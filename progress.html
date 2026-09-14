@@ -1,0 +1,2321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>My Progress - MindCare AI</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f4f7fb;
+    color: #222;
+}
+
+/* ================= HEADER ================= */
+
+.header {
+    background: #1f6f8b;
+    color: white;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h1 {
+    font-size: 25px;
+}
+
+.header p {
+    margin-top: 5px;
+    opacity: 0.9;
+}
+
+.back-btn {
+    background: white;
+    color: #1f6f8b;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* ================= CONTAINER ================= */
+
+.container {
+    max-width: 1100px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+/* ================= PATIENT ================= */
+
+.patient-card {
+    background: white;
+    padding: 22px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.patient-card h2 {
+    color: #1f6f8b;
+    margin-bottom: 7px;
+}
+
+.patient-card p {
+    color: #666;
+}
+
+/* ================= STATS ================= */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.stat-card {
+    background: white;
+    padding: 22px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.stat-icon {
+    font-size: 30px;
+    margin-bottom: 8px;
+}
+
+.stat-card h3 {
+    color: #1f6f8b;
+    font-size: 26px;
+    margin-bottom: 5px;
+}
+
+.stat-card p {
+    color: #666;
+    font-size: 13px;
+}
+
+/* ================= SECTION ================= */
+
+.section {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.section h2 {
+    color: #1f6f8b;
+    margin-bottom: 20px;
+}
+
+/* ================= CHART SECTION ================= */
+
+.chart-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.chart-card {
+    background: #f8fafc;
+    border-radius: 14px;
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+}
+
+.chart-card.full {
+    grid-column: 1 / -1;
+}
+
+.chart-card h3 {
+    color: #1f6f8b;
+    margin-bottom: 5px;
+}
+
+.chart-card p {
+    color: #777;
+    font-size: 13px;
+    margin-bottom: 15px;
+}
+
+.chart-box {
+    width: 100%;
+    height: 280px;
+    position: relative;
+}
+
+canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* ================= AI LEVELS ================= */
+
+.game-levels {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+}
+
+.game-card {
+    background: #f5f8fa;
+    padding: 18px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.game-icon {
+    font-size: 30px;
+    margin-bottom: 8px;
+}
+
+.game-card h3 {
+    color: #1f6f8b;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.level {
+    display: inline-block;
+    background: #e8f0ff;
+    color: #2457a6;
+    padding: 7px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* ================= PERFORMANCE ================= */
+
+.performance-item {
+    border: 1px solid #e5e5e5;
+    background: #fafafa;
+    padding: 17px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+}
+
+.performance-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.performance-top h3 {
+    font-size: 16px;
+}
+
+.badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.excellent {
+    background: #e7f7ed;
+    color: #218838;
+}
+
+.good {
+    background: #e8f0ff;
+    color: #2457a6;
+}
+
+.support {
+    background: #fff4d6;
+    color: #a66b00;
+}
+
+.performance-details {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.detail {
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.detail span {
+    display: block;
+    color: #777;
+    font-size: 11px;
+    margin-bottom: 4px;
+}
+
+.detail strong {
+    font-size: 14px;
+}
+
+.date {
+    color: #777;
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+/* ================= MEDICINE ================= */
+
+.medicine-progress {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.medicine-box {
+    background: #f5f8fa;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.medicine-box h3 {
+    color: #1f6f8b;
+    margin-bottom: 10px;
+}
+
+.medicine-box p {
+    color: #555;
+    line-height: 1.7;
+}
+
+/* ================= WATER ================= */
+
+.water-progress {
+    background: #f5f8fa;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.water-progress h3 {
+    color: #1f6f8b;
+    margin-bottom: 12px;
+}
+
+.water-number {
+    font-size: 30px;
+    font-weight: bold;
+    color: #1f6f8b;
+    margin-bottom: 12px;
+}
+
+.water-bar {
+    width: 100%;
+    height: 14px;
+    background: #e1e8ed;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.water-fill {
+    height: 100%;
+    width: 0%;
+    background: #1f6f8b;
+    border-radius: 20px;
+    transition: width 0.4s ease;
+}
+
+.water-text {
+    margin-top: 10px;
+    color: #666;
+    font-size: 14px;
+}
+
+/* ================= AI ================= */
+
+.ai-box {
+    background: #f5f8fa;
+    border-left: 5px solid #1f6f8b;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.ai-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.ai-title span {
+    font-size: 30px;
+}
+
+.ai-title h3 {
+    color: #1f6f8b;
+}
+
+.ai-box p {
+    color: #555;
+    line-height: 1.7;
+}
+
+/* ================= EMPTY ================= */
+
+.empty {
+    text-align: center;
+    padding: 25px;
+    color: #777;
+}
+
+/* ================= REFRESH ================= */
+
+.refresh-btn {
+    background: #1f6f8b;
+    color: white;
+    border: none;
+    padding: 11px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 1000px) {
+
+    .stats {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .game-levels {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .chart-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-card.full {
+        grid-column: auto;
+    }
+}
+
+@media (max-width: 800px) {
+
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .game-levels {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .medicine-progress {
+        grid-template-columns: 1fr;
+    }
+
+    .performance-details {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 500px) {
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .game-levels {
+        grid-template-columns: 1fr;
+    }
+
+    .performance-details {
+        grid-template-columns: 1fr;
+    }
+
+    .header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div class="header">
+
+    <div>
+
+        <h1>
+            📊 My Progress
+        </h1>
+
+        <p>
+            MindCare AI - Cognitive & Medication Progress
+        </p>
+
+    </div>
+
+    <button
+        class="back-btn"
+        onclick="goBack()">
+
+        ← Back
+
+    </button>
+
+</div>
+
+
+<div class="container">
+
+
+<!-- ================= PATIENT ================= -->
+
+<div class="patient-card">
+
+    <h2 id="patientProgressTitle">
+        👴 Patient's Progress
+    </h2>
+
+    <p>
+        Track cognitive activities, medication progress,
+        hydration and adaptive difficulty.
+    </p>
+
+</div>
+
+
+<!-- ================= STATS ================= -->
+
+<div class="stats">
+
+    <div class="stat-card">
+
+        <div class="stat-icon">🎮</div>
+
+        <h3 id="totalGames">0</h3>
+
+        <p>Games Played</p>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <div class="stat-icon">⭐</div>
+
+        <h3 id="bestScore">0</h3>
+
+        <p>Best Score</p>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <div class="stat-icon">❌</div>
+
+        <h3 id="totalMistakes">0</h3>
+
+        <p>Total Mistakes</p>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <div class="stat-icon">🏆</div>
+
+        <h3 id="excellentGames">0</h3>
+
+        <p>Excellent Games</p>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <div class="stat-icon">💧</div>
+
+        <h3 id="waterStat">0 / 5</h3>
+
+        <p>Today's Water</p>
+
+    </div>
+
+</div>
+
+
+<!-- =================================================
+     PROGRESS CHARTS
+================================================= -->
+
+<div class="section">
+
+    <h2>
+        📈 Patient Progress Charts
+    </h2>
+
+    <div class="chart-grid">
+
+
+        <!-- COGNITIVE -->
+
+        <div class="chart-card full">
+
+            <h3>
+                🧠 Cognitive Game Score Progress
+            </h3>
+
+            <p>
+                Based on the patient's recorded cognitive game scores.
+            </p>
+
+            <div class="chart-box">
+
+                <canvas id="cognitiveChart"></canvas>
+
+            </div>
+
+        </div>
+
+
+        <!-- MEDICINE -->
+
+        <div class="chart-card">
+
+            <h3>
+                💊 Medication Adherence
+            </h3>
+
+            <p>
+                Taken vs later/missed medicine activities.
+            </p>
+
+            <div class="chart-box">
+
+                <canvas id="medicineChart"></canvas>
+
+            </div>
+
+        </div>
+
+
+        <!-- WATER -->
+
+        <div class="chart-card">
+
+            <h3>
+                💧 Hydration Progress
+            </h3>
+
+            <p>
+                Today's recorded water intake.
+            </p>
+
+            <div class="chart-box">
+
+                <canvas id="waterChart"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= AI LEVELS ================= -->
+
+<div class="section">
+
+    <h2>
+        🤖 AI Adaptive Difficulty
+    </h2>
+
+    <div class="game-levels">
+
+
+        <div class="game-card">
+
+            <div class="game-icon">🃏</div>
+
+            <h3>Memory Match</h3>
+
+            <span
+                id="memoryLevel"
+                class="level">
+
+                Easy
+
+            </span>
+
+        </div>
+
+
+        <div class="game-card">
+
+            <div class="game-icon">🔢</div>
+
+            <h3>Number Memory</h3>
+
+            <span
+                id="numberLevel"
+                class="level">
+
+                Easy
+
+            </span>
+
+        </div>
+
+
+        <div class="game-card">
+
+            <div class="game-icon">🎨</div>
+
+            <h3>Pattern Recognition</h3>
+
+            <span
+                id="patternLevel"
+                class="level">
+
+                Easy
+
+            </span>
+
+        </div>
+
+
+        <div class="game-card">
+
+            <div class="game-icon">👀</div>
+
+            <h3>Attention Game</h3>
+
+            <span
+                id="attentionLevel"
+                class="level">
+
+                Easy
+
+            </span>
+
+        </div>
+
+
+        <div class="game-card">
+
+            <div class="game-icon">📅</div>
+
+            <h3>Daily Routine</h3>
+
+            <span
+                id="dailyRoutineLevel"
+                class="level">
+
+                Easy
+
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= PERFORMANCE ================= -->
+
+<div class="section">
+
+    <h2>
+        🧠 Recent Cognitive Performance
+    </h2>
+
+    <div id="performanceList">
+
+        <div class="empty">
+            No game history available yet.
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= MEDICINE ================= -->
+
+<div class="section">
+
+    <h2>
+        💊 Medication Progress
+    </h2>
+
+    <div class="medicine-progress">
+
+
+        <div class="medicine-box">
+
+            <h3>
+                📊 Medicine Adherence
+            </h3>
+
+            <p>
+
+                Total Activities:
+                <strong id="medicineTotal">0</strong>
+
+                <br>
+
+                Medicine Taken:
+                <strong id="medicineTaken">0</strong>
+
+                <br>
+
+                Later / Skipped:
+                <strong id="medicineLater">0</strong>
+
+                <br>
+
+                Missed:
+                <strong id="medicineMissed">0</strong>
+
+                <br>
+
+                Adherence:
+                <strong id="medicineAdherence">0%</strong>
+
+            </p>
+
+        </div>
+
+
+        <div class="medicine-box">
+
+            <h3>
+                💊 Current Medicine
+            </h3>
+
+            <p>
+
+                Medicine:
+                <strong id="medicineName">
+                    No prescription
+                </strong>
+
+                <br>
+
+                Dosage:
+                <strong id="medicineDosage">
+                    -
+                </strong>
+
+                <br>
+
+                Reminder:
+                <strong id="medicineTime">
+                    -
+                </strong>
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= WATER ================= -->
+
+<div class="section">
+
+    <h2>
+        💧 Hydration Progress
+    </h2>
+
+    <div class="water-progress">
+
+        <h3>
+            Today's Water Intake
+        </h3>
+
+        <div
+            class="water-number"
+            id="waterCount">
+
+            0 / 5
+
+        </div>
+
+        <div class="water-bar">
+
+            <div
+                class="water-fill"
+                id="waterFill">
+            </div>
+
+        </div>
+
+        <p
+            class="water-text"
+            id="waterMessage">
+
+            Keep tracking your daily hydration.
+
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- ================= AI SUMMARY ================= -->
+
+<div class="section">
+
+    <h2>
+        🤖 AI Progress Summary
+    </h2>
+
+    <div class="ai-box">
+
+        <div class="ai-title">
+
+            <span>🤖</span>
+
+            <h3>
+                Patient Progress
+            </h3>
+
+        </div>
+
+        <p id="aiSummary">
+
+            Complete cognitive games to generate
+            your AI-based progress summary.
+
+        </p>
+
+    </div>
+
+</div>
+
+
+<button
+    class="refresh-btn"
+    onclick="loadProgress()">
+
+    🔄 Refresh Progress
+
+</button>
+
+
+</div>
+
+
+<!-- =================================================
+     CHART.JS
+================================================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<script>
+
+/* =====================================================
+   CURRENT PATIENT
+===================================================== */
+
+const patientId =
+    sessionStorage.getItem("currentPatientId");
+
+const patientName =
+    sessionStorage.getItem("currentPatientName");
+
+
+/* =====================================================
+   LOGIN CHECK
+===================================================== */
+
+if (!patientId || !patientName) {
+
+    alert("Please login first.");
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+/* =====================================================
+   STORAGE KEYS
+===================================================== */
+
+const gameHistoryKey =
+    "gameHistory_" + patientId;
+
+const medicineHistoryKey =
+    "medicineHistory_" + patientId;
+
+const waterKey =
+    "waterProgress_" + patientId;
+
+const waterDateKey =
+    "waterProgressDate_" + patientId;
+
+const prescriptionKey =
+    "mindcarePrescription_" + patientId;
+
+
+/* =====================================================
+   PATIENT TITLE
+===================================================== */
+
+document.getElementById(
+    "patientProgressTitle"
+).textContent =
+    "👴 " + patientName + "'s Progress";
+
+
+/* =====================================================
+   CHART VARIABLES
+===================================================== */
+
+let cognitiveChart = null;
+let medicineChart = null;
+let waterChart = null;
+
+
+/* =====================================================
+   SAFE JSON
+===================================================== */
+
+function getJSON(key, fallback = []) {
+
+    try {
+
+        const data =
+            localStorage.getItem(key);
+
+        if (!data) {
+            return fallback;
+        }
+
+        return JSON.parse(data);
+
+    } catch (error) {
+
+        return fallback;
+
+    }
+
+}
+
+
+/* =====================================================
+   LOAD GAME HISTORY
+===================================================== */
+
+function getGameHistory() {
+
+    const history =
+        getJSON(
+            gameHistoryKey,
+            []
+        );
+
+    return Array.isArray(history)
+        ? history
+        : [];
+
+}
+
+
+/* =====================================================
+   GAME STATISTICS
+===================================================== */
+
+function updateGameStats(history) {
+
+    let bestScore = 0;
+    let mistakes = 0;
+    let excellent = 0;
+
+    history.forEach(item => {
+
+        const score =
+            Number(item.score) || 0;
+
+        const itemMistakes =
+            Number(item.mistakes) || 0;
+
+        if (score > bestScore) {
+
+            bestScore =
+                score;
+
+        }
+
+        mistakes +=
+            itemMistakes;
+
+        if (
+            item.performance ===
+            "Excellent"
+        ) {
+
+            excellent++;
+
+        }
+
+    });
+
+
+    document.getElementById(
+        "totalGames"
+    ).textContent =
+        history.length;
+
+
+    document.getElementById(
+        "bestScore"
+    ).textContent =
+        bestScore;
+
+
+    document.getElementById(
+        "totalMistakes"
+    ).textContent =
+        mistakes;
+
+
+    document.getElementById(
+        "excellentGames"
+    ).textContent =
+        excellent;
+
+}
+
+
+/* =====================================================
+   COGNITIVE PERFORMANCE LIST
+===================================================== */
+
+function loadGameProgress() {
+
+    const history =
+        getGameHistory();
+
+    updateGameStats(history);
+
+    const list =
+        document.getElementById(
+            "performanceList"
+        );
+
+
+    if (
+        history.length === 0
+    ) {
+
+        list.innerHTML = `
+            <div class="empty">
+                No game history available yet.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    const recent =
+        [...history]
+        .reverse()
+        .slice(0, 10);
+
+
+    list.innerHTML = "";
+
+
+    recent.forEach(item => {
+
+        let badgeClass =
+            "support";
+
+
+        if (
+            item.performance ===
+            "Excellent"
+        ) {
+
+            badgeClass =
+                "excellent";
+
+        }
+
+        else if (
+            item.performance ===
+            "Good"
+        ) {
+
+            badgeClass =
+                "good";
+
+        }
+
+
+        const div =
+            document.createElement(
+                "div"
+            );
+
+
+        div.className =
+            "performance-item";
+
+
+        div.innerHTML = `
+
+            <div class="performance-top">
+
+                <h3>
+                    🧠 ${escapeHTML(
+                        item.game ||
+                        "Cognitive Game"
+                    )}
+                </h3>
+
+                <span
+                    class="badge ${badgeClass}">
+
+                    ${escapeHTML(
+                        item.performance ||
+                        "Needs Support"
+                    )}
+
+                </span>
+
+            </div>
+
+
+            <div class="performance-details">
+
+                <div class="detail">
+
+                    <span>⭐ Score</span>
+
+                    <strong>
+                        ${Number(item.score) || 0}
+                    </strong>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <span>⏱ Time</span>
+
+                    <strong>
+                        ${Number(item.time) || 0} sec
+                    </strong>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <span>❌ Mistakes</span>
+
+                    <strong>
+                        ${Number(item.mistakes) || 0}
+                    </strong>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <span>🎯 Difficulty</span>
+
+                    <strong>
+                        ${escapeHTML(
+                            item.difficulty ||
+                            "Easy"
+                        )}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="date">
+
+                📅 ${escapeHTML(item.date || "-")}
+
+                &nbsp; • &nbsp;
+
+                🕐 ${escapeHTML(
+                    item.timeStamp || "-"
+                )}
+
+            </div>
+
+        `;
+
+
+        list.appendChild(div);
+
+    });
+
+}
+
+
+/* =====================================================
+   COGNITIVE CHART
+===================================================== */
+
+function loadCognitiveChart() {
+
+    const history =
+        getGameHistory();
+
+
+    const labels =
+        history.map(
+            (item, index) =>
+                item.game
+                ? item.game
+                : "Game " + (index + 1)
+        );
+
+
+    const scores =
+        history.map(
+            item =>
+                Number(item.score) || 0
+        );
+
+
+    const canvas =
+        document.getElementById(
+            "cognitiveChart"
+        );
+
+
+    if (cognitiveChart) {
+
+        cognitiveChart.destroy();
+
+    }
+
+
+    cognitiveChart =
+        new Chart(
+            canvas,
+            {
+
+                type: "line",
+
+                data: {
+
+                    labels:
+                        labels.length
+                        ? labels
+                        : ["No Data"],
+
+                    datasets: [
+
+                        {
+
+                            label:
+                                "Game Score",
+
+                            data:
+                                scores.length
+                                ? scores
+                                : [0],
+
+                            borderWidth: 3,
+
+                            tension: 0.3,
+
+                            fill: false,
+
+                            pointRadius: 5
+
+                        }
+
+                    ]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    scales: {
+
+                        y: {
+
+                            beginAtZero: true,
+
+                            title: {
+
+                                display: true,
+
+                                text:
+                                    "Score"
+
+                            }
+
+                        },
+
+                        x: {
+
+                            title: {
+
+                                display: true,
+
+                                text:
+                                    "Game Sessions"
+
+                            }
+
+                        }
+
+                    },
+
+                    plugins: {
+
+                        legend: {
+
+                            display: true
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        );
+
+}
+
+
+/* =====================================================
+   MEDICINE HISTORY
+===================================================== */
+
+function getMedicineHistory() {
+
+    const history =
+        getJSON(
+            medicineHistoryKey,
+            []
+        );
+
+    return Array.isArray(history)
+        ? history
+        : [];
+
+}
+
+
+/* =====================================================
+   MEDICINE PROGRESS
+===================================================== */
+
+function loadMedicineProgress() {
+
+    const history =
+        getMedicineHistory();
+
+
+    const total =
+        history.length;
+
+
+    const taken =
+        history.filter(
+            item =>
+                item.status === "taken"
+        ).length;
+
+
+    const later =
+        history.filter(
+            item =>
+                item.status === "later"
+        ).length;
+
+
+    const missed =
+        history.filter(
+            item =>
+                item.status === "missed"
+        ).length;
+
+
+    const adherence =
+        total > 0
+        ? Math.round(
+            (taken / total) * 100
+        )
+        : 0;
+
+
+    document.getElementById(
+        "medicineTotal"
+    ).textContent =
+        total;
+
+
+    document.getElementById(
+        "medicineTaken"
+    ).textContent =
+        taken;
+
+
+    document.getElementById(
+        "medicineLater"
+    ).textContent =
+        later;
+
+
+    document.getElementById(
+        "medicineMissed"
+    ).textContent =
+        missed;
+
+
+    document.getElementById(
+        "medicineAdherence"
+    ).textContent =
+        adherence + "%";
+
+
+    loadMedicineChart(
+        taken,
+        later,
+        missed
+    );
+
+
+    loadPrescription();
+
+}
+
+
+/* =====================================================
+   MEDICINE CHART
+===================================================== */
+
+function loadMedicineChart(
+    taken,
+    later,
+    missed
+) {
+
+    const canvas =
+        document.getElementById(
+            "medicineChart"
+        );
+
+
+    if (medicineChart) {
+
+        medicineChart.destroy();
+
+    }
+
+
+    medicineChart =
+        new Chart(
+            canvas,
+            {
+
+                type: "doughnut",
+
+                data: {
+
+                    labels: [
+                        "Taken",
+                        "Later / Skipped",
+                        "Missed"
+                    ],
+
+                    datasets: [
+
+                        {
+
+                            data: [
+                                taken,
+                                later,
+                                missed
+                            ],
+
+                            borderWidth: 1
+
+                        }
+
+                    ]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    plugins: {
+
+                        legend: {
+
+                            position:
+                                "bottom"
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        );
+
+}
+
+
+/* =====================================================
+   PRESCRIPTION
+===================================================== */
+
+function loadPrescription() {
+
+    let saved =
+        localStorage.getItem(
+            prescriptionKey
+        );
+
+
+    if (!saved) {
+
+        saved =
+            localStorage.getItem(
+                "mindcarePrescription_" +
+                patientName
+            );
+
+    }
+
+
+    if (!saved) {
+
+        document.getElementById(
+            "medicineName"
+        ).textContent =
+            "No prescription";
+
+        document.getElementById(
+            "medicineDosage"
+        ).textContent =
+            "-";
+
+        document.getElementById(
+            "medicineTime"
+        ).textContent =
+            "-";
+
+        return;
+
+    }
+
+
+    try {
+
+        const data =
+            JSON.parse(saved);
+
+
+        document.getElementById(
+            "medicineName"
+        ).textContent =
+            data.medicine || "-";
+
+
+        document.getElementById(
+            "medicineDosage"
+        ).textContent =
+            data.dosage || "-";
+
+
+        document.getElementById(
+            "medicineTime"
+        ).textContent =
+            formatTime(
+                data.time
+            );
+
+    }
+
+    catch(error) {
+
+        console.log(
+            "Prescription error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   FORMAT TIME
+===================================================== */
+
+function formatTime(time) {
+
+    if (!time) {
+        return "-";
+    }
+
+    const parts =
+        time.split(":");
+
+    let hour =
+        parseInt(parts[0]);
+
+    const minute =
+        parts[1] || "00";
+
+    const ampm =
+        hour >= 12
+        ? "PM"
+        : "AM";
+
+    hour =
+        hour % 12;
+
+    if (hour === 0) {
+        hour = 12;
+    }
+
+    return (
+        hour +
+        ":" +
+        minute +
+        " " +
+        ampm
+    );
+
+}
+
+
+/* =====================================================
+   WATER COUNT
+===================================================== */
+
+function getWaterCount() {
+
+    const saved =
+        localStorage.getItem(
+            waterKey
+        );
+
+
+    if (!saved) {
+        return 0;
+    }
+
+
+    let count = 0;
+
+
+    try {
+
+        const data =
+            JSON.parse(saved);
+
+
+        if (
+            typeof data ===
+            "number"
+        ) {
+
+            count =
+                data;
+
+        }
+
+        else if (
+            Array.isArray(data)
+        ) {
+
+            count =
+                data.length;
+
+        }
+
+        else if (
+            data &&
+            typeof data.count ===
+            "number"
+        ) {
+
+            count =
+                data.count;
+
+        }
+
+        else if (
+            data &&
+            typeof data.waterCount ===
+            "number"
+        ) {
+
+            count =
+                data.waterCount;
+
+        }
+
+        else if (
+            data &&
+            typeof data.completed ===
+            "number"
+        ) {
+
+            count =
+                data.completed;
+
+        }
+
+    }
+
+    catch(error) {
+
+        count =
+            Number(saved) || 0;
+
+    }
+
+
+    return Math.max(
+        0,
+        Math.min(
+            Number(count) || 0,
+            5
+        )
+    );
+
+}
+
+
+/* =====================================================
+   WATER PROGRESS
+===================================================== */
+
+function loadWaterProgress() {
+
+    const count =
+        getWaterCount();
+
+
+    document.getElementById(
+        "waterStat"
+    ).textContent =
+        count + " / 5";
+
+
+    document.getElementById(
+        "waterCount"
+    ).textContent =
+        count + " / 5";
+
+
+    const percentage =
+        (count / 5) * 100;
+
+
+    document.getElementById(
+        "waterFill"
+    ).style.width =
+        percentage + "%";
+
+
+    const message =
+        document.getElementById(
+            "waterMessage"
+        );
+
+
+    if (count === 0) {
+
+        message.textContent =
+            "No water activities completed yet. Keep tracking hydration.";
+
+    }
+
+    else if (count < 3) {
+
+        message.textContent =
+            "Good start. Continue your hydration activities.";
+
+    }
+
+    else if (count < 5) {
+
+        message.textContent =
+            "Great progress. Keep going to complete today's hydration goal.";
+
+    }
+
+    else {
+
+        message.textContent =
+            "Excellent! Today's hydration goal is complete.";
+
+    }
+
+
+    loadWaterChart(
+        count
+    );
+
+}
+
+
+/* =====================================================
+   WATER CHART
+===================================================== */
+
+function loadWaterChart(count) {
+
+    const canvas =
+        document.getElementById(
+            "waterChart"
+        );
+
+
+    if (waterChart) {
+
+        waterChart.destroy();
+
+    }
+
+
+    waterChart =
+        new Chart(
+            canvas,
+            {
+
+                type: "bar",
+
+                data: {
+
+                    labels: [
+                        "Today's Water"
+                    ],
+
+                    datasets: [
+
+                        {
+
+                            label:
+                                "Glasses Completed",
+
+                            data: [
+                                count
+                            ],
+
+                            borderWidth: 1
+
+                        },
+
+                        {
+
+                            label:
+                                "Daily Goal",
+
+                            data: [
+                                5
+                            ],
+
+                            borderWidth: 1
+
+                        }
+
+                    ]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    scales: {
+
+                        y: {
+
+                            beginAtZero: true,
+
+                            max: 5,
+
+                            ticks: {
+
+                                stepSize: 1
+
+                            },
+
+                            title: {
+
+                                display: true,
+
+                                text:
+                                    "Glasses"
+
+                            }
+
+                        }
+
+                    },
+
+                    plugins: {
+
+                        legend: {
+
+                            position:
+                                "bottom"
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        );
+
+}
+
+
+/* =====================================================
+   AI LEVELS
+===================================================== */
+
+function loadAILevels() {
+
+    const memory =
+        localStorage.getItem(
+            "aiLevel_" + patientId
+        ) || "Easy";
+
+
+    const number =
+        localStorage.getItem(
+            "numberMemoryLevel_" +
+            patientId
+        ) || "Easy";
+
+
+    const pattern =
+        localStorage.getItem(
+            "patternLevel_" +
+            patientId
+        ) || "Easy";
+
+
+    const attention =
+        localStorage.getItem(
+            "attentionLevel_" +
+            patientId
+        ) || "Easy";
+
+
+    const dailyRoutine =
+        localStorage.getItem(
+            "dailyRoutineLevel_" +
+            patientId
+        ) || "Easy";
+
+
+    document.getElementById(
+        "memoryLevel"
+    ).textContent =
+        memory;
+
+
+    document.getElementById(
+        "numberLevel"
+    ).textContent =
+        number;
+
+
+    document.getElementById(
+        "patternLevel"
+    ).textContent =
+        pattern;
+
+
+    document.getElementById(
+        "attentionLevel"
+    ).textContent =
+        attention;
+
+
+    document.getElementById(
+        "dailyRoutineLevel"
+    ).textContent =
+        dailyRoutine;
+
+}
+
+
+/* =====================================================
+   AI SUMMARY
+===================================================== */
+
+function updateAISummary() {
+
+    const history =
+        getGameHistory();
+
+
+    const summary =
+        document.getElementById(
+            "aiSummary"
+        );
+
+
+    if (
+        history.length === 0
+    ) {
+
+        summary.textContent =
+            "No cognitive game data is available yet. Start playing the available cognitive games to build the patient's progress history.";
+
+        return;
+
+    }
+
+
+    let excellent = 0;
+    let good = 0;
+    let support = 0;
+    let totalScore = 0;
+
+
+    history.forEach(item => {
+
+        totalScore +=
+            Number(item.score) || 0;
+
+
+        if (
+            item.performance ===
+            "Excellent"
+        ) {
+
+            excellent++;
+
+        }
+
+        else if (
+            item.performance ===
+            "Good"
+        ) {
+
+            good++;
+
+        }
+
+        else {
+
+            support++;
+
+        }
+
+    });
+
+
+    const averageScore =
+        Math.round(
+            totalScore /
+            history.length
+        );
+
+
+    if (
+        excellent >= good &&
+        excellent >= support
+    ) {
+
+        summary.textContent =
+            "The patient is showing strong performance across recent cognitive game sessions. The AI can gradually adjust the challenge based on future performance.";
+
+    }
+
+    else if (
+        good >= support
+    ) {
+
+        summary.textContent =
+            "The patient is showing moderate and consistent performance across cognitive activities. Continued regular practice can help the AI adjust difficulty appropriately.";
+
+    }
+
+    else {
+
+        summary.textContent =
+            "Some cognitive activities are currently challenging. The AI can keep the difficulty supportive and adjust it as recorded performance changes.";
+
+    }
+
+
+    summary.textContent +=
+        " Average score: " +
+        averageScore +
+        ".";
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =====================================================
+   LOAD EVERYTHING
+===================================================== */
+
+function loadProgress() {
+
+    loadGameProgress();
+
+    loadCognitiveChart();
+
+    loadAILevels();
+
+    loadMedicineProgress();
+
+    loadWaterProgress();
+
+    updateAISummary();
+
+}
+
+
+/* =====================================================
+   BACK
+===================================================== */
+
+function goBack() {
+
+    const caregiverPatientId =
+        sessionStorage.getItem(
+            "caregiverPatientId"
+        );
+
+
+    const role =
+        sessionStorage.getItem(
+            "mindcareRole"
+        );
+
+
+    if (
+        role === "caregiver" ||
+        caregiverPatientId
+    ) {
+
+        window.location.href =
+            "caregiver.html";
+
+    }
+
+    else {
+
+        window.location.href =
+            "patient.html";
+
+    }
+
+}
+
+
+/* =====================================================
+   PAGE LOAD
+===================================================== */
+
+window.addEventListener(
+    "load",
+    function() {
+
+        loadProgress();
+
+    }
+);
+
+
+/* =====================================================
+   PAGE SHOW
+===================================================== */
+
+window.addEventListener(
+    "pageshow",
+    function() {
+
+        loadProgress();
+
+    }
+);
+
+</script>
+
+</body>
+</html>

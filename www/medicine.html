@@ -1,0 +1,2409 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Medicine - MINDCARE AI</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        /* =========================================
+           REMINDER POPUP
+        ========================================= */
+
+        #medicineReminderPopup {
+
+            display: none;
+
+            position: fixed;
+
+            top: 50%;
+            left: 50%;
+
+            transform: translate(-50%, -50%);
+
+            width: min(420px, 90%);
+
+            background: white;
+
+            border-radius: 20px;
+
+            padding: 25px;
+
+            box-shadow: 0 15px 50px rgba(0,0,0,0.30);
+
+            z-index: 99999;
+
+            text-align: center;
+        }
+
+
+        #medicineReminderPopup.show {
+
+            display: block;
+
+            animation: reminderPopupShow 0.3s ease;
+        }
+
+
+        @keyframes reminderPopupShow {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translate(-50%, -50%)
+                    scale(0.85);
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translate(-50%, -50%)
+                    scale(1);
+            }
+        }
+
+
+        .reminder-bell {
+
+            font-size: 55px;
+
+            margin-bottom: 10px;
+
+            animation: bellShake 0.8s ease-in-out infinite;
+        }
+
+
+        @keyframes bellShake {
+
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+
+            25% {
+                transform: rotate(-10deg);
+            }
+
+            75% {
+                transform: rotate(10deg);
+            }
+        }
+
+
+        .reminder-title {
+
+            font-size: 24px;
+
+            font-weight: bold;
+
+            margin-bottom: 10px;
+        }
+
+
+        .reminder-medicine {
+
+            font-size: 21px;
+
+            font-weight: bold;
+
+            margin: 12px 0;
+        }
+
+
+        .reminder-dosage {
+
+            font-size: 16px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .reminder-actions {
+
+            display: flex;
+
+            gap: 10px;
+
+            justify-content: center;
+
+            flex-wrap: wrap;
+        }
+
+
+        .reminder-taken-btn {
+
+            border: none;
+
+            padding: 12px 18px;
+
+            border-radius: 10px;
+
+            cursor: pointer;
+
+            font-weight: bold;
+
+            background: #2e9b61;
+
+            color: white;
+        }
+
+
+        .reminder-later-btn {
+
+            border: none;
+
+            padding: 12px 18px;
+
+            border-radius: 10px;
+
+            cursor: pointer;
+
+            font-weight: bold;
+
+            background: #e09b32;
+
+            color: white;
+        }
+
+
+        .reminder-overlay {
+
+            display: none;
+
+            position: fixed;
+
+            inset: 0;
+
+            background: rgba(0,0,0,0.35);
+
+            z-index: 99998;
+        }
+
+
+        .reminder-overlay.show {
+
+            display: block;
+        }
+
+
+        /* =========================================
+           ENABLE REMINDER BUTTON
+        ========================================= */
+
+        .enable-reminder-btn {
+
+            margin-top: 12px;
+
+            padding: 11px 18px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            cursor: pointer;
+
+            font-weight: bold;
+
+            background: #4b63d3;
+
+            color: white;
+        }
+
+
+        /* =========================================
+           PATIENT NAME
+        ========================================= */
+
+        #patientName {
+
+            font-weight: bold;
+        }
+
+
+        /* =========================================
+           MOBILE
+        ========================================= */
+
+        @media (max-width: 600px) {
+
+            .medicine-header {
+
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 15px;
+            }
+
+            .medicine-header button {
+
+                width: 100%;
+            }
+
+            .medicine-patient {
+
+                flex-direction: column;
+
+                text-align: center;
+            }
+
+            .reminder-actions button {
+
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="medicine-page">
+
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <header class="medicine-header">
+
+        <div>
+
+            <h1>💊 Medicine Reminder</h1>
+
+            <p>
+                Doctor-approved medication schedule
+            </p>
+
+        </div>
+
+
+        <button onclick="goBack()">
+
+            ← Back
+
+        </button>
+
+    </header>
+
+
+
+    <!-- =========================
+         PATIENT INFO
+    ========================== -->
+
+    <section class="medicine-patient">
+
+        <div class="medicine-patient-icon">
+
+            👴
+
+        </div>
+
+
+        <div>
+
+            <h2>
+
+                Patient:
+
+                <span id="patientName">
+
+                    Patient
+
+                </span>
+
+            </h2>
+
+
+            <p>
+
+                Your doctor-approved medicines are shown below.
+
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         MAIN
+    ========================== -->
+
+    <main class="medicine-container">
+
+
+        <div class="medicine-title">
+
+            <div>
+
+                <h2>
+
+                    Today's Medicines
+
+                </h2>
+
+
+                <p>
+
+                    Follow the schedule provided by your doctor.
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- MEDICINE LIST -->
+
+        <div id="medicineList">
+
+        </div>
+
+
+
+        <!-- NO MEDICINE -->
+
+        <div id="noMedicine"
+             class="no-medicine"
+             style="display:none;">
+
+            <div>
+
+                💊
+
+            </div>
+
+
+            <h3>
+
+                No Prescription Available
+
+            </h3>
+
+
+            <p>
+
+                Your doctor has not added a medicine prescription yet.
+
+            </p>
+
+        </div>
+
+
+
+        <!-- =========================
+             SAFETY
+        ========================== -->
+
+        <section class="medicine-safety">
+
+            <div class="safety-icon">
+
+                🛡️
+
+            </div>
+
+
+            <div>
+
+                <h3>
+
+                    Medication Safety
+
+                </h3>
+
+
+                <p>
+
+                    This schedule is based only on the
+                    prescription provided by your doctor.
+                    Do not change the medicine or dosage
+                    without consulting your doctor.
+
+                </p>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =========================
+         AI ASSISTANT
+    ========================= -->
+
+    <section class="medicine-ai">
+
+        <div class="ai-medicine-icon">
+
+            🤖
+
+        </div>
+
+
+        <div>
+
+            <h2>
+
+                MINDCARE AI Reminder
+
+            </h2>
+
+
+            <p id="aiMessage">
+
+                Your medication schedule will appear here.
+
+            </p>
+
+
+            <button
+                class="enable-reminder-btn"
+                onclick="setupReminderPermissions()">
+
+                🔔 Enable Medicine Reminder
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <p>
+
+            MINDCARE AI • Supporting everyday elderly care
+
+        </p>
+
+    </footer>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     REMINDER OVERLAY
+===================================================== -->
+
+<div
+    id="reminderOverlay"
+    class="reminder-overlay">
+
+</div>
+
+
+
+<!-- =====================================================
+     CUSTOM MEDICINE POPUP
+===================================================== -->
+
+<div
+    id="medicineReminderPopup">
+
+
+    <div class="reminder-bell">
+
+        🔔
+
+    </div>
+
+
+    <div class="reminder-title">
+
+        Medicine Reminder
+
+    </div>
+
+
+    <div>
+
+        <span id="popupPatientName">
+            Patient
+        </span>
+
+        , it is time to take:
+
+    </div>
+
+
+    <div
+        id="popupMedicineName"
+        class="reminder-medicine">
+
+    </div>
+
+
+    <div
+        id="popupMedicineDosage"
+        class="reminder-dosage">
+
+    </div>
+
+
+    <div class="reminder-actions">
+
+
+        <button
+            class="reminder-taken-btn"
+            onclick="popupMedicineTaken()">
+
+            ✓ Medicine Taken
+
+        </button>
+
+
+        <button
+            class="reminder-later-btn"
+            onclick="popupMedicineLater()">
+
+            ⏰ Remind Later
+
+        </button>
+
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+
+/* =====================================================
+   CURRENT LOGGED-IN PATIENT
+===================================================== */
+
+const patientId =
+    sessionStorage.getItem("currentPatientId");
+
+const patientName =
+    sessionStorage.getItem("currentPatientName");
+
+
+
+/* =====================================================
+   LOGIN CHECK
+===================================================== */
+
+if (!patientId || !patientName) {
+
+    alert("Please login as a patient first.");
+
+    window.location.replace("index.html");
+
+}
+
+
+
+/* =====================================================
+   PATIENT STORAGE KEY
+===================================================== */
+
+function patientKey(prefix) {
+
+    return prefix + patientId;
+
+}
+
+
+
+/* =====================================================
+   DISPLAY PATIENT
+===================================================== */
+
+function displayPatientName() {
+
+    const nameElement =
+        document.getElementById("patientName");
+
+    const popupNameElement =
+        document.getElementById("popupPatientName");
+
+
+    if (nameElement) {
+
+        nameElement.textContent =
+            patientName || "Patient";
+
+    }
+
+
+    if (popupNameElement) {
+
+        popupNameElement.textContent =
+            patientName || "Patient";
+
+    }
+
+}
+
+
+displayPatientName();
+
+
+
+/* =====================================================
+   AUDIO
+===================================================== */
+
+let audioContext = null;
+
+let currentReminderMedicine = "";
+
+let currentReminderTime = "";
+
+
+
+/* =====================================================
+   CREATE AUDIO CONTEXT
+===================================================== */
+
+function createAudioContext() {
+
+    if (!audioContext) {
+
+        const AudioContext =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+
+        if (!AudioContext) {
+
+            console.log(
+                "Web Audio API not supported."
+            );
+
+            return null;
+
+        }
+
+
+        audioContext =
+            new AudioContext();
+
+    }
+
+
+    return audioContext;
+
+}
+
+
+
+/* =====================================================
+   ENABLE REMINDER PERMISSIONS
+===================================================== */
+
+async function setupReminderPermissions() {
+
+    try {
+
+        const ctx =
+            createAudioContext();
+
+
+        if (
+            ctx &&
+            ctx.state === "suspended"
+        ) {
+
+            await ctx.resume();
+
+        }
+
+
+        if ("Notification" in window) {
+
+            if (
+                Notification.permission === "default"
+            ) {
+
+                const permission =
+                    await Notification.requestPermission();
+
+
+                if (
+                    permission === "granted"
+                ) {
+
+                    alert(
+                        "🔔 Medicine reminders enabled successfully!"
+                    );
+
+                }
+
+                else {
+
+                    alert(
+                        "Please allow notifications in Chrome settings."
+                    );
+
+                }
+
+            }
+
+            else if (
+                Notification.permission === "granted"
+            ) {
+
+                alert(
+                    "🔔 Medicine reminders are already enabled!"
+                );
+
+            }
+
+            else {
+
+                alert(
+                    "Notifications are blocked. Please allow them in Chrome site settings."
+                );
+
+            }
+
+        }
+
+        else {
+
+            alert(
+                "This browser does not support notifications."
+            );
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.log(
+            "Permission error:",
+            error
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   PLAY REMINDER SOUND
+===================================================== */
+
+function playReminderSound() {
+
+    return new Promise(
+        async function(resolve) {
+
+            try {
+
+                const ctx =
+                    createAudioContext();
+
+
+                if (!ctx) {
+
+                    resolve();
+
+                    return;
+
+                }
+
+
+                if (
+                    ctx.state === "suspended"
+                ) {
+
+                    await ctx.resume();
+
+                }
+
+
+                const now =
+                    ctx.currentTime;
+
+
+
+                /* FIRST BELL */
+
+                const oscillator1 =
+                    ctx.createOscillator();
+
+
+                const gain1 =
+                    ctx.createGain();
+
+
+                oscillator1.type =
+                    "sine";
+
+
+                oscillator1.frequency.setValueAtTime(
+                    880,
+                    now
+                );
+
+
+                gain1.gain.setValueAtTime(
+                    0.5,
+                    now
+                );
+
+
+                gain1.gain.exponentialRampToValueAtTime(
+                    0.01,
+                    now + 0.8
+                );
+
+
+                oscillator1.connect(gain1);
+
+                gain1.connect(
+                    ctx.destination
+                );
+
+
+                oscillator1.start(now);
+
+                oscillator1.stop(
+                    now + 0.8
+                );
+
+
+
+                /* SECOND BELL */
+
+                setTimeout(
+                    function() {
+
+                        try {
+
+                            if (
+                                !audioContext
+                            ) {
+
+                                return;
+
+                            }
+
+
+                            const secondNow =
+                                audioContext.currentTime;
+
+
+                            const oscillator2 =
+                                audioContext.createOscillator();
+
+
+                            const gain2 =
+                                audioContext.createGain();
+
+
+                            oscillator2.type =
+                                "sine";
+
+
+                            oscillator2.frequency.setValueAtTime(
+                                1100,
+                                secondNow
+                            );
+
+
+                            gain2.gain.setValueAtTime(
+                                0.4,
+                                secondNow
+                            );
+
+
+                            gain2.gain.exponentialRampToValueAtTime(
+                                0.01,
+                                secondNow + 0.8
+                            );
+
+
+                            oscillator2.connect(
+                                gain2
+                            );
+
+
+                            gain2.connect(
+                                audioContext.destination
+                            );
+
+
+                            oscillator2.start(
+                                secondNow
+                            );
+
+
+                            oscillator2.stop(
+                                secondNow + 0.8
+                            );
+
+                        }
+
+                        catch (error) {
+
+                            console.log(
+                                "Second bell error:",
+                                error
+                            );
+
+                        }
+
+                    },
+                    350
+                );
+
+
+                setTimeout(
+                    resolve,
+                    1300
+                );
+
+            }
+
+            catch (error) {
+
+                console.log(
+                    "Sound error:",
+                    error
+                );
+
+                resolve();
+
+            }
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   BROWSER NOTIFICATION
+===================================================== */
+
+function showBrowserNotification(
+    medicineName
+) {
+
+    if (
+        !("Notification" in window)
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        Notification.permission !== "granted"
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const notification =
+            new Notification(
+                "💊 MINDCARE AI",
+                {
+
+                    body:
+                        "It is time to take " +
+                        medicineName,
+
+                    tag:
+                        "medicine-" +
+                        patientId +
+                        "-" +
+                        medicineName
+
+                }
+            );
+
+
+        notification.onclick =
+            function() {
+
+                window.focus();
+
+                notification.close();
+
+            };
+
+    }
+
+    catch (error) {
+
+        console.log(
+            "Browser notification error:",
+            error
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   TRIGGER MEDICINE REMINDER
+===================================================== */
+
+async function triggerMedicineReminder(
+    medicineName,
+    medicineTime
+) {
+
+    currentReminderMedicine =
+        medicineName;
+
+    currentReminderTime =
+        medicineTime;
+
+
+    await playReminderSound();
+
+
+    showMedicinePopup(
+        medicineName
+    );
+
+
+    showBrowserNotification(
+        medicineName
+    );
+
+}
+
+
+
+/* =====================================================
+   SHOW MEDICINE POPUP
+===================================================== */
+
+function showMedicinePopup(
+    medicineName
+) {
+
+    const popup =
+        document.getElementById(
+            "medicineReminderPopup"
+        );
+
+
+    const overlay =
+        document.getElementById(
+            "reminderOverlay"
+        );
+
+
+    const medicineNameElement =
+        document.getElementById(
+            "popupMedicineName"
+        );
+
+
+    const dosageElement =
+        document.getElementById(
+            "popupMedicineDosage"
+        );
+
+
+    medicineNameElement.textContent =
+        medicineName;
+
+
+    const saved =
+        getPrescriptionData();
+
+
+    if (saved) {
+
+        dosageElement.textContent =
+            "Dosage: " +
+            (saved.dosage || "");
+
+    }
+
+
+    popup.classList.add(
+        "show"
+    );
+
+
+    overlay.classList.add(
+        "show"
+    );
+
+}
+
+
+
+/* =====================================================
+   CLOSE POPUP
+===================================================== */
+
+function closeMedicinePopup() {
+
+    const popup =
+        document.getElementById(
+            "medicineReminderPopup"
+        );
+
+
+    const overlay =
+        document.getElementById(
+            "reminderOverlay"
+        );
+
+
+    popup.classList.remove(
+        "show"
+    );
+
+
+    overlay.classList.remove(
+        "show"
+    );
+
+}
+
+
+
+/* =====================================================
+   POPUP TAKEN
+===================================================== */
+
+function popupMedicineTaken() {
+
+    closeMedicinePopup();
+
+    markTaken();
+
+}
+
+
+
+/* =====================================================
+   POPUP LATER
+===================================================== */
+
+function popupMedicineLater() {
+
+    closeMedicinePopup();
+
+    remindLater();
+
+}
+
+
+
+/* =====================================================
+   GET PRESCRIPTION KEY
+===================================================== */
+
+function getPatientPrescriptionKey() {
+
+    /*
+       NEW SYSTEM:
+
+       mindcarePrescription_<PatientID>
+    */
+
+    return (
+        "mindcarePrescription_" +
+        patientId
+    );
+
+}
+
+
+
+/* =====================================================
+   GET PRESCRIPTION DATA
+===================================================== */
+
+function getPrescriptionData() {
+
+    if (!patientId) {
+
+        return null;
+
+    }
+
+
+
+    /* =========================================
+       1. NEW PATIENT ID SYSTEM
+    ========================================= */
+
+    const idKey =
+        "mindcarePrescription_" +
+        patientId;
+
+
+    const idSaved =
+        localStorage.getItem(idKey);
+
+
+    if (idSaved) {
+
+        try {
+
+            return JSON.parse(
+                idSaved
+            );
+
+        }
+
+        catch (error) {
+
+            console.log(
+                "Patient ID prescription error:",
+                error
+            );
+
+        }
+
+    }
+
+
+
+    /* =========================================
+       2. OLD NAME SYSTEM FALLBACK
+    ========================================= */
+
+    if (patientName) {
+
+        const nameKey =
+            "mindcarePrescription_" +
+            patientName;
+
+
+        const nameSaved =
+            localStorage.getItem(
+                nameKey
+            );
+
+
+        if (nameSaved) {
+
+            try {
+
+                const oldData =
+                    JSON.parse(
+                        nameSaved
+                    );
+
+
+                /*
+                   Automatically copy old
+                   prescription into the
+                   new Patient ID system.
+                */
+
+                localStorage.setItem(
+                    idKey,
+                    JSON.stringify(
+                        oldData
+                    )
+                );
+
+
+                return oldData;
+
+            }
+
+            catch (error) {
+
+                console.log(
+                    "Old prescription error:",
+                    error
+                );
+
+            }
+
+        }
+
+    }
+
+
+    return null;
+
+}
+
+
+
+/* =====================================================
+   TIME FORMATTER
+===================================================== */
+
+function formatTime(time) {
+
+    if (!time) {
+
+        return "";
+
+    }
+
+
+    const parts =
+        time.split(":");
+
+
+    let hours =
+        parseInt(
+            parts[0],
+            10
+        );
+
+
+    const minutes =
+        parts[1] || "00";
+
+
+    const period =
+        hours >= 12
+            ? "PM"
+            : "AM";
+
+
+    hours =
+        hours % 12;
+
+
+    if (hours === 0) {
+
+        hours = 12;
+
+    }
+
+
+    return (
+        hours +
+        ":" +
+        minutes +
+        " " +
+        period
+    );
+
+}
+
+
+
+/* =====================================================
+   PRESCRIPTION UNIQUE KEY
+===================================================== */
+
+function getPrescriptionKey(data) {
+
+    return (
+        (data.medicine || "") +
+        "_" +
+        (data.time || "")
+    );
+
+}
+
+
+
+/* =====================================================
+   LOAD MEDICINE
+===================================================== */
+
+function loadMedicine() {
+
+    const saved =
+        getPrescriptionData();
+
+
+    const medicineList =
+        document.getElementById(
+            "medicineList"
+        );
+
+
+    const noMedicine =
+        document.getElementById(
+            "noMedicine"
+        );
+
+
+    const aiMessage =
+        document.getElementById(
+            "aiMessage"
+        );
+
+
+    if (!saved) {
+
+        medicineList.innerHTML =
+            "";
+
+
+        noMedicine.style.display =
+            "block";
+
+
+        aiMessage.textContent =
+            "No doctor-approved medicine schedule is available yet.";
+
+
+        return;
+
+    }
+
+
+    noMedicine.style.display =
+        "none";
+
+
+    const data =
+        saved;
+
+
+    const prescriptionKey =
+        getPrescriptionKey(
+            data
+        );
+
+
+    const statusKey =
+        "medicineStatus_" +
+        patientId +
+        "_" +
+        prescriptionKey;
+
+
+
+    medicineList.innerHTML = `
+
+        <div class="medicine-card">
+
+
+            <div class="medicine-card-top">
+
+
+                <div class="medicine-icon">
+
+                    💊
+
+                </div>
+
+
+                <div>
+
+                    <h2>
+
+                        ${escapeHTML(
+                            data.medicine ||
+                            "Medicine"
+                        )}
+
+                    </h2>
+
+
+                    <span class="doctor-approved">
+
+                        ✓ Doctor Approved
+
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="medicine-details">
+
+
+                <div class="medicine-detail">
+
+                    <span>
+
+                        💊
+
+                    </span>
+
+
+                    <div>
+
+                        <small>
+
+                            Dosage
+
+                        </small>
+
+
+                        <strong>
+
+                            ${escapeHTML(
+                                data.dosage ||
+                                "-"
+                            )}
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="medicine-detail">
+
+                    <span>
+
+                        ⏰
+
+                    </span>
+
+
+                    <div>
+
+                        <small>
+
+                            Reminder
+
+                        </small>
+
+
+                        <strong>
+
+                            ${formatTime(
+                                data.time
+                            )}
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="medicine-detail">
+
+                    <span>
+
+                        🔄
+
+                    </span>
+
+
+                    <div>
+
+                        <small>
+
+                            Frequency
+
+                        </small>
+
+
+                        <strong>
+
+                            ${escapeHTML(
+                                data.frequency ||
+                                "-"
+                            )}
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="doctor-instructions">
+
+                <strong>
+
+                    👨‍⚕️ Doctor's Instructions
+
+                </strong>
+
+
+                <p>
+
+                    ${escapeHTML(
+                        data.instructions ||
+                        "Follow doctor's instructions."
+                    )}
+
+                </p>
+
+            </div>
+
+
+
+            <div
+                class="medicine-status"
+                id="medicineStatus">
+
+                <span>
+
+                    ⏳
+
+                </span>
+
+
+                <strong>
+
+                    Waiting for medicine confirmation
+
+                </strong>
+
+            </div>
+
+
+
+            <div class="medicine-actions">
+
+
+                <button
+                    class="taken-btn"
+                    onclick="markTaken()">
+
+                    ✓ Medicine Taken
+
+                </button>
+
+
+                <button
+                    class="later-btn"
+                    onclick="remindLater()">
+
+                    ⏰ Remind Later
+
+                </button>
+
+
+            </div>
+
+
+        </div>
+
+    `;
+
+
+
+    aiMessage.innerHTML =
+        "Your next medicine reminder is at <strong>" +
+        formatTime(data.time) +
+        "</strong>.";
+
+
+
+    restoreMedicineStatus(
+        statusKey
+    );
+
+}
+
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHTML(value) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        value == null
+            ? ""
+            : String(value);
+
+
+    return div.innerHTML;
+
+}
+
+
+
+/* =====================================================
+   ADD MEDICINE HISTORY
+===================================================== */
+
+function addMedicineHistory(
+    status
+) {
+
+    const data =
+        getPrescriptionData();
+
+
+    if (!data) {
+
+        return;
+
+    }
+
+
+    /*
+       NEW SYSTEM:
+
+       medicineHistory_<PatientID>
+    */
+
+    const historyKey =
+        patientKey(
+            "medicineHistory_"
+        );
+
+
+    let history = [];
+
+
+    try {
+
+        history =
+            JSON.parse(
+                localStorage.getItem(
+                    historyKey
+                ) || "[]"
+            );
+
+    }
+
+    catch (error) {
+
+        history = [];
+
+    }
+
+
+    if (!Array.isArray(history)) {
+
+        history = [];
+
+    }
+
+
+    const now =
+        new Date();
+
+
+    const historyItem = {
+
+        patientId:
+            patientId,
+
+        patientName:
+            patientName,
+
+        medicine:
+            data.medicine || "",
+
+        dosage:
+            data.dosage || "",
+
+        status:
+            status,
+
+        date:
+            now.toLocaleDateString(),
+
+        time:
+            now.toLocaleTimeString(
+                [],
+                {
+                    hour: "2-digit",
+                    minute: "2-digit"
+                }
+            )
+
+    };
+
+
+    history.push(
+        historyItem
+    );
+
+
+    localStorage.setItem(
+        historyKey,
+        JSON.stringify(
+            history
+        )
+    );
+
+}
+
+
+
+/* =====================================================
+   MEDICINE TAKEN
+===================================================== */
+
+function markTaken() {
+
+    const data =
+        getPrescriptionData();
+
+
+    if (!data) {
+
+        return;
+
+    }
+
+
+    const prescriptionKey =
+        getPrescriptionKey(
+            data
+        );
+
+
+    const statusKey =
+        "medicineStatus_" +
+        patientId +
+        "_" +
+        prescriptionKey;
+
+
+    const status =
+        document.getElementById(
+            "medicineStatus"
+        );
+
+
+    if (!status) {
+
+        return;
+
+    }
+
+
+    status.innerHTML = `
+
+        <span>
+
+            ✅
+
+        </span>
+
+
+        <strong>
+
+            Medicine marked as taken
+
+        </strong>
+
+    `;
+
+
+    status.classList.add(
+        "medicine-taken"
+    );
+
+
+    localStorage.setItem(
+        statusKey,
+        "taken"
+    );
+
+
+    addMedicineHistory(
+        "taken"
+    );
+
+
+    alert(
+        "Medicine marked as taken successfully."
+    );
+
+}
+
+
+
+/* =====================================================
+   REMIND LATER
+===================================================== */
+
+function remindLater() {
+
+    const data =
+        getPrescriptionData();
+
+
+    if (!data) {
+
+        return;
+
+    }
+
+
+    const prescriptionKey =
+        getPrescriptionKey(
+            data
+        );
+
+
+    const statusKey =
+        "medicineStatus_" +
+        patientId +
+        "_" +
+        prescriptionKey;
+
+
+    localStorage.setItem(
+        statusKey,
+        "later"
+    );
+
+
+    addMedicineHistory(
+        "later"
+    );
+
+
+    const status =
+        document.getElementById(
+            "medicineStatus"
+        );
+
+
+    if (status) {
+
+        status.innerHTML = `
+
+            <span>
+
+                ⏰
+
+            </span>
+
+
+            <strong>
+
+                Reminder postponed
+
+            </strong>
+
+        `;
+
+    }
+
+
+    alert(
+        "Reminder postponed. We will remind you later."
+    );
+
+}
+
+
+
+/* =====================================================
+   RESTORE MEDICINE STATUS
+===================================================== */
+
+function restoreMedicineStatus(
+    statusKey
+) {
+
+    const savedStatus =
+        localStorage.getItem(
+            statusKey
+        );
+
+
+    const status =
+        document.getElementById(
+            "medicineStatus"
+        );
+
+
+    if (!status) {
+
+        return;
+
+    }
+
+
+    if (
+        savedStatus === "taken"
+    ) {
+
+        status.innerHTML = `
+
+            <span>
+
+                ✅
+
+            </span>
+
+
+            <strong>
+
+                Medicine marked as taken
+
+            </strong>
+
+        `;
+
+
+        status.classList.add(
+            "medicine-taken"
+        );
+
+    }
+
+
+    else if (
+        savedStatus === "later"
+    ) {
+
+        status.innerHTML = `
+
+            <span>
+
+                ⏰
+
+            </span>
+
+
+            <strong>
+
+                Reminder postponed
+
+            </strong>
+
+        `;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   MEDICINE REMINDER CHECK
+===================================================== */
+
+function checkMedicineReminder() {
+
+    const prescription =
+        getPrescriptionData();
+
+
+    if (!prescription) {
+
+        return;
+
+    }
+
+
+    if (!prescription.time) {
+
+        return;
+
+    }
+
+
+
+    /* CURRENT TIME */
+
+    const now =
+        new Date();
+
+
+    const currentTotalMinutes =
+        now.getHours() * 60 +
+        now.getMinutes();
+
+
+
+    /* PRESCRIBED TIME */
+
+    const timeParts =
+        prescription.time.split(":");
+
+
+    const medicineHour =
+        parseInt(
+            timeParts[0],
+            10
+        );
+
+
+    const medicineMinute =
+        parseInt(
+            timeParts[1],
+            10
+        );
+
+
+    if (
+        isNaN(medicineHour) ||
+        isNaN(medicineMinute)
+    ) {
+
+        return;
+
+    }
+
+
+    const medicineTotalMinutes =
+        medicineHour * 60 +
+        medicineMinute;
+
+
+
+    /* PRESCRIPTION KEY */
+
+    const prescriptionKey =
+        getPrescriptionKey(
+            prescription
+        );
+
+
+    const statusKey =
+        "medicineStatus_" +
+        patientId +
+        "_" +
+        prescriptionKey;
+
+
+    const savedStatus =
+        localStorage.getItem(
+            statusKey
+        );
+
+
+
+    /* ALREADY TAKEN */
+
+    if (
+        savedStatus === "taken"
+    ) {
+
+        return;
+
+    }
+
+
+
+    /* CHECK TIME */
+
+    if (
+        currentTotalMinutes >=
+        medicineTotalMinutes
+    ) {
+
+        showMedicineReminder(
+
+            prescription.medicine,
+
+            prescription.time
+
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   SHOW MEDICINE REMINDER
+===================================================== */
+
+function showMedicineReminder(
+    medicineName,
+    prescriptionTime
+) {
+
+    const today =
+        new Date().toDateString();
+
+
+    /*
+       Patient ID is included.
+
+       So each patient's reminder
+       is completely separate.
+    */
+
+    const reminderKey =
+
+        "medicineReminder_" +
+
+        patientId +
+
+        "_" +
+
+        today +
+
+        "_" +
+
+        medicineName +
+
+        "_" +
+
+        prescriptionTime;
+
+
+
+    /* ALREADY SHOWN TODAY */
+
+    if (
+        localStorage.getItem(
+            reminderKey
+        )
+    ) {
+
+        return;
+
+    }
+
+
+
+    /* SAVE REMINDER */
+
+    localStorage.setItem(
+        reminderKey,
+        "shown"
+    );
+
+
+
+    /* SOUND + POPUP */
+
+    triggerMedicineReminder(
+
+        medicineName,
+
+        prescriptionTime
+
+    );
+
+}
+
+
+
+/* =====================================================
+   INITIAL REMINDER CHECK
+===================================================== */
+
+checkMedicineReminder();
+
+
+
+/* =====================================================
+   CHECK EVERY 30 SECONDS
+===================================================== */
+
+setInterval(
+
+    checkMedicineReminder,
+
+    30000
+
+);
+
+
+
+/* =====================================================
+   BACK
+===================================================== */
+
+function goBack() {
+
+    window.location.href =
+        "patient.html";
+
+}
+
+
+
+/* =====================================================
+   PAGE LOAD
+===================================================== */
+
+window.addEventListener(
+
+    "load",
+
+    function() {
+
+        loadMedicine();
+
+    }
+
+);
+
+
+
+/* =====================================================
+   PAGE SHOW
+===================================================== */
+
+window.addEventListener(
+
+    "pageshow",
+
+    function() {
+
+        loadMedicine();
+
+    }
+
+);
+
+
+</script>
+
+
+</body>
+
+</html>

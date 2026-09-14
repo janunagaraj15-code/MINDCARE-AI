@@ -1,0 +1,1662 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Daily Routine Recall - MINDCARE AI</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #eef4ff, #f8fbff);
+            color: #222;
+        }
+
+        header {
+            background: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            color: #2457d6;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .back-btn {
+            background: #2457d6;
+            color: white;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 40px auto;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .intro h1 {
+            color: #2457d6;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .intro p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .info-bar {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        .info {
+            background: white;
+            padding: 10px 18px;
+            border-radius: 20px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+            font-weight: bold;
+            color: #2457d6;
+        }
+
+        .game-box {
+            background: white;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .instruction {
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .routine-display {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .routine-item {
+            width: 150px;
+            min-height: 100px;
+            background: #eef3ff;
+            border: 2px solid #dce6ff;
+            border-radius: 15px;
+            padding: 18px 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .routine-icon {
+            font-size: 35px;
+            margin-bottom: 8px;
+        }
+
+        .sequence-number {
+            font-size: 13px;
+            color: #2457d6;
+            margin-bottom: 5px;
+        }
+
+        .options {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .option-btn {
+            width: 150px;
+            min-height: 90px;
+            background: white;
+            border: 2px solid #d5def5;
+            border-radius: 14px;
+            cursor: pointer;
+            padding: 15px 10px;
+            font-size: 15px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .option-btn:hover {
+            border-color: #2457d6;
+            transform: translateY(-3px);
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .option-icon {
+            display: block;
+            font-size: 32px;
+            margin-bottom: 7px;
+        }
+
+        .start-btn {
+            background: #2457d6;
+            color: white;
+            border: none;
+            padding: 13px 30px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .next-btn {
+            background: #2457d6;
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: 15px;
+            margin-top: 25px;
+        }
+
+        .message {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 20px 0;
+            min-height: 25px;
+        }
+
+        .result-box {
+            display: none;
+            margin-top: 25px;
+            padding: 25px;
+            background: #f5f8ff;
+            border-radius: 15px;
+        }
+
+        .result-box h2 {
+            color: #2457d6;
+        }
+
+        .result-item {
+            margin: 10px;
+            font-size: 17px;
+        }
+
+        .ai-box {
+            margin-top: 20px;
+            background: #eef3ff;
+            padding: 18px;
+            border-radius: 12px;
+            color: #2457d6;
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 700px) {
+
+            header {
+                padding: 15px 20px;
+            }
+
+            .container {
+                width: 94%;
+            }
+
+            .game-box {
+                padding: 25px 15px;
+            }
+
+            .routine-item,
+            .option-btn {
+                width: 130px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header>
+
+    <div>
+
+        <div class="logo">
+            🧠 MINDCARE AI
+        </div>
+
+        <div class="subtitle">
+            Daily Routine Recall Game
+        </div>
+
+    </div>
+
+    <button class="back-btn"
+            onclick="goBack()">
+
+        ← Back
+
+    </button>
+
+</header>
+
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<div class="container">
+
+
+    <div class="intro">
+
+        <h1>
+            📅 Daily Routine Recall
+        </h1>
+
+        <p>
+            Remember familiar daily activities
+            and recall them in the correct order.
+        </p>
+
+    </div>
+
+
+
+    <!-- =========================
+         INFO
+    ========================== -->
+
+    <div class="info-bar">
+
+        <div class="info">
+            🤖 Level:
+            <span id="level">Easy</span>
+        </div>
+
+        <div class="info">
+            ⭐ Score:
+            <span id="score">0</span>
+        </div>
+
+        <div class="info">
+            ❌ Mistakes:
+            <span id="mistakes">0</span>
+        </div>
+
+        <div class="info">
+            ⏱ Time:
+            <span id="time">0</span>s
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         GAME BOX
+    ========================== -->
+
+    <div class="game-box">
+
+
+        <!-- START SCREEN -->
+
+        <div id="startScreen">
+
+            <div class="instruction">
+
+                🧠 You will see a sequence of daily activities.
+
+                <br>
+
+                Remember the order and select them
+                in the same order.
+
+            </div>
+
+            <button class="start-btn"
+                    onclick="startGame()">
+
+                ▶ Start Game
+
+            </button>
+
+        </div>
+
+
+
+        <!-- SHOW SEQUENCE -->
+
+        <div id="sequenceScreen"
+             class="hidden">
+
+            <h2>
+                Remember This Routine
+            </h2>
+
+            <p>
+                👀 Watch carefully...
+            </p>
+
+            <div id="routineDisplay"
+                 class="routine-display">
+            </div>
+
+        </div>
+
+
+
+        <!-- ANSWER SCREEN -->
+
+        <div id="answerScreen"
+             class="hidden">
+
+            <h2>
+                🧠 Recall the Routine
+            </h2>
+
+            <p class="instruction">
+
+                Select the activities
+                in the correct order.
+
+            </p>
+
+            <div id="options"
+                 class="options">
+            </div>
+
+            <div id="message"
+                 class="message">
+            </div>
+
+        </div>
+
+
+
+        <!-- RESULT -->
+
+        <div id="resultBox"
+             class="result-box">
+
+            <h2>
+                🎉 Game Completed!
+            </h2>
+
+            <div class="result-item">
+                ⭐ Score:
+                <strong id="finalScore">0</strong>
+            </div>
+
+            <div class="result-item">
+                ❌ Mistakes:
+                <strong id="finalMistakes">0</strong>
+            </div>
+
+            <div class="result-item">
+                ⏱ Time:
+                <strong id="finalTime">0</strong>
+                seconds
+            </div>
+
+            <div class="result-item">
+                📊 Performance:
+                <strong id="performance">-</strong>
+            </div>
+
+            <div class="ai-box">
+
+                🤖 AI Recommendation:
+
+                <br><br>
+
+                <span id="aiMessage"></span>
+
+            </div>
+
+            <br>
+
+            <button class="start-btn"
+                    onclick="startGame()">
+
+                🔄 Play Again
+
+            </button>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+
+/* =========================
+   CURRENT PATIENT
+========================= */
+
+const patientId =
+    sessionStorage.getItem("currentPatientId");
+
+const patientName =
+    sessionStorage.getItem("currentPatientName");
+
+
+/* =========================
+   LOGIN CHECK
+========================= */
+
+if (!patientId || !patientName) {
+
+    alert("Please login as a patient first.");
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+/* =========================
+   PATIENT-SPECIFIC STORAGE
+========================= */
+
+const historyKey =
+    "gameHistory_" + patientId;
+
+const levelKey =
+    "dailyRoutineLevel_" + patientId;
+
+
+/* =========================
+   GAME VARIABLES
+========================= */
+
+let level =
+    localStorage.getItem(levelKey) || "Easy";
+
+
+/*
+   Difficulty actually played
+   in the current game.
+*/
+
+let playedLevel =
+    "Easy";
+
+
+let score =
+    0;
+
+
+let mistakes =
+    0;
+
+
+let seconds =
+    0;
+
+
+let timer =
+    null;
+
+
+let sequenceTimeout =
+    null;
+
+
+let currentSequence =
+    [];
+
+
+let userSequence =
+    [];
+
+
+let gameStarted =
+    false;
+
+
+let gameFinished =
+    false;
+
+
+/* =========================
+   ROUTINE DATA
+========================= */
+
+const routines = [
+
+    {
+        icon: "🌅",
+        name: "Wake Up"
+    },
+
+    {
+        icon: "🪥",
+        name: "Brush Teeth"
+    },
+
+    {
+        icon: "🍳",
+        name: "Have Breakfast"
+    },
+
+    {
+        icon: "🚿",
+        name: "Take Bath"
+    },
+
+    {
+        icon: "👕",
+        name: "Get Dressed"
+    },
+
+    {
+        icon: "💊",
+        name: "Take Medicine"
+    },
+
+    {
+        icon: "🍛",
+        name: "Have Lunch"
+    },
+
+    {
+        icon: "🚶",
+        name: "Go for Walk"
+    },
+
+    {
+        icon: "☕",
+        name: "Have Tea"
+    },
+
+    {
+        icon: "🍽️",
+        name: "Have Dinner"
+    },
+
+    {
+        icon: "📺",
+        name: "Watch TV"
+    },
+
+    {
+        icon: "😴",
+        name: "Go to Sleep"
+    }
+
+];
+
+
+/* =========================
+   LEVEL SETTINGS
+========================= */
+
+const levelSettings = {
+
+    Easy: {
+
+        length: 3,
+
+        displayTime: 4000
+
+    },
+
+    Medium: {
+
+        length: 4,
+
+        displayTime: 3000
+
+    },
+
+    Hard: {
+
+        length: 5,
+
+        displayTime: 2200
+
+    }
+
+};
+
+
+/* =========================
+   GET SEQUENCE LENGTH
+========================= */
+
+function getSequenceLength() {
+
+    return levelSettings[
+        playedLevel
+    ].length;
+
+}
+
+
+/* =========================
+   GET DISPLAY TIME
+========================= */
+
+function getDisplayTime() {
+
+    return levelSettings[
+        playedLevel
+    ].displayTime;
+
+}
+
+
+/* =========================
+   UPDATE LEVEL
+========================= */
+
+function updateLevelDisplay() {
+
+    document.getElementById(
+        "level"
+    ).textContent =
+        level;
+
+}
+
+
+/* =========================
+   UPDATE STATS
+========================= */
+
+function updateStats() {
+
+    document.getElementById(
+        "score"
+    ).textContent =
+        score;
+
+
+    document.getElementById(
+        "mistakes"
+    ).textContent =
+        mistakes;
+
+
+    document.getElementById(
+        "time"
+    ).textContent =
+        seconds;
+
+}
+
+
+/* =========================
+   START GAME
+========================= */
+
+function startGame() {
+
+    clearInterval(
+        timer
+    );
+
+    clearTimeout(
+        sequenceTimeout
+    );
+
+
+    /*
+       Read patient-specific
+       AI recommended level.
+    */
+
+    level =
+        localStorage.getItem(
+            levelKey
+        ) || "Easy";
+
+
+    /*
+       Store the level actually played.
+    */
+
+    playedLevel =
+        level;
+
+
+    score =
+        0;
+
+
+    mistakes =
+        0;
+
+
+    seconds =
+        0;
+
+
+    currentSequence =
+        [];
+
+
+    userSequence =
+        [];
+
+
+    gameStarted =
+        true;
+
+
+    gameFinished =
+        false;
+
+
+    updateStats();
+
+
+    updateLevelDisplay();
+
+
+    document.getElementById(
+        "startScreen"
+    ).classList.add(
+        "hidden"
+    );
+
+
+    document.getElementById(
+        "resultBox"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "answerScreen"
+    ).classList.add(
+        "hidden"
+    );
+
+
+    document.getElementById(
+        "sequenceScreen"
+    ).classList.remove(
+        "hidden"
+    );
+
+
+    document.getElementById(
+        "message"
+    ).textContent =
+        "";
+
+
+    createSequence();
+
+
+    startTimer();
+
+}
+
+
+/* =========================
+   CREATE SEQUENCE
+========================= */
+
+function createSequence() {
+
+    currentSequence =
+        [];
+
+
+    const length =
+        getSequenceLength();
+
+
+    const shuffled =
+        [...routines].sort(
+            () =>
+                Math.random() - 0.5
+        );
+
+
+    currentSequence =
+        shuffled.slice(
+            0,
+            length
+        );
+
+
+    const display =
+        document.getElementById(
+            "routineDisplay"
+        );
+
+
+    display.innerHTML =
+        "";
+
+
+    currentSequence.forEach(
+        (item, index) => {
+
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+
+            div.className =
+                "routine-item";
+
+
+            div.innerHTML = `
+
+                <div class="sequence-number">
+                    Step ${index + 1}
+                </div>
+
+                <div class="routine-icon">
+                    ${item.icon}
+                </div>
+
+                <div>
+                    ${item.name}
+                </div>
+
+            `;
+
+
+            display.appendChild(
+                div
+            );
+
+        }
+    );
+
+
+    sequenceTimeout =
+        setTimeout(
+
+            () => {
+
+                if (gameStarted) {
+
+                    showAnswerScreen();
+
+                }
+
+            },
+
+            getDisplayTime()
+
+        );
+
+}
+
+
+/* =========================
+   SHOW ANSWER
+========================= */
+
+function showAnswerScreen() {
+
+    if (!gameStarted) {
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "sequenceScreen"
+    ).classList.add(
+        "hidden"
+    );
+
+
+    document.getElementById(
+        "answerScreen"
+    ).classList.remove(
+        "hidden"
+    );
+
+
+    userSequence =
+        [];
+
+
+    const options =
+        document.getElementById(
+            "options"
+        );
+
+
+    options.innerHTML =
+        "";
+
+
+    /*
+       Shuffle only the displayed
+       answer options.
+    */
+
+    const shuffledOptions =
+        [...currentSequence].sort(
+            () =>
+                Math.random() - 0.5
+        );
+
+
+    shuffledOptions.forEach(
+        item => {
+
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+
+            button.className =
+                "option-btn";
+
+
+            button.innerHTML = `
+
+                <span class="option-icon">
+                    ${item.icon}
+                </span>
+
+                ${item.name}
+
+            `;
+
+
+            button.onclick =
+                () => {
+
+                    selectRoutine(
+                        item,
+                        button
+                    );
+
+                };
+
+
+            options.appendChild(
+                button
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================
+   SELECT ROUTINE
+========================= */
+
+function selectRoutine(
+    item,
+    button
+) {
+
+    if (
+        !gameStarted ||
+        gameFinished
+    ) {
+
+        return;
+
+    }
+
+
+    const expected =
+        currentSequence[
+            userSequence.length
+        ];
+
+
+    if (
+        item.name ===
+        expected.name
+    ) {
+
+
+        userSequence.push(
+            item
+        );
+
+
+        score +=
+            20;
+
+
+        button.disabled =
+            true;
+
+
+        button.style.opacity =
+            "0.5";
+
+
+        document.getElementById(
+            "message"
+        ).textContent =
+            "✅ Correct!";
+
+
+        updateStats();
+
+
+        /*
+           Check whether
+           entire sequence is completed.
+        */
+
+        if (
+            userSequence.length ===
+            currentSequence.length
+        ) {
+
+            finishGame();
+
+        }
+
+    }
+
+    else {
+
+
+        mistakes++;
+
+
+        score =
+            Math.max(
+                0,
+                score - 10
+            );
+
+
+        document.getElementById(
+            "message"
+        ).textContent =
+            "❌ Try the correct activity.";
+
+
+        updateStats();
+
+    }
+
+}
+
+
+/* =========================
+   TIMER
+========================= */
+
+function startTimer() {
+
+    timer =
+        setInterval(
+
+            () => {
+
+                if (
+                    gameStarted &&
+                    !gameFinished
+                ) {
+
+                    seconds++;
+
+                    updateStats();
+
+                }
+
+            },
+
+            1000
+
+        );
+
+}
+
+
+/* =========================
+   FINISH GAME
+========================= */
+
+function finishGame() {
+
+    gameStarted =
+        false;
+
+
+    gameFinished =
+        true;
+
+
+    clearInterval(
+        timer
+    );
+
+
+    clearTimeout(
+        sequenceTimeout
+    );
+
+
+    const performance =
+        calculatePerformance();
+
+
+    document.getElementById(
+        "answerScreen"
+    ).classList.add(
+        "hidden"
+    );
+
+
+    document.getElementById(
+        "resultBox"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "finalScore"
+    ).textContent =
+        score;
+
+
+    document.getElementById(
+        "finalMistakes"
+    ).textContent =
+        mistakes;
+
+
+    document.getElementById(
+        "finalTime"
+    ).textContent =
+        seconds;
+
+
+    document.getElementById(
+        "performance"
+    ).textContent =
+        performance;
+
+
+    updateAI(
+        performance
+    );
+
+
+    saveHistory(
+        performance
+    );
+
+}
+
+
+/* =========================
+   PERFORMANCE
+========================= */
+
+function calculatePerformance() {
+
+
+    if (
+        playedLevel ===
+        "Easy"
+    ) {
+
+
+        if (
+            mistakes <= 1 &&
+            seconds <= 40
+        ) {
+
+            return "Excellent";
+
+        }
+
+
+        if (
+            mistakes <= 3 &&
+            seconds <= 60
+        ) {
+
+            return "Good";
+
+        }
+
+
+        return "Needs Support";
+
+    }
+
+
+    if (
+        playedLevel ===
+        "Medium"
+    ) {
+
+
+        if (
+            mistakes <= 1 &&
+            seconds <= 50
+        ) {
+
+            return "Excellent";
+
+        }
+
+
+        if (
+            mistakes <= 3 &&
+            seconds <= 70
+        ) {
+
+            return "Good";
+
+        }
+
+
+        return "Needs Support";
+
+    }
+
+
+    /* HARD */
+
+    if (
+        mistakes <= 2 &&
+        seconds <= 70
+    ) {
+
+        return "Excellent";
+
+    }
+
+
+    if (
+        mistakes <= 4 &&
+        seconds <= 100
+    ) {
+
+        return "Good";
+
+    }
+
+
+    return "Needs Support";
+
+}
+
+
+/* =========================
+   AI ADAPTIVE DIFFICULTY
+========================= */
+
+function updateAI(
+    performance
+) {
+
+    let nextLevel =
+        playedLevel;
+
+
+    let message =
+        "";
+
+
+    if (
+        performance ===
+        "Excellent"
+    ) {
+
+
+        if (
+            playedLevel ===
+            "Easy"
+        ) {
+
+            nextLevel =
+                "Medium";
+
+        }
+
+        else if (
+            playedLevel ===
+            "Medium"
+        ) {
+
+            nextLevel =
+                "Hard";
+
+        }
+
+        else {
+
+            nextLevel =
+                "Hard";
+
+        }
+
+
+        message =
+            "Excellent performance! AI increased the difficulty to "
+            + nextLevel
+            + " for the next game.";
+
+    }
+
+
+    else if (
+        performance ===
+        "Good"
+    ) {
+
+
+        nextLevel =
+            playedLevel;
+
+
+        message =
+            "Good performance! AI will maintain the "
+            + nextLevel
+            + " difficulty.";
+
+    }
+
+
+    else {
+
+
+        nextLevel =
+            "Easy";
+
+
+        message =
+            "AI detected that the game was challenging. "
+            + "Difficulty is adjusted to Easy for supportive practice.";
+
+    }
+
+
+    /*
+       IMPORTANT:
+       Save the recommended level
+       for THIS patient only.
+    */
+
+    level =
+        nextLevel;
+
+
+    localStorage.setItem(
+        levelKey,
+        nextLevel
+    );
+
+
+    document.getElementById(
+        "aiMessage"
+    ).textContent =
+        message;
+
+}
+
+
+/* =========================
+   SAVE GAME HISTORY
+========================= */
+
+function saveHistory(
+    performance
+) {
+
+
+    let history =
+        [];
+
+
+    try {
+
+
+        history =
+            JSON.parse(
+
+                localStorage.getItem(
+                    historyKey
+                ) || "[]"
+
+            );
+
+
+        if (
+            !Array.isArray(
+                history
+            )
+        ) {
+
+            history =
+                [];
+
+        }
+
+    }
+
+    catch (error) {
+
+        history =
+            [];
+
+    }
+
+
+    const now =
+        new Date();
+
+
+    /*
+       IMPORTANT:
+
+       patientId = identifies
+       the logged-in patient.
+
+       patient = displays
+       the patient's name.
+
+       difficulty = actual
+       difficulty played.
+
+       AI recommended level is
+       stored separately in levelKey.
+    */
+
+    const gameData = {
+
+        patientId:
+            patientId,
+
+        patient:
+            patientName,
+
+        game:
+            "Daily Routine Recall",
+
+        score:
+            score,
+
+        time:
+            seconds,
+
+        mistakes:
+            mistakes,
+
+        difficulty:
+            playedLevel,
+
+        performance:
+            performance,
+
+        date:
+            now.toLocaleDateString(),
+
+        timeStamp:
+            now.toLocaleTimeString(
+                [],
+                {
+                    hour:
+                        "2-digit",
+
+                    minute:
+                        "2-digit"
+                }
+            )
+
+    };
+
+
+    history.push(
+        gameData
+    );
+
+
+    localStorage.setItem(
+
+        historyKey,
+
+        JSON.stringify(
+            history
+        )
+
+    );
+
+}
+
+
+/* =========================
+   BACK BUTTON
+========================= */
+
+function goBack() {
+
+    window.location.href =
+        "memory-games.html";
+
+}
+
+
+/* =========================
+   PAGE LOAD
+========================= */
+
+window.addEventListener(
+    "load",
+    function() {
+
+
+        level =
+            localStorage.getItem(
+                levelKey
+            ) || "Easy";
+
+
+        updateLevelDisplay();
+
+
+        updateStats();
+
+    }
+);
+
+
+/* =========================
+   PAGE SHOW
+========================= */
+
+window.addEventListener(
+    "pageshow",
+    function() {
+
+
+        level =
+            localStorage.getItem(
+                levelKey
+            ) || "Easy";
+
+
+        updateLevelDisplay();
+
+    }
+);
+
+
+</script>
+
+
+</body>
+
+</html>

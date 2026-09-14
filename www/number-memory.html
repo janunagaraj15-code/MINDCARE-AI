@@ -1,0 +1,1705 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Number Memory - MINDCARE AI</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #eef4ff, #f8fbff);
+            color: #222;
+        }
+
+        header {
+            background: #ffffff;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            color: #2457d6;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .back-btn {
+            border: none;
+            background: #2457d6;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 850px;
+            margin: 40px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 0;
+            color: #2457d6;
+        }
+
+        .description {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .difficulty {
+            display: inline-block;
+            margin: 15px 0;
+            padding: 8px 18px;
+            border-radius: 20px;
+            background: #eef3ff;
+            color: #2457d6;
+            font-weight: bold;
+        }
+
+        .info-box {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 25px 0;
+        }
+
+        .info {
+            background: #f5f7fb;
+            padding: 12px 25px;
+            border-radius: 10px;
+        }
+
+        .info span {
+            display: block;
+            font-size: 13px;
+            color: #777;
+        }
+
+        .info strong {
+            font-size: 20px;
+        }
+
+        .start-btn,
+        .submit-btn,
+        .again-btn {
+            border: none;
+            padding: 13px 28px;
+            border-radius: 10px;
+            background: #2457d6;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 8px;
+        }
+
+        .start-btn:hover,
+        .submit-btn:hover,
+        .again-btn:hover {
+            opacity: 0.9;
+        }
+
+        #gameArea,
+        #resultArea {
+            display: none;
+        }
+
+        .number-display {
+            font-size: 42px;
+            font-weight: bold;
+            letter-spacing: 8px;
+            margin: 35px 0;
+            min-height: 55px;
+            color: #2457d6;
+        }
+
+        .instruction {
+            font-size: 18px;
+            color: #555;
+        }
+
+        #numberInput {
+            width: 80%;
+            max-width: 400px;
+            padding: 15px;
+            font-size: 22px;
+            text-align: center;
+            border: 2px solid #ccd5ea;
+            border-radius: 10px;
+            outline: none;
+        }
+
+        #numberInput:focus {
+            border-color: #2457d6;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .result-box {
+            background: #f5f7fb;
+            padding: 18px;
+            border-radius: 12px;
+        }
+
+        .result-box span {
+            display: block;
+            font-size: 13px;
+            color: #777;
+        }
+
+        .result-box strong {
+            font-size: 22px;
+            display: block;
+            margin-top: 5px;
+        }
+
+        .ai-box {
+            background: #eef4ff;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .ai-box h3 {
+            color: #2457d6;
+            margin-top: 0;
+        }
+
+        #message {
+            min-height: 30px;
+            margin: 15px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 650px) {
+
+            header {
+                padding: 15px 20px;
+            }
+
+            .container {
+                width: 94%;
+                margin: 25px auto;
+            }
+
+            .info-box {
+                gap: 10px;
+                flex-wrap: wrap;
+            }
+
+            .result-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .number-display {
+                font-size: 30px;
+                letter-spacing: 5px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <div>
+
+        <div class="logo">
+            🧠 MINDCARE AI
+        </div>
+
+        <div class="subtitle">
+            Number Memory Cognitive Game
+        </div>
+
+    </div>
+
+
+    <button
+        class="back-btn"
+        onclick="goBack()">
+
+        ← Back
+
+    </button>
+
+</header>
+
+
+
+<div class="container">
+
+
+    <!-- INTRO -->
+
+    <div
+        class="card"
+        id="introArea">
+
+        <h1>
+            🔢 Number Memory
+        </h1>
+
+
+        <p class="description">
+
+            Remember the number shown on the screen and enter it after it disappears.
+            This game helps practice short-term memory and concentration.
+
+        </p>
+
+
+        <div class="difficulty">
+
+            AI Difficulty:
+
+            <span id="difficultyText">
+                Easy
+            </span>
+
+        </div>
+
+
+        <br>
+
+
+        <button
+            class="start-btn"
+            onclick="startGame()">
+
+            ▶ Start Game
+
+        </button>
+
+    </div>
+
+
+
+    <!-- GAME -->
+
+    <div
+        class="card"
+        id="gameArea">
+
+
+        <h1>
+            🔢 Number Memory Challenge
+        </h1>
+
+
+        <div class="info-box">
+
+
+            <div class="info">
+
+                <span>
+                    Difficulty
+                </span>
+
+                <strong id="gameDifficulty">
+                    Easy
+                </strong>
+
+            </div>
+
+
+
+            <div class="info">
+
+                <span>
+                    Time
+                </span>
+
+                <strong>
+
+                    <span id="timer">
+                        0
+                    </span>s
+
+                </strong>
+
+            </div>
+
+
+
+            <div class="info">
+
+                <span>
+                    Mistakes
+                </span>
+
+                <strong id="mistakes">
+                    0
+                </strong>
+
+            </div>
+
+
+        </div>
+
+
+
+        <p
+            class="instruction"
+            id="instruction">
+
+            Remember this number...
+
+        </p>
+
+
+
+        <div
+            class="number-display"
+            id="numberDisplay">
+
+            ----
+
+        </div>
+
+
+
+        <div
+            id="inputArea"
+            style="display:none;">
+
+
+            <p class="instruction">
+
+                Enter the number you remember:
+
+            </p>
+
+
+
+            <input
+                type="text"
+                id="numberInput"
+                inputmode="numeric"
+                autocomplete="off"
+                placeholder="Enter number"
+            >
+
+
+            <br>
+
+
+            <button
+                class="submit-btn"
+                onclick="submitAnswer()">
+
+                ✓ Submit Answer
+
+            </button>
+
+
+        </div>
+
+
+
+        <div id="message">
+        </div>
+
+
+    </div>
+
+
+
+    <!-- RESULT -->
+
+    <div
+        class="card"
+        id="resultArea">
+
+
+        <h1>
+            🎯 Game Completed!
+        </h1>
+
+
+
+        <div class="result-grid">
+
+
+            <div class="result-box">
+
+                <span>
+                    Score
+                </span>
+
+                <strong id="finalScore">
+                    0
+                </strong>
+
+            </div>
+
+
+
+            <div class="result-box">
+
+                <span>
+                    Time
+                </span>
+
+                <strong id="finalTime">
+                    0s
+                </strong>
+
+            </div>
+
+
+
+            <div class="result-box">
+
+                <span>
+                    Mistakes
+                </span>
+
+                <strong id="finalMistakes">
+                    0
+                </strong>
+
+            </div>
+
+
+
+            <div class="result-box">
+
+                <span>
+                    Difficulty
+                </span>
+
+                <strong id="finalDifficulty">
+                    Easy
+                </strong>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="ai-box">
+
+
+            <h3>
+                🤖 AI Performance Analysis
+            </h3>
+
+
+            <p id="aiAnalysis">
+
+                Your performance will be analysed here.
+
+            </p>
+
+
+            <p>
+
+                <strong>
+                    Recommended Next Level:
+                </strong>
+
+                <span id="nextLevel">
+                    Easy
+                </span>
+
+            </p>
+
+
+        </div>
+
+
+
+        <br>
+
+
+        <button
+            class="again-btn"
+            onclick="playAgain()">
+
+            🔄 Play Again
+
+        </button>
+
+
+
+        <button
+            class="back-btn"
+            onclick="goBack()">
+
+            🏠 Memory Games
+
+        </button>
+
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+
+/* =====================================================
+   MINDCARE AI - NUMBER MEMORY GAME
+   PATIENT ID BASED VERSION
+===================================================== */
+
+
+/* =====================================================
+   CURRENT LOGGED-IN PATIENT
+===================================================== */
+
+const patientId =
+    sessionStorage.getItem("currentPatientId");
+
+const patientName =
+    sessionStorage.getItem("currentPatientName");
+
+
+/*
+   Patient login check.
+
+   If there is no active patient session,
+   the game cannot be opened directly.
+*/
+
+if (!patientId || !patientName) {
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+/* =====================================================
+   PATIENT-SPECIFIC STORAGE KEYS
+===================================================== */
+
+/*
+   Each patient gets separate:
+
+   game history
+   AI difficulty
+
+   Example:
+
+   gameHistory_MC001
+   aiLevel_MC001
+
+   gameHistory_MC002
+   aiLevel_MC002
+*/
+
+const historyKey =
+    "gameHistory_" + patientId;
+
+const aiLevelKey =
+    "aiLevel_" + patientId;
+
+
+/* =========================
+   AI LEVEL
+========================= */
+
+/*
+   IMPORTANT:
+
+   Previous version used:
+
+   aiLevel
+
+   That was GLOBAL.
+
+   Now:
+
+   aiLevel_<patientId>
+
+   So each patient's AI level
+   is maintained separately.
+*/
+
+let currentLevel =
+    localStorage.getItem(
+        aiLevelKey
+    )
+    || "Easy";
+
+
+/*
+   Difficulty actually played
+   in the current game.
+*/
+
+let playedLevel =
+    "Easy";
+
+
+/* =========================
+   GAME VARIABLES
+========================= */
+
+let targetNumber = "";
+
+let seconds = 0;
+
+let mistakes = 0;
+
+let timerInterval = null;
+
+let gameFinished = false;
+
+
+/*
+   Used to cancel the previous
+   number hiding timer when a
+   new game starts.
+*/
+
+let hideNumberTimeout = null;
+
+
+/* =========================
+   DIFFICULTY SETTINGS
+========================= */
+
+const difficultySettings = {
+
+    Easy: {
+
+        digits: 3,
+
+        displayTime: 5000
+
+    },
+
+
+    Medium: {
+
+        digits: 5,
+
+        displayTime: 4000
+
+    },
+
+
+    Hard: {
+
+        digits: 7,
+
+        displayTime: 3000
+
+    }
+
+};
+
+
+/* =========================
+   UPDATE DIFFICULTY
+========================= */
+
+function updateDifficulty() {
+
+    currentLevel =
+        localStorage.getItem(
+            aiLevelKey
+        )
+        || "Easy";
+
+
+    /*
+       Safety check.
+
+       If an invalid level somehow
+       exists in storage, use Easy.
+    */
+
+    if (
+        !difficultySettings[
+            currentLevel
+        ]
+    ) {
+
+        currentLevel =
+            "Easy";
+
+        localStorage.setItem(
+            aiLevelKey,
+            currentLevel
+        );
+
+    }
+
+
+    document.getElementById(
+        "difficultyText"
+    ).textContent =
+        currentLevel;
+
+}
+
+
+/* =========================
+   GENERATE RANDOM NUMBER
+========================= */
+
+function generateNumber(digits) {
+
+    const min =
+        Math.pow(
+            10,
+            digits - 1
+        );
+
+
+    const max =
+        Math.pow(
+            10,
+            digits
+        ) - 1;
+
+
+    return String(
+
+        Math.floor(
+
+            Math.random() *
+            (max - min + 1)
+
+        ) + min
+
+    );
+
+}
+
+
+/* =========================
+   START GAME
+========================= */
+
+function startGame() {
+
+    /*
+       Get the latest AI level
+       for THIS patient.
+    */
+
+    updateDifficulty();
+
+
+    /*
+       Store the actual
+       difficulty played.
+    */
+
+    playedLevel =
+        currentLevel;
+
+
+    const settings =
+        difficultySettings[
+            playedLevel
+        ];
+
+
+    /*
+       Generate a new number.
+    */
+
+    targetNumber =
+        generateNumber(
+            settings.digits
+        );
+
+
+    seconds = 0;
+
+    mistakes = 0;
+
+    gameFinished = false;
+
+
+    /*
+       Cancel any previous
+       hide-number timeout.
+    */
+
+    clearTimeout(
+        hideNumberTimeout
+    );
+
+
+    /*
+       Show game and hide
+       previous result.
+    */
+
+    document.getElementById(
+        "introArea"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "resultArea"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "gameArea"
+    ).style.display =
+        "block";
+
+
+    /*
+       Reset game information.
+    */
+
+    document.getElementById(
+        "gameDifficulty"
+    ).textContent =
+        playedLevel;
+
+
+    document.getElementById(
+        "timer"
+    ).textContent =
+        "0";
+
+
+    document.getElementById(
+        "mistakes"
+    ).textContent =
+        "0";
+
+
+    document.getElementById(
+        "message"
+    ).textContent =
+        "";
+
+
+    document.getElementById(
+        "inputArea"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "numberInput"
+    ).value =
+        "";
+
+
+    /*
+       Show generated number.
+    */
+
+    document.getElementById(
+        "numberDisplay"
+    ).textContent =
+        targetNumber;
+
+
+    document.getElementById(
+        "instruction"
+    ).textContent =
+        "Remember this number...";
+
+
+    /*
+       Start timer.
+    */
+
+    startTimer();
+
+
+    /*
+       Hide number after
+       difficulty-based time.
+    */
+
+    hideNumberTimeout =
+        setTimeout(
+
+            function() {
+
+                if (gameFinished)
+                    return;
+
+
+                document.getElementById(
+                    "numberDisplay"
+                ).textContent =
+                    "????";
+
+
+                document.getElementById(
+                    "instruction"
+                ).textContent =
+                    "Now enter the number you remember.";
+
+
+                document.getElementById(
+                    "inputArea"
+                ).style.display =
+                    "block";
+
+
+                document.getElementById(
+                    "numberInput"
+                ).focus();
+
+            },
+
+            settings.displayTime
+
+        );
+
+}
+
+
+/* =========================
+   TIMER
+========================= */
+
+function startTimer() {
+
+    clearInterval(
+        timerInterval
+    );
+
+
+    timerInterval =
+        setInterval(
+
+            function() {
+
+                /*
+                   Don't keep counting
+                   after game finishes.
+                */
+
+                if (gameFinished) {
+
+                    clearInterval(
+                        timerInterval
+                    );
+
+                    return;
+
+                }
+
+
+                seconds++;
+
+
+                document.getElementById(
+                    "timer"
+                ).textContent =
+                    seconds;
+
+            },
+
+            1000
+
+        );
+
+}
+
+
+/* =========================
+   SUBMIT ANSWER
+========================= */
+
+function submitAnswer() {
+
+    if (gameFinished)
+        return;
+
+
+    const userAnswer =
+        document.getElementById(
+            "numberInput"
+        ).value.trim();
+
+
+    if (userAnswer === "") {
+
+        document.getElementById(
+            "message"
+        ).textContent =
+            "Please enter the number.";
+
+        return;
+
+    }
+
+
+    if (
+        userAnswer ===
+        targetNumber
+    ) {
+
+        document.getElementById(
+            "message"
+        ).textContent =
+            "✅ Correct! Excellent memory.";
+
+
+        endGame(true);
+
+    }
+
+    else {
+
+        mistakes++;
+
+
+        document.getElementById(
+            "mistakes"
+        ).textContent =
+            mistakes;
+
+
+        document.getElementById(
+            "message"
+        ).textContent =
+            "❌ Incorrect. The correct number was "
+            + targetNumber;
+
+
+        endGame(false);
+
+    }
+
+}
+
+
+/* =========================
+   ENTER KEY SUPPORT
+========================= */
+
+document.getElementById(
+    "numberInput"
+).addEventListener(
+
+    "keydown",
+
+    function(event) {
+
+        if (
+            event.key ===
+            "Enter"
+        ) {
+
+            submitAnswer();
+
+        }
+
+    }
+
+);
+
+
+/* =========================
+   END GAME
+========================= */
+
+function endGame(correct) {
+
+    /*
+       Prevent duplicate
+       game completion.
+    */
+
+    if (gameFinished)
+        return;
+
+
+    gameFinished = true;
+
+
+    clearInterval(
+        timerInterval
+    );
+
+
+    clearTimeout(
+        hideNumberTimeout
+    );
+
+
+    /*
+       Calculate score.
+    */
+
+    let score = 0;
+
+
+    if (correct) {
+
+        score = 100;
+
+    }
+
+    else {
+
+        score = 0;
+
+    }
+
+
+    let performance = "";
+
+    let nextLevel =
+        playedLevel;
+
+
+    /* =================================================
+       AI ADAPTIVE LOGIC
+    ================================================= */
+
+
+    /* =========================
+       EASY
+    ========================= */
+
+    if (
+        playedLevel ===
+        "Easy"
+    ) {
+
+        if (
+            correct &&
+            mistakes === 0 &&
+            seconds <= 15
+        ) {
+
+            performance =
+                "Excellent";
+
+
+            nextLevel =
+                "Medium";
+
+        }
+
+
+        else if (correct) {
+
+            performance =
+                "Good";
+
+
+            nextLevel =
+                "Easy";
+
+        }
+
+
+        else {
+
+            performance =
+                "Needs Support";
+
+
+            nextLevel =
+                "Easy";
+
+        }
+
+    }
+
+
+    /* =========================
+       MEDIUM
+    ========================= */
+
+    else if (
+        playedLevel ===
+        "Medium"
+    ) {
+
+        if (
+            correct &&
+            mistakes === 0 &&
+            seconds <= 20
+        ) {
+
+            performance =
+                "Excellent";
+
+
+            nextLevel =
+                "Hard";
+
+        }
+
+
+        else if (correct) {
+
+            performance =
+                "Good";
+
+
+            nextLevel =
+                "Medium";
+
+        }
+
+
+        else {
+
+            performance =
+                "Needs Support";
+
+
+            nextLevel =
+                "Easy";
+
+        }
+
+    }
+
+
+    /* =========================
+       HARD
+    ========================= */
+
+    else {
+
+        if (
+            correct &&
+            mistakes === 0 &&
+            seconds <= 30
+        ) {
+
+            performance =
+                "Excellent";
+
+
+            nextLevel =
+                "Hard";
+
+        }
+
+
+        else if (correct) {
+
+            performance =
+                "Good";
+
+
+            nextLevel =
+                "Medium";
+
+        }
+
+
+        else {
+
+            performance =
+                "Needs Support";
+
+
+            nextLevel =
+                "Easy";
+
+        }
+
+    }
+
+
+    /* =================================================
+       SAVE NEXT AI LEVEL
+       FOR THIS PATIENT ONLY
+    ================================================= */
+
+    localStorage.setItem(
+        aiLevelKey,
+        nextLevel
+    );
+
+
+    /*
+       Update current level too.
+    */
+
+    currentLevel =
+        nextLevel;
+
+
+    /* =========================
+       SHOW RESULT
+    ========================= */
+
+    document.getElementById(
+        "gameArea"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "resultArea"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "finalScore"
+    ).textContent =
+        score;
+
+
+    document.getElementById(
+        "finalTime"
+    ).textContent =
+        seconds + "s";
+
+
+    document.getElementById(
+        "finalMistakes"
+    ).textContent =
+        mistakes;
+
+
+    document.getElementById(
+        "finalDifficulty"
+    ).textContent =
+        playedLevel;
+
+
+    document.getElementById(
+        "nextLevel"
+    ).textContent =
+        nextLevel;
+
+
+    /* =========================
+       AI ANALYSIS
+    ========================= */
+
+    let analysisText = "";
+
+
+    if (
+        performance ===
+        "Excellent"
+    ) {
+
+        analysisText =
+            "Excellent memory performance. The AI recommends increasing the difficulty for the next session.";
+
+    }
+
+
+    else if (
+        performance ===
+        "Good"
+    ) {
+
+        analysisText =
+            "Good performance. Continue practising to improve memory and concentration.";
+
+    }
+
+
+    else {
+
+        analysisText =
+            "The AI recommends an easier level and more practice to support memory recall.";
+
+    }
+
+
+    document.getElementById(
+        "aiAnalysis"
+    ).textContent =
+        analysisText;
+
+
+    /* =========================
+       SAVE GAME HISTORY
+    ========================= */
+
+    saveGameHistory(
+
+        score,
+
+        seconds,
+
+        mistakes,
+
+        playedLevel,
+
+        performance
+
+    );
+
+}
+
+
+/* =====================================================
+   SAVE HISTORY - PATIENT ID BASED
+===================================================== */
+
+function saveGameHistory(
+
+    score,
+
+    time,
+
+    mistakes,
+
+    difficulty,
+
+    performance
+
+) {
+
+
+    /*
+       IMPORTANT:
+
+       Old:
+       gameHistory_Rajan
+
+       New:
+       gameHistory_<patientId>
+    */
+
+
+    let history = [];
+
+
+    try {
+
+        history =
+            JSON.parse(
+
+                localStorage.getItem(
+                    historyKey
+                )
+                || "[]"
+
+            );
+
+
+        if (
+            !Array.isArray(history)
+        ) {
+
+            history = [];
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.log(
+            "Game history error:",
+            error
+        );
+
+        history = [];
+
+    }
+
+
+    const now =
+        new Date();
+
+
+    /*
+       Save patient ID and
+       patient name.
+
+       This helps doctor/caregiver
+       identify whose result it is.
+    */
+
+    const historyItem = {
+
+        patientId:
+            patientId,
+
+        patient:
+            patientName,
+
+        game:
+            "Number Memory",
+
+        score:
+            score,
+
+        time:
+            time,
+
+        mistakes:
+            mistakes,
+
+        difficulty:
+            difficulty,
+
+        performance:
+            performance,
+
+        date:
+            now.toLocaleDateString(),
+
+        timeStamp:
+            now.toLocaleTimeString(
+
+                [],
+
+                {
+
+                    hour:
+                        "2-digit",
+
+                    minute:
+                        "2-digit"
+
+                }
+
+            )
+
+    };
+
+
+    history.push(
+        historyItem
+    );
+
+
+    /*
+       Save only inside this
+       patient's history.
+    */
+
+    localStorage.setItem(
+
+        historyKey,
+
+        JSON.stringify(
+            history
+        )
+
+    );
+
+}
+
+
+/* =========================
+   PLAY AGAIN
+========================= */
+
+function playAgain() {
+
+    document.getElementById(
+        "resultArea"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "introArea"
+    ).style.display =
+        "block";
+
+
+    /*
+       Load the latest
+       patient-specific AI level.
+    */
+
+    updateDifficulty();
+
+}
+
+
+/* =========================
+   BACK
+========================= */
+
+function goBack() {
+
+    window.location.href =
+        "memory-games.html";
+
+}
+
+
+/* =========================
+   PAGE LOAD
+========================= */
+
+window.addEventListener(
+
+    "load",
+
+    function() {
+
+        /*
+           Load AI level belonging
+           to the current patient.
+        */
+
+        updateDifficulty();
+
+    }
+
+);
+
+</script>
+
+
+</body>
+</html>

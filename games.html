@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Cognitive Game - MINDCARE AI</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="game-page">
+
+    <!-- HEADER -->
+    <header class="game-header">
+
+        <div>
+            <h1>🧠 MINDCARE AI</h1>
+            <p>AI Adaptive Cognitive Game</p>
+        </div>
+
+        <button onclick="goBack()">
+            ← Back
+        </button>
+
+    </header>
+
+
+    <!-- INTRO -->
+    <section class="game-intro" id="gameIntro">
+
+        <div class="game-icon">
+            🤖
+        </div>
+
+        <h2>
+            AI Memory Challenge
+        </h2>
+
+        <p>
+            The game adapts to your performance.
+        </p>
+
+        <p>
+            Take your time and concentrate.
+        </p>
+
+        <button onclick="startGame()">
+            ▶ Start Game
+        </button>
+
+    </section>
+
+
+    <!-- GAME AREA -->
+    <section class="game-area" id="gameArea">
+
+        <!-- AI LEVEL -->
+        <div class="ai-level">
+
+            🤖 AI Difficulty:
+
+            <strong id="difficulty">
+                Easy
+            </strong>
+
+        </div>
+
+
+        <!-- GAME INFO -->
+        <div class="game-info">
+
+            <div>
+                <span>
+                    ⏱ Time
+                </span>
+
+                <strong id="time">
+                    0
+                </strong>
+            </div>
+
+
+            <div>
+                <span>
+                    ⭐ Score
+                </span>
+
+                <strong id="score">
+                    0
+                </strong>
+            </div>
+
+
+            <div>
+                <span>
+                    ❌ Mistakes
+                </span>
+
+                <strong id="mistakes">
+                    0
+                </strong>
+            </div>
+
+        </div>
+
+
+        <!-- MEMORY GRID -->
+        <div class="memory-grid" id="memoryGrid">
+        </div>
+
+
+        <!-- GAME MESSAGE -->
+        <div class="game-message" id="gameMessage">
+        </div>
+
+    </section>
+
+
+    <!-- RESULT -->
+    <section class="game-result" id="gameResult">
+
+        <div class="result-icon">
+            🎉
+        </div>
+
+        <h2>
+            Game Completed!
+        </h2>
+
+        <p id="resultText">
+        </p>
+
+
+        <!-- RESULTS -->
+        <div class="result-stats">
+
+            <div>
+                <strong id="finalScore">
+                    0
+                </strong>
+
+                <span>
+                    Score
+                </span>
+            </div>
+
+
+            <div>
+                <strong id="finalTime">
+                    0
+                </strong>
+
+                <span>
+                    Seconds
+                </span>
+            </div>
+
+
+            <div>
+                <strong id="finalMistakes">
+                    0
+                </strong>
+
+                <span>
+                    Mistakes
+                </span>
+            </div>
+
+        </div>
+
+
+        <!-- AI ANALYSIS -->
+        <div class="ai-analysis">
+
+            <div class="analysis-icon">
+                🤖
+            </div>
+
+            <div>
+
+                <h3>
+                    AI Performance Analysis
+                </h3>
+
+                <p id="aiAnalysis">
+                </p>
+
+                <p>
+                    Recommended next level:
+
+                    <strong id="nextLevel">
+                    </strong>
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <button onclick="startGame()">
+            🔄 Play Again
+        </button>
+
+    </section>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   MINDCARE AI - ADAPTIVE COGNITIVE MEMORY GAME
+   PATIENT ID BASED VERSION
+===================================================== */
+
+
+/* =====================================================
+   CURRENT LOGGED-IN PATIENT
+===================================================== */
+
+const patientId =
+    sessionStorage.getItem("currentPatientId");
+
+const patientName =
+    sessionStorage.getItem("currentPatientName");
+
+
+/*
+   If patient is not logged in,
+   send them back to login page.
+*/
+
+if (!patientId || !patientName) {
+
+    window.location.href = "index.html";
+
+}
+
+
+/* =====================================================
+   PATIENT-SPECIFIC STORAGE KEYS
+===================================================== */
+
+/*
+   Every patient gets separate storage.
+
+   Example:
+
+   Rajan:
+   gameHistory_MC001
+   aiLevel_MC001
+
+   Meena:
+   gameHistory_MC002
+   aiLevel_MC002
+
+   Any new patient:
+   gameHistory_THEIR_ID
+   aiLevel_THEIR_ID
+*/
+
+const historyKey =
+    "gameHistory_" + patientId;
+
+const aiLevelKey =
+    "aiLevel_" + patientId;
+
+
+/* =========================
+   GAME LEVEL CONFIGURATION
+========================= */
+
+const levelSymbols = {
+
+    Easy: [
+        "🍎",
+        "🐶",
+        "🌸",
+        "⭐"
+    ],
+
+    Medium: [
+        "🍎",
+        "🐶",
+        "🌸",
+        "⭐",
+        "🍕",
+        "🚗"
+    ],
+
+    Hard: [
+        "🍎",
+        "🐶",
+        "🌸",
+        "⭐",
+        "🍕",
+        "🚗",
+        "🎈",
+        "🌈"
+    ]
+
+};
+
+
+/*
+   Easy   = 4 pairs  = 8 cards
+   Medium = 6 pairs  = 12 cards
+   Hard   = 8 pairs  = 16 cards
+*/
+
+
+/* =========================
+   GAME VARIABLES
+========================= */
+
+let symbols = [];
+
+let cards = [];
+
+let firstCard = null;
+
+let secondCard = null;
+
+let lockBoard = false;
+
+let matches = 0;
+
+let score = 0;
+
+let mistakes = 0;
+
+let seconds = 0;
+
+let timer = null;
+
+
+/* =====================================================
+   AI LEVEL - PATIENT SPECIFIC
+===================================================== */
+
+/*
+   IMPORTANT:
+
+   Old version:
+   localStorage.getItem("aiLevel")
+
+   New version:
+   localStorage.getItem("aiLevel_" + patientId)
+
+   So every patient has their own AI difficulty.
+*/
+
+let currentLevel =
+    localStorage.getItem(aiLevelKey)
+    || "Easy";
+
+
+/*
+   This stores the level
+   actually played in the
+   current game.
+*/
+
+let playedLevel = currentLevel;
+
+
+/* =========================
+   UPDATE DIFFICULTY
+========================= */
+
+function updateDifficulty() {
+
+    document.getElementById(
+        "difficulty"
+    ).textContent = currentLevel;
+
+}
+
+
+/* =========================
+   SET SYMBOLS FOR LEVEL
+========================= */
+
+function setSymbolsForLevel() {
+
+    const selectedSymbols =
+        levelSymbols[currentLevel]
+        || levelSymbols.Easy;
+
+
+    /*
+       Create two copies of
+       every symbol to make pairs.
+    */
+
+    symbols = [
+        ...selectedSymbols,
+        ...selectedSymbols
+    ];
+
+}
+
+
+/* =========================
+   SHUFFLE CARDS
+========================= */
+
+function shuffleCards() {
+
+    cards = [...symbols];
+
+
+    /*
+       Fisher-Yates shuffle
+       for better randomization.
+    */
+
+    for (
+        let i = cards.length - 1;
+        i > 0;
+        i--
+    ) {
+
+        const j =
+            Math.floor(
+                Math.random() * (i + 1)
+            );
+
+
+        [
+            cards[i],
+            cards[j]
+        ] = [
+            cards[j],
+            cards[i]
+        ];
+
+    }
+
+}
+
+
+/* =========================
+   CREATE CARDS
+========================= */
+
+function createCards() {
+
+    const grid =
+        document.getElementById(
+            "memoryGrid"
+        );
+
+
+    grid.innerHTML = "";
+
+
+    cards.forEach(
+        (symbol, index) => {
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "memory-card";
+
+
+            card.dataset.symbol =
+                symbol;
+
+
+            card.dataset.index =
+                index;
+
+
+            card.innerHTML = `
+
+                <div class="card-front">
+                    ?
+                </div>
+
+                <div class="card-back">
+                    ${symbol}
+                </div>
+
+            `;
+
+
+            card.addEventListener(
+                "click",
+                flipCard
+            );
+
+
+            grid.appendChild(card);
+
+        }
+    );
+
+}
+
+
+/* =========================
+   FLIP CARD
+========================= */
+
+function flipCard() {
+
+    /*
+       Do not allow another card
+       while wrong pair is waiting.
+    */
+
+    if (lockBoard)
+        return;
+
+
+    /*
+       Do not allow clicking
+       the same card twice.
+    */
+
+    if (this === firstCard)
+        return;
+
+
+    /*
+       Do not allow already
+       matched cards.
+    */
+
+    if (
+        this.classList.contains(
+            "matched"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    this.classList.add(
+        "flipped"
+    );
+
+
+    if (!firstCard) {
+
+        firstCard = this;
+
+        return;
+
+    }
+
+
+    secondCard = this;
+
+    checkMatch();
+
+}
+
+
+/* =========================
+   CHECK MATCH
+========================= */
+
+function checkMatch() {
+
+    const isMatch =
+        firstCard.dataset.symbol ===
+        secondCard.dataset.symbol;
+
+
+    if (isMatch) {
+
+        disableCards();
+
+        matches++;
+
+
+        /*
+           Each correct pair
+           gives 20 points.
+        */
+
+        score += 20;
+
+
+        document.getElementById(
+            "score"
+        ).textContent = score;
+
+
+        /*
+           Get required number
+           of pairs for current level.
+        */
+
+        const requiredMatches =
+            levelSymbols[
+                playedLevel
+            ].length;
+
+
+        /*
+           If all pairs are matched,
+           game is completed.
+        */
+
+        if (
+            matches ===
+            requiredMatches
+        ) {
+
+            endGame();
+
+        }
+
+    }
+
+    else {
+
+        mistakes++;
+
+
+        document.getElementById(
+            "mistakes"
+        ).textContent =
+            mistakes;
+
+
+        unflipCards();
+
+    }
+
+}
+
+
+/* =========================
+   MATCHED CARDS
+========================= */
+
+function disableCards() {
+
+    firstCard.classList.add(
+        "matched"
+    );
+
+
+    secondCard.classList.add(
+        "matched"
+    );
+
+
+    resetBoard();
+
+}
+
+
+/* =========================
+   WRONG MATCH
+========================= */
+
+function unflipCards() {
+
+    lockBoard = true;
+
+
+    setTimeout(() => {
+
+        if (firstCard) {
+
+            firstCard.classList.remove(
+                "flipped"
+            );
+
+        }
+
+
+        if (secondCard) {
+
+            secondCard.classList.remove(
+                "flipped"
+            );
+
+        }
+
+
+        resetBoard();
+
+
+    }, 900);
+
+}
+
+
+/* =========================
+   RESET BOARD
+========================= */
+
+function resetBoard() {
+
+    [
+        firstCard,
+        secondCard
+    ] = [
+        null,
+        null
+    ];
+
+
+    lockBoard = false;
+
+}
+
+
+/* =========================
+   TIMER
+========================= */
+
+function startTimer() {
+
+    seconds = 0;
+
+
+    document.getElementById(
+        "time"
+    ).textContent = "0";
+
+
+    clearInterval(timer);
+
+
+    timer = setInterval(() => {
+
+        seconds++;
+
+
+        document.getElementById(
+            "time"
+        ).textContent =
+            seconds;
+
+
+    }, 1000);
+
+}
+
+
+/* =========================
+   START GAME
+========================= */
+
+function startGame() {
+
+    /*
+       Make sure the latest
+       patient-specific AI
+       recommendation is used.
+    */
+
+    currentLevel =
+        localStorage.getItem(
+            aiLevelKey
+        )
+        || "Easy";
+
+
+    /*
+       Remember the difficulty
+       actually played.
+    */
+
+    playedLevel =
+        currentLevel;
+
+
+    /*
+       Hide intro.
+    */
+
+    document.getElementById(
+        "gameIntro"
+    ).style.display =
+        "none";
+
+
+    /*
+       Show game.
+    */
+
+    document.getElementById(
+        "gameArea"
+    ).style.display =
+        "block";
+
+
+    /*
+       Hide previous result.
+    */
+
+    document.getElementById(
+        "gameResult"
+    ).style.display =
+        "none";
+
+
+    /*
+       Reset game variables.
+    */
+
+    matches = 0;
+
+    score = 0;
+
+    mistakes = 0;
+
+    seconds = 0;
+
+
+    firstCard = null;
+
+    secondCard = null;
+
+    lockBoard = false;
+
+
+    /*
+       Reset screen values.
+    */
+
+    document.getElementById(
+        "score"
+    ).textContent =
+        "0";
+
+
+    document.getElementById(
+        "mistakes"
+    ).textContent =
+        "0";
+
+
+    document.getElementById(
+        "time"
+    ).textContent =
+        "0";
+
+
+    /*
+       Update AI difficulty.
+    */
+
+    updateDifficulty();
+
+
+    /*
+       Create cards according
+       to AI-selected level.
+    */
+
+    setSymbolsForLevel();
+
+
+    shuffleCards();
+
+
+    createCards();
+
+
+    /*
+       Start timer.
+    */
+
+    startTimer();
+
+}
+
+
+/* =========================
+   AI PERFORMANCE ANALYSIS
+========================= */
+
+function analyzePerformance() {
+
+    let performance;
+
+
+    /*
+       The level played is stored
+       separately because currentLevel
+       changes to the NEXT level.
+    */
+
+    const levelPlayed =
+        playedLevel;
+
+
+    /* =========================
+       EASY PERFORMANCE
+    ========================= */
+
+    if (
+        levelPlayed === "Easy"
+    ) {
+
+        /*
+           Excellent:
+           Very few mistakes
+           and good speed.
+        */
+
+        if (
+            mistakes <= 1 &&
+            seconds <= 40
+        ) {
+
+            performance =
+                "Excellent";
+
+
+            /*
+               Increase challenge.
+            */
+
+            currentLevel =
+                "Medium";
+
+        }
+
+
+        /*
+           Good:
+           Player can continue
+           with Easy.
+        */
+
+        else if (
+            mistakes <= 3
+        ) {
+
+            performance =
+                "Good";
+
+
+            currentLevel =
+                "Easy";
+
+        }
+
+
+        /*
+           Needs Support:
+           Keep Easy level.
+        */
+
+        else {
+
+            performance =
+                "Needs Support";
+
+
+            currentLevel =
+                "Easy";
+
+        }
+
+    }
+
+
+    /* =========================
+       MEDIUM PERFORMANCE
+    ========================= */
+
+    else if (
+        levelPlayed === "Medium"
+    ) {
+
+        /*
+           Excellent:
+           Increase to Hard.
+        */
+
+        if (
+            mistakes <= 2 &&
+            seconds <= 60
+        ) {
+
+            performance =
+                "Excellent";
+
+
+            currentLevel =
+                "Hard";
+
+        }
+
+
+        /*
+           Good:
+           Maintain Medium.
+        */
+
+        else if (
+            mistakes <= 4
+        ) {
+
+            performance =
+                "Good";
+
+
+            currentLevel =
+                "Medium";
+
+        }
+
+
+        /*
+           Needs Support:
+           Reduce to Easy.
+        */
+
+        else {
+
+            performance =
+                "Needs Support";
+
+
+            currentLevel =
+                "Easy";
+
+        }
+
+    }
+
+
+    /* =========================
+       HARD PERFORMANCE
+    ========================= */
+
+    else {
+
+        /*
+           Excellent:
+           Stay at Hard.
+        */
+
+        if (
+            mistakes <= 3 &&
+            seconds <= 90
+        ) {
+
+            performance =
+                "Excellent";
+
+
+            currentLevel =
+                "Hard";
+
+        }
+
+
+        /*
+           Good:
+           Reduce slightly.
+        */
+
+        else if (
+            mistakes <= 6
+        ) {
+
+            performance =
+                "Good";
+
+
+            currentLevel =
+                "Medium";
+
+        }
+
+
+        /*
+           Needs Support:
+           Go back to Easy.
+        */
+
+        else {
+
+            performance =
+                "Needs Support";
+
+
+            currentLevel =
+                "Easy";
+
+        }
+
+    }
+
+
+    /* =====================================================
+       SAVE NEXT AI LEVEL - PATIENT SPECIFIC
+    ===================================================== */
+
+    localStorage.setItem(
+        aiLevelKey,
+        currentLevel
+    );
+
+
+    /* =========================
+       AI ANALYSIS MESSAGE
+    ========================= */
+
+    let analysisText = "";
+
+
+    if (
+        performance ===
+        "Excellent"
+    ) {
+
+        analysisText =
+            "Excellent cognitive performance. AI increased the difficulty level to provide a stronger memory challenge.";
+
+    }
+
+
+    else if (
+        performance ===
+        "Good"
+    ) {
+
+        analysisText =
+            "Good cognitive performance. AI maintained a suitable difficulty level for continued practice.";
+
+    }
+
+
+    else {
+
+        analysisText =
+            "The game showed some difficulty. AI reduced the challenge to support comfortable practice.";
+
+    }
+
+
+    document.getElementById(
+        "aiAnalysis"
+    ).textContent =
+        analysisText;
+
+
+    document.getElementById(
+        "nextLevel"
+    ).textContent =
+        currentLevel;
+
+
+    return performance;
+
+}
+
+
+/* =====================================================
+   SAVE GAME HISTORY - PATIENT ID BASED
+===================================================== */
+
+function saveGameHistory(
+    performance
+) {
+
+    /*
+       IMPORTANT:
+
+       History is now saved using
+       the logged-in patient's ID.
+
+       Example:
+       gameHistory_MC001
+       gameHistory_MC002
+       gameHistory_ABC123
+    */
+
+    let history = [];
+
+
+    try {
+
+        history =
+            JSON.parse(
+                localStorage.getItem(
+                    historyKey
+                )
+                || "[]"
+            );
+
+
+        if (
+            !Array.isArray(history)
+        ) {
+
+            history = [];
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.log(
+            "Game history error:",
+            error
+        );
+
+
+        history = [];
+
+    }
+
+
+    const now =
+        new Date();
+
+
+    /*
+       Save the actual level
+       played by the patient.
+    */
+
+    const gameResult = {
+
+        /*
+           Patient ID is stored
+           for doctor/caregiver
+           identification.
+        */
+
+        patientId:
+            patientId,
+
+
+        /*
+           Actual registered
+           patient name.
+        */
+
+        patient:
+            patientName,
+
+
+        game:
+            "Memory Challenge",
+
+
+        score:
+            score,
+
+
+        time:
+            seconds,
+
+
+        mistakes:
+            mistakes,
+
+
+        difficulty:
+            playedLevel,
+
+
+        performance:
+            performance,
+
+
+        date:
+            now.toLocaleDateString(),
+
+
+        timeStamp:
+            now.toLocaleTimeString(
+                [],
+                {
+                    hour: "2-digit",
+                    minute: "2-digit"
+                }
+            )
+
+    };
+
+
+    history.push(
+        gameResult
+    );
+
+
+    localStorage.setItem(
+        historyKey,
+        JSON.stringify(history)
+    );
+
+}
+
+
+/* =========================
+   END GAME
+========================= */
+
+function endGame() {
+
+    /*
+       Stop timer.
+    */
+
+    clearInterval(timer);
+
+
+    /*
+       Hide game area.
+    */
+
+    document.getElementById(
+        "gameArea"
+    ).style.display =
+        "none";
+
+
+    /*
+       Show result.
+    */
+
+    document.getElementById(
+        "gameResult"
+    ).style.display =
+        "block";
+
+
+    /*
+       Show final score.
+    */
+
+    document.getElementById(
+        "finalScore"
+    ).textContent =
+        score;
+
+
+    /*
+       Show final time.
+    */
+
+    document.getElementById(
+        "finalTime"
+    ).textContent =
+        seconds;
+
+
+    /*
+       Show mistakes.
+    */
+
+    document.getElementById(
+        "finalMistakes"
+    ).textContent =
+        mistakes;
+
+
+    /* =========================
+       RESULT MESSAGE
+    ========================= */
+
+    let message;
+
+
+    if (
+        mistakes <= 1
+    ) {
+
+        message =
+            "Excellent concentration! 🌟";
+
+    }
+
+
+    else if (
+        mistakes <= 3
+    ) {
+
+        message =
+            "Good effort! Keep practicing. 👍";
+
+    }
+
+
+    else {
+
+        message =
+            "Nice try! Let's practice again. 💙";
+
+    }
+
+
+    document.getElementById(
+        "resultText"
+    ).textContent =
+        message;
+
+
+    /* =========================
+       RUN AI
+    ========================= */
+
+    const performance =
+        analyzePerformance();
+
+
+    /* =========================
+       SAVE HISTORY
+    ========================= */
+
+    saveGameHistory(
+        performance
+    );
+
+}
+
+
+/* =========================
+   BACK TO MEMORY GAMES
+========================= */
+
+function goBack() {
+
+    window.location.href =
+        "memory-games.html";
+
+}
+
+
+/* =========================
+   INITIAL STATE
+========================= */
+
+document.getElementById(
+    "gameArea"
+).style.display =
+    "none";
+
+
+document.getElementById(
+    "gameResult"
+).style.display =
+    "none";
+
+
+/*
+   Load previously recommended
+   AI level for THIS patient.
+*/
+
+updateDifficulty();
+
+</script>
+
+
+</body>
+</html>

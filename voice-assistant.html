@@ -1,0 +1,1750 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Voice Assistant - MINDCARE AI</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        .voice-page {
+            min-height: 100vh;
+        }
+
+        .voice-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .voice-main-card {
+            background: white;
+            border-radius: 25px;
+            padding: 40px 25px;
+            text-align: center;
+
+            box-shadow:
+                0 10px 30px rgba(0,0,0,0.10);
+        }
+
+        .voice-icon {
+            width: 120px;
+            height: 120px;
+
+            margin: 0 auto 20px;
+
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 55px;
+
+            background: #eef4ff;
+        }
+
+        .voice-main-card h2 {
+            margin-bottom: 10px;
+        }
+
+        .voice-main-card p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .speak-btn {
+            border: none;
+
+            border-radius: 50%;
+
+            width: 100px;
+            height: 100px;
+
+            font-size: 42px;
+
+            cursor: pointer;
+
+            background: #4f46e5;
+            color: white;
+
+            box-shadow:
+                0 8px 20px rgba(0,0,0,0.20);
+
+            transition: 0.3s;
+        }
+
+        .speak-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .speak-btn.listening {
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.12);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+
+        }
+
+        #voiceStatus {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .voice-question {
+            margin-top: 30px;
+
+            background: #f7f8fc;
+
+            border-radius: 15px;
+
+            padding: 18px;
+
+            text-align: left;
+        }
+
+        .voice-question h3 {
+            margin-bottom: 8px;
+        }
+
+        #userText {
+            color: #555;
+        }
+
+        .ai-response {
+            margin-top: 20px;
+
+            background: #eef8ff;
+
+            border-radius: 15px;
+
+            padding: 20px;
+
+            text-align: left;
+
+            border-left: 5px solid #4f46e5;
+        }
+
+        .ai-response h3 {
+            margin-bottom: 10px;
+        }
+
+        #aiResponse {
+            line-height: 1.6;
+            color: #444;
+        }
+
+        .quick-section {
+            margin-top: 30px;
+        }
+
+        .quick-section h2 {
+            margin-bottom: 20px;
+        }
+
+        .quick-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fit, minmax(180px, 1fr));
+
+            gap: 15px;
+        }
+
+        .quick-btn {
+
+            border: none;
+
+            padding: 18px;
+
+            border-radius: 15px;
+
+            background: white;
+
+            box-shadow:
+                0 5px 15px rgba(0,0,0,0.08);
+
+            cursor: pointer;
+
+            font-size: 15px;
+
+            transition: 0.3s;
+        }
+
+        .quick-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        .back-btn {
+
+            margin-top: 30px;
+
+            padding: 12px 25px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            cursor: pointer;
+
+            background: #333;
+
+            color: white;
+
+            font-size: 15px;
+        }
+
+        .patient-info {
+
+            margin-bottom: 25px;
+
+            background: #f4f7ff;
+
+            padding: 15px;
+
+            border-radius: 12px;
+
+            color: #444;
+
+            font-size: 14px;
+        }
+
+        .patient-info strong {
+            color: #4f46e5;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #777;
+        }
+
+        @media (max-width: 600px) {
+
+            .voice-container {
+                margin: 20px auto;
+                padding: 12px;
+            }
+
+            .voice-main-card {
+                padding: 30px 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="voice-page">
+
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <header class="patient-header">
+
+        <div>
+
+            <h1>
+                🧠 MINDCARE AI
+            </h1>
+
+            <p>
+                Voice Assistant
+            </p>
+
+        </div>
+
+
+        <button
+            class="logout-btn"
+            onclick="goDashboard()">
+
+            Dashboard
+
+        </button>
+
+    </header>
+
+
+
+    <!-- =========================
+         MAIN
+    ========================== -->
+
+    <main class="voice-container">
+
+
+        <div class="voice-main-card">
+
+
+            <!-- PATIENT INFO -->
+
+            <div class="patient-info">
+
+                👤 Patient:
+
+                <strong id="patientName">
+                    Patient
+                </strong>
+
+                <br><br>
+
+                🆔 Patient ID:
+
+                <strong id="patientId">
+                    -
+                </strong>
+
+            </div>
+
+
+
+            <div class="voice-icon">
+
+                🎤
+
+            </div>
+
+
+
+            <h2 id="helloText">
+
+                Hello 👋
+
+            </h2>
+
+
+
+            <p>
+
+                You can ask me about your medicine,
+                schedule, water or games.
+
+            </p>
+
+
+
+            <!-- SPEAK BUTTON -->
+
+            <button
+                id="speakButton"
+                class="speak-btn"
+                onclick="startVoice()">
+
+                🎤
+
+            </button>
+
+
+
+            <div id="voiceStatus">
+
+                Tap the microphone and speak
+
+            </div>
+
+
+
+            <!-- USER QUESTION -->
+
+            <div class="voice-question">
+
+                <h3>
+                    🗣️ You said
+                </h3>
+
+                <p id="userText">
+
+                    Waiting for your question...
+
+                </p>
+
+            </div>
+
+
+
+            <!-- AI RESPONSE -->
+
+            <div class="ai-response">
+
+                <h3>
+                    🤖 MINDCARE AI
+                </h3>
+
+                <p id="aiResponse">
+
+                    Hello! I am ready to help you.
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =========================
+             QUICK QUESTIONS
+        ========================== -->
+
+        <section class="quick-section">
+
+
+            <h2>
+                Quick Questions
+            </h2>
+
+
+            <div class="quick-grid">
+
+
+                <button
+                    class="quick-btn"
+                    onclick="askQuick('What is my medicine?')">
+
+                    💊
+
+                    <br><br>
+
+                    What is my medicine?
+
+                </button>
+
+
+
+                <button
+                    class="quick-btn"
+                    onclick="askQuick('What is my schedule?')">
+
+                    📅
+
+                    <br><br>
+
+                    What is my schedule?
+
+                </button>
+
+
+
+                <button
+                    class="quick-btn"
+                    onclick="askQuick('How much water did I drink?')">
+
+                    💧
+
+                    <br><br>
+
+                    Water progress
+
+                </button>
+
+
+
+                <button
+                    class="quick-btn"
+                    onclick="askQuick('How many games did I play?')">
+
+                    🧠
+
+                    <br><br>
+
+                    Game progress
+
+                </button>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <button
+            class="back-btn"
+            onclick="goDashboard()">
+
+            ← Back to Dashboard
+
+        </button>
+
+
+    </main>
+
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <p>
+
+            MINDCARE AI • Supporting everyday elderly care
+
+        </p>
+
+    </footer>
+
+
+</div>
+
+
+
+<script>
+
+
+/* =====================================================
+   CURRENT PATIENT
+===================================================== */
+
+let patientId =
+    sessionStorage.getItem(
+        "currentPatientId"
+    );
+
+
+let patientName =
+    sessionStorage.getItem(
+        "currentPatientName"
+    );
+
+
+
+/* =====================================================
+   LOGIN CHECK
+===================================================== */
+
+if (
+    !patientId ||
+    !patientName
+) {
+
+    alert(
+        "Please login first."
+    );
+
+    window.location.replace(
+        "index.html"
+    );
+
+}
+
+
+
+/* =====================================================
+   DISPLAY PATIENT
+===================================================== */
+
+document.getElementById(
+    "patientName"
+).textContent =
+    patientName;
+
+
+document.getElementById(
+    "patientId"
+).textContent =
+    patientId;
+
+
+document.getElementById(
+    "helloText"
+).textContent =
+    "Hello " +
+    patientName +
+    " 👋";
+
+
+
+/* =====================================================
+   PATIENT STORAGE KEY
+===================================================== */
+
+function patientKey(prefix) {
+
+    return (
+        prefix +
+        "_" +
+        patientId
+    );
+
+}
+
+
+
+/* =====================================================
+   SPEECH RECOGNITION
+===================================================== */
+
+let recognition;
+
+let isListening = false;
+
+
+const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+
+
+if (SpeechRecognition) {
+
+
+    recognition =
+        new SpeechRecognition();
+
+
+    recognition.lang =
+        "en-IN";
+
+
+    recognition.continuous =
+        false;
+
+
+    recognition.interimResults =
+        false;
+
+
+
+    recognition.onstart =
+        function() {
+
+            isListening = true;
+
+
+            document
+                .getElementById(
+                    "speakButton"
+                )
+                .classList.add(
+                    "listening"
+                );
+
+
+            document
+                .getElementById(
+                    "voiceStatus"
+                )
+                .textContent =
+                "🎤 Listening... Please speak";
+
+        };
+
+
+
+    recognition.onresult =
+        function(event) {
+
+            const text =
+                event.results[0][0]
+                    .transcript;
+
+
+            document
+                .getElementById(
+                    "userText"
+                )
+                .textContent =
+                text;
+
+
+            processQuestion(text);
+
+        };
+
+
+
+    recognition.onerror =
+        function(event) {
+
+            console.log(
+                "Voice error:",
+                event.error
+            );
+
+
+            let message =
+                "Could not hear you. Please try again.";
+
+
+            if (
+                event.error ===
+                "not-allowed"
+            ) {
+
+                message =
+                    "Microphone permission is blocked. Please allow microphone access.";
+
+            }
+
+
+            else if (
+                event.error ===
+                "no-speech"
+            ) {
+
+                message =
+                    "I could not hear any speech. Please try again.";
+
+            }
+
+
+            document
+                .getElementById(
+                    "voiceStatus"
+                )
+                .textContent =
+                message;
+
+        };
+
+
+
+    recognition.onend =
+        function() {
+
+            isListening = false;
+
+
+            document
+                .getElementById(
+                    "speakButton"
+                )
+                .classList.remove(
+                    "listening"
+                );
+
+
+            document
+                .getElementById(
+                    "voiceStatus"
+                )
+                .textContent =
+                "Tap the microphone to speak again";
+
+        };
+
+}
+
+
+
+/* =====================================================
+   START VOICE
+===================================================== */
+
+function startVoice() {
+
+
+    if (!recognition) {
+
+
+        const message =
+            "Voice recognition is not supported in this browser. Please use Google Chrome.";
+
+
+        document
+            .getElementById(
+                "aiResponse"
+            )
+            .textContent =
+            message;
+
+
+        speak(message);
+
+
+        return;
+
+    }
+
+
+
+    if (isListening) {
+
+        recognition.stop();
+
+        return;
+
+    }
+
+
+
+    try {
+
+        recognition.start();
+
+    }
+
+    catch (error) {
+
+        console.log(
+            "Recognition start error:",
+            error
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   PROCESS QUESTION
+===================================================== */
+
+function processQuestion(
+    question
+) {
+
+
+    const text =
+        question.toLowerCase();
+
+
+    let response =
+        "I can help you with your medicine, schedule, water and cognitive games.";
+
+
+
+    /* MEDICINE */
+
+    if (
+
+        text.includes("medicine") ||
+        text.includes("tablet") ||
+        text.includes("medication") ||
+        text.includes("pill")
+
+    ) {
+
+        response =
+            getMedicineResponse();
+
+    }
+
+
+
+    /* SCHEDULE */
+
+    else if (
+
+        text.includes("schedule") ||
+        text.includes("routine") ||
+        text.includes("appointment") ||
+        text.includes("today")
+
+    ) {
+
+        response =
+            getScheduleResponse();
+
+    }
+
+
+
+    /* WATER */
+
+    else if (
+
+        text.includes("water") ||
+        text.includes("drink") ||
+        text.includes("hydration")
+
+    ) {
+
+        response =
+            getWaterResponse();
+
+    }
+
+
+
+    /* GAMES */
+
+    else if (
+
+        text.includes("game") ||
+        text.includes("score") ||
+        text.includes("memory") ||
+        text.includes("play")
+
+    ) {
+
+        response =
+            getGameResponse();
+
+    }
+
+
+
+    /* GREETING */
+
+    else if (
+
+        text.includes("hello") ||
+        text.includes("hi") ||
+        text.includes("hai")
+
+    ) {
+
+        response =
+            "Hello " +
+            patientName +
+            "! 👋 I am your MINDCARE AI assistant. How can I help you today?";
+
+    }
+
+
+
+    /* RESPONSE */
+
+    showAIResponse(
+        response
+    );
+
+}
+
+
+
+/* =====================================================
+   MEDICINE RESPONSE
+===================================================== */
+
+function getMedicineResponse() {
+
+
+    let saved = null;
+
+
+
+    /* First use Patient ID */
+
+    const idKey =
+        patientKey(
+            "mindcarePrescription"
+        );
+
+
+    saved =
+        localStorage.getItem(
+            idKey
+        );
+
+
+
+    /* Old data fallback */
+
+    if (!saved) {
+
+        saved =
+            localStorage.getItem(
+                "mindcarePrescription_" +
+                patientName
+            );
+
+    }
+
+
+
+    if (!saved) {
+
+        return (
+            "There is no doctor-approved medicine information available right now."
+        );
+
+    }
+
+
+
+    try {
+
+
+        const data =
+            JSON.parse(
+                saved
+            );
+
+
+
+        /* Support both single medicine
+           and medicine array */
+
+        if (
+            Array.isArray(
+                data.medicines
+            )
+        ) {
+
+
+            if (
+                data.medicines.length === 0
+            ) {
+
+                return (
+                    "There is no doctor-approved medicine information available right now."
+                );
+
+            }
+
+
+            let response =
+                "Your doctor-approved medicines are: ";
+
+
+            data.medicines.forEach(
+                function(item, index) {
+
+                    response +=
+                        item.medicine ||
+                        item.name ||
+                        "medicine";
+
+
+                    if (
+                        item.dosage
+                    ) {
+
+                        response +=
+                            ", dosage " +
+                            item.dosage;
+
+                    }
+
+
+                    if (
+                        item.time
+                    ) {
+
+                        response +=
+                            ", at " +
+                            formatTime(
+                                item.time
+                            );
+
+                    }
+
+
+                    if (
+                        index <
+                        data.medicines.length - 1
+                    ) {
+
+                        response +=
+                            ". ";
+
+                    }
+
+                }
+            );
+
+
+            response +=
+                ". Please follow the prescription provided by your doctor.";
+
+
+            return response;
+
+        }
+
+
+
+        /* Single medicine */
+
+        const medicine =
+            data.medicine ||
+            data.name ||
+            "medicine";
+
+
+        const dosage =
+            data.dosage ||
+            "";
+
+
+        const time =
+            data.time ||
+            "";
+
+
+        let response =
+            "Your doctor-approved medicine is " +
+            medicine;
+
+
+
+        if (dosage) {
+
+            response +=
+                ". Dosage: " +
+                dosage;
+
+        }
+
+
+
+        if (time) {
+
+            response +=
+                ". Scheduled time: " +
+                formatTime(
+                    time
+                );
+
+        }
+
+
+
+        response +=
+            ". Please follow the prescription provided by your doctor.";
+
+
+        return response;
+
+    }
+
+
+    catch (error) {
+
+        console.log(
+            "Medicine data error:",
+            error
+        );
+
+
+        return (
+            "I could not read your medicine information right now."
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   SCHEDULE RESPONSE
+===================================================== */
+
+function getScheduleResponse() {
+
+
+    const key =
+        patientKey(
+            "dailySchedule"
+        );
+
+
+    let saved =
+        localStorage.getItem(
+            key
+        );
+
+
+
+    /* If saved schedule exists */
+
+    if (saved) {
+
+
+        try {
+
+
+            const schedule =
+                JSON.parse(
+                    saved
+                );
+
+
+            if (
+                Array.isArray(
+                    schedule
+                ) &&
+                schedule.length > 0
+            ) {
+
+
+                let response =
+                    "Your saved schedule is: ";
+
+
+                schedule.forEach(
+                    function(item, index) {
+
+
+                        const title =
+                            item.title ||
+                            item.activity ||
+                            item.name ||
+                            "Activity";
+
+
+                        const time =
+                            item.time
+                                ? formatTime(
+                                    item.time
+                                  )
+                                : "";
+
+
+                        response +=
+                            title;
+
+
+                        if (time) {
+
+                            response +=
+                                " at " +
+                                time;
+
+                        }
+
+
+                        if (
+                            index <
+                            schedule.length - 1
+                        ) {
+
+                            response +=
+                                ", ";
+
+                        }
+
+                    }
+                );
+
+
+                return (
+                    response +
+                    "."
+                );
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.log(
+                "Schedule error:",
+                error
+            );
+
+        }
+
+    }
+
+
+
+    /* Default helpful schedule */
+
+    return (
+        "Your daily routine includes medicine reminders, water breaks, cognitive games and regular daily activities. Please check your dashboard for your complete schedule."
+    );
+
+}
+
+
+
+/* =====================================================
+   WATER RESPONSE
+===================================================== */
+
+function getWaterResponse() {
+
+
+    const key =
+        patientKey(
+            "waterProgress"
+        );
+
+
+    const dateKey =
+        patientKey(
+            "waterProgressDate"
+        );
+
+
+    let count = 0;
+
+
+
+    try {
+
+
+        const saved =
+            localStorage.getItem(
+                key
+            );
+
+
+        if (
+            saved
+        ) {
+
+
+            const parsed =
+                JSON.parse(
+                    saved
+                );
+
+
+            if (
+                typeof parsed ===
+                "number"
+            ) {
+
+                count =
+                    parsed;
+
+            }
+
+
+            else if (
+                parsed &&
+                typeof parsed.count ===
+                "number"
+            ) {
+
+                count =
+                    parsed.count;
+
+            }
+
+
+            else if (
+                parsed &&
+                typeof parsed.waterCount ===
+                "number"
+            ) {
+
+                count =
+                    parsed.waterCount;
+
+            }
+
+
+            else {
+
+                count =
+                    parseInt(
+                        saved
+                    ) || 0;
+
+            }
+
+        }
+
+    }
+
+    catch (error) {
+
+        count =
+            parseInt(
+                localStorage.getItem(
+                    key
+                ) || "0"
+            ) || 0;
+
+    }
+
+
+
+    /* Prevent negative */
+
+    count =
+        Math.max(
+            0,
+            count
+        );
+
+
+
+    if (
+        count >= 5
+    ) {
+
+        return (
+            "Great " +
+            patientName +
+            "! You have recorded " +
+            count +
+            " water breaks today."
+        );
+
+    }
+
+
+
+    return (
+
+        "You have recorded " +
+        count +
+        " out of 5 water breaks today. Keep following your planned hydration routine."
+
+    );
+
+}
+
+
+
+/* =====================================================
+   GAME RESPONSE
+===================================================== */
+
+function getGameResponse() {
+
+
+    const key =
+        patientKey(
+            "gameHistory"
+        );
+
+
+    let history = [];
+
+
+
+    try {
+
+
+        history =
+            JSON.parse(
+                localStorage.getItem(
+                    key
+                ) || "[]"
+            );
+
+
+    }
+
+    catch (error) {
+
+        history = [];
+
+    }
+
+
+
+    if (
+        !Array.isArray(
+            history
+        )
+    ) {
+
+        history = [];
+
+    }
+
+
+
+    /* Today's date */
+
+    const today =
+        new Date()
+            .toLocaleDateString(
+                "en-IN"
+            );
+
+
+
+    const todayGames =
+        history.filter(
+            function(game) {
+
+                if (
+                    !game ||
+                    !game.date
+                ) {
+
+                    return false;
+
+                }
+
+
+                return (
+                    game.date ===
+                    today
+                );
+
+            }
+        );
+
+
+
+    if (
+        todayGames.length === 0
+    ) {
+
+        return (
+            "You have not recorded a cognitive game session today. You can start a simple memory game when you are ready."
+        );
+
+    }
+
+
+
+    return (
+
+        "You have completed " +
+
+        todayGames.length +
+
+        " cognitive game session" +
+
+        (
+            todayGames.length > 1
+                ? "s"
+                : ""
+        ) +
+
+        " today. Keep following your regular activities."
+
+    );
+
+}
+
+
+
+/* =====================================================
+   FORMAT TIME
+===================================================== */
+
+function formatTime(
+    time
+) {
+
+
+    if (!time) {
+
+        return "";
+
+    }
+
+
+
+    const parts =
+        String(
+            time
+        ).split(":");
+
+
+
+    if (
+        parts.length < 2
+    ) {
+
+        return time;
+
+    }
+
+
+
+    let hour =
+        parseInt(
+            parts[0],
+            10
+        );
+
+
+    const minute =
+        parts[1];
+
+
+
+    if (
+        isNaN(hour)
+    ) {
+
+        return time;
+
+    }
+
+
+
+    const ampm =
+        hour >= 12
+            ? "PM"
+            : "AM";
+
+
+
+    hour =
+        hour % 12;
+
+
+
+    if (
+        hour === 0
+    ) {
+
+        hour = 12;
+
+    }
+
+
+
+    return (
+
+        hour +
+        ":" +
+        minute +
+        " " +
+        ampm
+
+    );
+
+}
+
+
+
+/* =====================================================
+   QUICK QUESTION
+===================================================== */
+
+function askQuick(
+    question
+) {
+
+
+    document
+        .getElementById(
+            "userText"
+        )
+        .textContent =
+        question;
+
+
+    processQuestion(
+        question
+    );
+
+}
+
+
+
+/* =====================================================
+   SHOW AI RESPONSE
+===================================================== */
+
+function showAIResponse(
+    response
+) {
+
+
+    document
+        .getElementById(
+            "aiResponse"
+        )
+        .textContent =
+        response;
+
+
+    speak(
+        response
+    );
+
+}
+
+
+
+/* =====================================================
+   TEXT TO SPEECH
+===================================================== */
+
+function speak(
+    text
+) {
+
+
+    if (
+        !(
+            "speechSynthesis"
+            in window
+        )
+    ) {
+
+        return;
+
+    }
+
+
+
+    window.speechSynthesis.cancel();
+
+
+
+    const speech =
+        new SpeechSynthesisUtterance(
+            text
+        );
+
+
+
+    speech.lang =
+        "en-IN";
+
+
+    speech.rate =
+        0.9;
+
+
+    speech.pitch =
+        1;
+
+
+
+    window.speechSynthesis.speak(
+        speech
+    );
+
+}
+
+
+
+/* =====================================================
+   BACK TO DASHBOARD
+===================================================== */
+
+function goDashboard() {
+
+    window.location.href =
+        "patient.html";
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>

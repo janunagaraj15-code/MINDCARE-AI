@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Hydration - MINDCARE AI</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f8ff;
+            color: #263238;
+        }
+
+        .water-page {
+            min-height: 100vh;
+            padding-bottom: 30px;
+        }
+
+        /* HEADER */
+
+        .water-header {
+            background: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .water-header h1 {
+            font-size: 28px;
+        }
+
+        .water-header p {
+            margin-top: 5px;
+            color: #607d8b;
+        }
+
+        .back-btn {
+            border: none;
+            background: #1976d2;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .back-btn:hover {
+            background: #125ca8;
+        }
+
+        /* MAIN */
+
+        .water-container {
+            max-width: 900px;
+            margin: 35px auto;
+            padding: 20px;
+        }
+
+        /* WELCOME */
+
+        .water-welcome {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .water-welcome .water-icon {
+            font-size: 55px;
+        }
+
+        .water-welcome h2 {
+            margin: 10px 0;
+            font-size: 27px;
+        }
+
+        .water-welcome p {
+            color: #607d8b;
+            font-size: 17px;
+        }
+
+        /* PROGRESS */
+
+        .progress-card {
+            background: white;
+            margin-top: 25px;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .progress-card h2 {
+            margin-bottom: 15px;
+        }
+
+        .water-count {
+            font-size: 45px;
+            font-weight: bold;
+            color: #1976d2;
+        }
+
+        .water-label {
+            color: #607d8b;
+            margin-top: 5px;
+        }
+
+        /* PROGRESS BAR */
+
+        .progress-bar-container {
+            width: 100%;
+            height: 22px;
+            background: #e3f2fd;
+            border-radius: 20px;
+            margin: 25px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: #2196f3;
+            border-radius: 20px;
+            transition: width 0.4s ease;
+        }
+
+        /* GLASSES */
+
+        .glasses-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 25px 0;
+        }
+
+        .glass {
+            width: 60px;
+            height: 75px;
+            border: 3px solid #2196f3;
+            border-radius: 8px 8px 18px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            background: white;
+            transition: 0.3s;
+        }
+
+        .glass.filled {
+            background: #2196f3;
+        }
+
+        /* BUTTONS */
+
+        .water-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .drink-btn {
+            border: none;
+            background: #1976d2;
+            color: white;
+            padding: 14px 25px;
+            border-radius: 9px;
+            font-size: 17px;
+            cursor: pointer;
+        }
+
+        .drink-btn:hover {
+            background: #125ca8;
+        }
+
+        .reset-btn {
+            border: none;
+            background: #78909c;
+            color: white;
+            padding: 14px 25px;
+            border-radius: 9px;
+            font-size: 17px;
+            cursor: pointer;
+        }
+
+        .reset-btn:hover {
+            background: #546e7a;
+        }
+
+        /* REMINDER */
+
+        .reminder-card {
+            background: white;
+            margin-top: 25px;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .reminder-card h2 {
+            margin-bottom: 10px;
+        }
+
+        .reminder-card p {
+            color: #607d8b;
+            margin-bottom: 20px;
+        }
+
+        .reminder-btn {
+            border: none;
+            background: #00897b;
+            color: white;
+            padding: 14px 25px;
+            border-radius: 9px;
+            font-size: 17px;
+            cursor: pointer;
+        }
+
+        .reminder-btn:hover {
+            background: #00695c;
+        }
+
+        /* AI MESSAGE */
+
+        .ai-message {
+            margin-top: 25px;
+            background: white;
+            padding: 22px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .ai-icon {
+            font-size: 45px;
+        }
+
+        .ai-message h3 {
+            margin-bottom: 7px;
+        }
+
+        .ai-message p {
+            color: #607d8b;
+        }
+
+        /* POPUP */
+
+        .water-popup {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .popup-box {
+            background: white;
+            width: 90%;
+            max-width: 430px;
+            padding: 30px;
+            border-radius: 18px;
+            text-align: center;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.25);
+        }
+
+        .popup-icon {
+            font-size: 55px;
+        }
+
+        .popup-box h2 {
+            margin: 12px 0;
+        }
+
+        .popup-box p {
+            color: #607d8b;
+            margin-bottom: 20px;
+        }
+
+        .close-popup {
+            border: none;
+            background: #1976d2;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        /* FOOTER */
+
+        footer {
+            text-align: center;
+            margin-top: 35px;
+            color: #78909c;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 600px) {
+
+            .water-header {
+                padding: 18px;
+                gap: 15px;
+                flex-wrap: wrap;
+            }
+
+            .water-header h1 {
+                font-size: 22px;
+            }
+
+            .water-container {
+                padding: 15px;
+            }
+
+            .glass {
+                width: 50px;
+                height: 65px;
+            }
+
+            .water-buttons {
+                flex-direction: column;
+            }
+
+            .drink-btn,
+            .reset-btn,
+            .reminder-btn {
+                width: 100%;
+            }
+
+            .ai-message {
+                flex-direction: column;
+                text-align: center;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="water-page">
+
+
+    <!-- HEADER -->
+
+    <header class="water-header">
+
+        <div>
+
+            <h1>💧 MINDCARE AI</h1>
+
+            <p>Hydration & Water Reminder</p>
+
+        </div>
+
+        <button class="back-btn"
+                onclick="goBack()">
+
+            ← Back
+
+        </button>
+
+    </header>
+
+
+    <!-- MAIN -->
+
+    <main class="water-container">
+
+
+        <!-- WELCOME -->
+
+        <section class="water-welcome">
+
+            <div class="water-icon">
+                💧
+            </div>
+
+            <h2>
+                Stay Hydrated, <span id="patientNameDisplay">Patient</span>!
+            </h2>
+
+            <p>
+                Keep track of your water intake throughout the day.
+            </p>
+
+        </section>
+
+
+        <!-- PROGRESS -->
+
+        <section class="progress-card">
+
+            <h2>
+                Today's Water Progress
+            </h2>
+
+            <div class="water-count"
+                 id="waterCount">
+
+                0 / 5
+
+            </div>
+
+            <div class="water-label">
+                Glasses Completed
+            </div>
+
+
+            <!-- PROGRESS BAR -->
+
+            <div class="progress-bar-container">
+
+                <div class="progress-bar"
+                     id="progressBar">
+                </div>
+
+            </div>
+
+
+            <!-- GLASSES -->
+
+            <div class="glasses-container"
+                 id="glassesContainer">
+
+            </div>
+
+
+            <!-- BUTTONS -->
+
+            <div class="water-buttons">
+
+                <button class="drink-btn"
+                        onclick="drinkWater()">
+
+                    💧 I Drank Water
+
+                </button>
+
+                <button class="reset-btn"
+                        onclick="resetWater()">
+
+                    Reset Today
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- REMINDER -->
+
+        <section class="reminder-card">
+
+            <h2>
+                ⏰ Water Reminder
+            </h2>
+
+            <p>
+                Set a reminder to take a water break.
+            </p>
+
+            <button class="reminder-btn"
+                    onclick="setWaterReminder()">
+
+                🔔 Remind Me
+
+            </button>
+
+        </section>
+
+
+        <!-- AI MESSAGE -->
+
+        <section class="ai-message">
+
+            <div class="ai-icon">
+                🤖
+            </div>
+
+            <div>
+
+                <h3>
+                    MINDCARE AI Assistant
+                </h3>
+
+                <p id="aiMessage">
+
+                    Let's stay hydrated throughout the day.
+
+                </p>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <p>
+            MINDCARE AI • Supporting everyday elderly care
+        </p>
+
+    </footer>
+
+
+</div>
+
+
+<!-- =========================
+     WATER REMINDER POPUP
+========================= -->
+
+<div class="water-popup"
+     id="waterPopup">
+
+    <div class="popup-box">
+
+        <div class="popup-icon">
+            💧
+        </div>
+
+        <h2>
+            Water Reminder
+        </h2>
+
+        <p id="waterReminderText">
+            Patient, it's time to take a water break.
+        </p>
+
+        <button class="close-popup"
+                onclick="closeWaterPopup()">
+
+            ✓ Got It
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+/* =========================
+   PATIENT LOGIN DETAILS
+========================= */
+
+const patientId =
+    sessionStorage.getItem("currentPatientId");
+
+const patientName =
+    sessionStorage.getItem("currentPatientName");
+
+
+/* =========================
+   LOGIN CHECK
+========================= */
+
+if (!patientId || !patientName) {
+
+    alert("Please login first.");
+
+    window.location.href = "index.html";
+
+}
+
+
+/* =========================
+   PATIENT DISPLAY
+========================= */
+
+document.getElementById(
+    "patientNameDisplay"
+).textContent = patientName;
+
+
+/* =========================
+   PATIENT-SPECIFIC KEYS
+========================= */
+
+const dailyGoal = 5;
+
+const waterKey =
+    "waterProgress_" + patientId;
+
+const waterDateKey =
+    "waterProgressDate_" + patientId;
+
+
+/* =========================
+   CHECK NEW DAY
+========================= */
+
+function checkNewDay() {
+
+    const today =
+        new Date().toLocaleDateString();
+
+    const savedDate =
+        localStorage.getItem(waterDateKey);
+
+
+    if (savedDate !== today) {
+
+        localStorage.setItem(
+            waterKey,
+            "0"
+        );
+
+        localStorage.setItem(
+            waterDateKey,
+            today
+        );
+
+    }
+
+}
+
+
+/* =========================
+   GET WATER COUNT
+========================= */
+
+function getWaterCount() {
+
+    const saved =
+        localStorage.getItem(waterKey);
+
+    const count =
+        parseInt(saved || "0", 10);
+
+    return isNaN(count) ? 0 : count;
+
+}
+
+
+/* =========================
+   SAVE WATER COUNT
+========================= */
+
+function saveWaterCount(count) {
+
+    localStorage.setItem(
+        waterKey,
+        count.toString()
+    );
+
+    localStorage.setItem(
+        waterDateKey,
+        new Date().toLocaleDateString()
+    );
+
+}
+
+
+/* =========================
+   DRINK WATER
+========================= */
+
+function drinkWater() {
+
+    let count =
+        getWaterCount();
+
+
+    if (count < dailyGoal) {
+
+        count++;
+
+        saveWaterCount(count);
+
+        updateWaterUI();
+
+    }
+
+
+    if (count === dailyGoal) {
+
+        document.getElementById(
+            "aiMessage"
+        ).textContent =
+            "Excellent! Today's hydration goal is completed. Great job!";
+
+    }
+
+}
+
+
+/* =========================
+   UPDATE UI
+========================= */
+
+function updateWaterUI() {
+
+    const count =
+        getWaterCount();
+
+
+    /* Water Count */
+
+    document.getElementById(
+        "waterCount"
+    ).textContent =
+        count + " / " + dailyGoal;
+
+
+    /* Progress Bar */
+
+    const percentage =
+        (count / dailyGoal) * 100;
+
+
+    document.getElementById(
+        "progressBar"
+    ).style.width =
+        percentage + "%";
+
+
+    /* Glasses */
+
+    const container =
+        document.getElementById(
+            "glassesContainer"
+        );
+
+
+    container.innerHTML = "";
+
+
+    for (
+        let i = 1;
+        i <= dailyGoal;
+        i++
+    ) {
+
+        const glass =
+            document.createElement("div");
+
+
+        glass.className =
+            "glass";
+
+
+        if (i <= count) {
+
+            glass.classList.add(
+                "filled"
+            );
+
+            glass.textContent =
+                "💧";
+
+        }
+
+        else {
+
+            glass.textContent =
+                "🥛";
+
+        }
+
+
+        container.appendChild(
+            glass
+        );
+
+    }
+
+
+    /* AI Message */
+
+    const aiMessage =
+        document.getElementById(
+            "aiMessage"
+        );
+
+
+    if (count === 0) {
+
+        aiMessage.textContent =
+            "Let's start your hydration routine. Remember to take regular water breaks.";
+
+    }
+
+    else if (count < dailyGoal) {
+
+        const remaining =
+            dailyGoal - count;
+
+        aiMessage.textContent =
+            "Good start! You have " +
+            remaining +
+            " water break(s) remaining today.";
+
+    }
+
+    else {
+
+        aiMessage.textContent =
+            "Excellent! Today's hydration goal is completed. Great job!";
+
+    }
+
+}
+
+
+/* =========================
+   RESET WATER
+========================= */
+
+function resetWater() {
+
+    const confirmReset =
+        confirm(
+            "Reset today's water progress?"
+        );
+
+
+    if (confirmReset) {
+
+        saveWaterCount(0);
+
+        updateWaterUI();
+
+    }
+
+}
+
+
+/* =========================
+   WATER REMINDER
+========================= */
+
+function setWaterReminder() {
+
+    const reminderMinutes = 30;
+
+
+    alert(
+        "💧 Water reminder set!\n\nYou will be reminded in 30 minutes."
+    );
+
+
+    setTimeout(
+        function() {
+
+            showWaterPopup();
+
+        },
+        reminderMinutes * 60 * 1000
+    );
+
+}
+
+
+/* =========================
+   SHOW POPUP
+========================= */
+
+function showWaterPopup() {
+
+    document.getElementById(
+        "waterPopup"
+    ).style.display =
+        "flex";
+
+
+    document.getElementById(
+        "waterReminderText"
+    ).textContent =
+        patientName +
+        ", it's time to take a water break.";
+
+
+    playWaterSound();
+
+}
+
+
+/* =========================
+   CLOSE POPUP
+========================= */
+
+function closeWaterPopup() {
+
+    document.getElementById(
+        "waterPopup"
+    ).style.display =
+        "none";
+
+}
+
+
+/* =========================
+   WATER SOUND
+========================= */
+
+function playWaterSound() {
+
+    try {
+
+        const AudioContext =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+
+        if (!AudioContext) {
+            return;
+        }
+
+
+        const audioContext =
+            new AudioContext();
+
+
+        const oscillator =
+            audioContext.createOscillator();
+
+
+        const gain =
+            audioContext.createGain();
+
+
+        oscillator.connect(
+            gain
+        );
+
+        gain.connect(
+            audioContext.destination
+        );
+
+
+        oscillator.type =
+            "sine";
+
+
+        oscillator.frequency.value =
+            880;
+
+
+        gain.gain.setValueAtTime(
+            0.15,
+            audioContext.currentTime
+        );
+
+
+        oscillator.start();
+
+
+        oscillator.stop(
+            audioContext.currentTime + 0.5
+        );
+
+    }
+
+    catch(error) {
+
+        console.log(
+            "Water reminder sound unavailable.",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================
+   BACK
+========================= */
+
+function goBack() {
+
+    window.location.href =
+        "patient.html";
+
+}
+
+
+/* =========================
+   PAGE LOAD
+========================= */
+
+window.addEventListener(
+    "load",
+    function() {
+
+        checkNewDay();
+
+        updateWaterUI();
+
+    }
+);
+
+
+/* =========================
+   PAGE SHOW
+========================= */
+
+window.addEventListener(
+    "pageshow",
+    function() {
+
+        checkNewDay();
+
+        updateWaterUI();
+
+    }
+);
+
+
+</script>
+
+
+</body>
+
+</html>

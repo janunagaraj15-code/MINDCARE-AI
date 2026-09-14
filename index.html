@@ -1,0 +1,1576 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>MINDCARE AI</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+<div class="login-page">
+
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <header class="login-header">
+
+        <div class="logo">
+
+            🧠
+
+            <span>
+                MINDCARE AI
+            </span>
+
+        </div>
+
+        <p>
+            AI-Powered Cognitive Care Platform
+        </p>
+
+    </header>
+
+
+
+    <!-- =========================
+         MAIN
+    ========================== -->
+
+    <main class="login-container">
+
+
+        <div class="login-card">
+
+
+            <div class="login-icon">
+                🧠
+            </div>
+
+
+            <h1>
+                Welcome to MINDCARE AI
+            </h1>
+
+
+            <p class="login-description">
+                Choose your role to continue
+            </p>
+
+
+
+            <!-- =====================
+                 PATIENT
+            ====================== -->
+
+            <button class="role-button patient-login"
+                    onclick="openPatientLogin()">
+
+                <span class="role-icon">
+                    👴
+                </span>
+
+                <span class="role-content">
+
+                    <strong>
+                        Patient
+                    </strong>
+
+                    <small>
+                        Access games, reminders & daily care
+                    </small>
+
+                </span>
+
+                <span>
+                    →
+                </span>
+
+            </button>
+
+
+
+            <!-- =====================
+                 DOCTOR
+            ====================== -->
+
+            <button class="role-button doctor-login"
+                    onclick="openDoctor()">
+
+                <span class="role-icon">
+                    👨‍⚕️
+                </span>
+
+                <span class="role-content">
+
+                    <strong>
+                        Doctor
+                    </strong>
+
+                    <small>
+                        Manage patients & prescriptions
+                    </small>
+
+                </span>
+
+                <span>
+                    →
+                </span>
+
+            </button>
+
+
+
+            <!-- =====================
+                 CAREGIVER
+            ====================== -->
+
+            <button class="role-button caregiver-login"
+                    onclick="openCaregiver()">
+
+                <span class="role-icon">
+                    👩‍👦
+                </span>
+
+                <span class="role-content">
+
+                    <strong>
+                        Caregiver
+                    </strong>
+
+                    <small>
+                        Monitor patient activities & alerts
+                    </small>
+
+                </span>
+
+                <span>
+                    →
+                </span>
+
+            </button>
+
+
+        </div>
+
+
+        <!-- =========================
+             SECURITY MESSAGE
+        ========================== -->
+
+        <div class="login-note">
+
+            🔒
+
+            <span>
+                Your care information is designed
+                for authorized users only.
+            </span>
+
+        </div>
+
+
+    </main>
+
+
+
+    <!-- =========================
+         PATIENT LOGIN MODAL
+    ========================== -->
+
+    <div id="patientLoginModal"
+         class="mindcare-modal">
+
+
+        <div class="mindcare-modal-card">
+
+
+            <button class="close-modal"
+                    onclick="closePatientLogin()">
+
+                ×
+
+            </button>
+
+
+            <div class="modal-icon">
+                👴
+            </div>
+
+
+            <h2>
+                Patient Login
+            </h2>
+
+
+            <p class="modal-description">
+                Login to access your personal care dashboard
+            </p>
+
+
+
+            <!-- Patient ID -->
+
+            <label>
+                Patient ID
+            </label>
+
+            <input type="text"
+                   id="loginPatientId"
+                   placeholder="Enter Patient ID"
+                   autocomplete="off">
+
+
+
+            <!-- Password -->
+
+            <label>
+                Password
+            </label>
+
+            <input type="password"
+                   id="loginPassword"
+                   placeholder="Enter Password">
+
+
+
+            <button class="modal-primary-btn"
+                    onclick="patientLogin()">
+
+                Login
+
+            </button>
+
+
+            <p id="loginError"
+               class="form-error">
+            </p>
+
+
+
+            <div class="register-question">
+
+                New Patient?
+
+                <button onclick="openRegister()">
+                    Create Account
+                </button>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         PATIENT REGISTRATION MODAL
+    ========================== -->
+
+    <div id="registerModal"
+         class="mindcare-modal">
+
+
+        <div class="mindcare-modal-card register-card">
+
+
+            <button class="close-modal"
+                    onclick="closeRegister()">
+
+                ×
+
+            </button>
+
+
+            <div class="modal-icon">
+                📝
+            </div>
+
+
+            <h2>
+                Patient Registration
+            </h2>
+
+
+            <p class="modal-description">
+                Create a patient account
+            </p>
+
+
+
+            <!-- Patient Name -->
+
+            <label>
+                Patient Name
+            </label>
+
+            <input type="text"
+                   id="registerName"
+                   placeholder="Enter patient name"
+                   autocomplete="off">
+
+
+
+            <!-- Patient ID -->
+
+            <label>
+                Patient ID
+            </label>
+
+            <input type="text"
+                   id="registerPatientId"
+                   placeholder="Example: P1001"
+                   autocomplete="off">
+
+
+
+            <!-- Gender -->
+
+            <label>
+                Gender
+            </label>
+
+            <select id="registerGender">
+
+                <option value="">
+                    Select Gender
+                </option>
+
+                <option value="male">
+                    Male
+                </option>
+
+                <option value="female">
+                    Female
+                </option>
+
+                <option value="other">
+                    Other
+                </option>
+
+            </select>
+
+
+
+            <!-- Password -->
+
+            <label>
+                Password
+            </label>
+
+            <input type="password"
+                   id="registerPassword"
+                   placeholder="Create password">
+
+
+
+            <!-- Confirm Password -->
+
+            <label>
+                Confirm Password
+            </label>
+
+            <input type="password"
+                   id="registerConfirmPassword"
+                   placeholder="Confirm password">
+
+
+
+            <button class="modal-primary-btn"
+                    onclick="registerPatient()">
+
+                Create Patient Account
+
+            </button>
+
+
+            <p id="registerMessage"
+               class="form-message">
+            </p>
+
+
+
+            <div class="register-question">
+
+                Already registered?
+
+                <button onclick="backToLogin()">
+                    Login
+                </button>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =========================
+     JAVASCRIPT
+========================== -->
+
+<script>
+
+
+/* =====================================================
+   PATIENT LOGIN MODAL
+===================================================== */
+
+function openPatientLogin() {
+
+    document.getElementById(
+        "patientLoginModal"
+    ).style.display = "flex";
+
+
+    document.getElementById(
+        "loginPatientId"
+    ).focus();
+
+}
+
+
+
+function closePatientLogin() {
+
+    document.getElementById(
+        "patientLoginModal"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "loginError"
+    ).textContent = "";
+
+}
+
+
+
+/* =====================================================
+   OPEN REGISTRATION
+===================================================== */
+
+function openRegister() {
+
+    closePatientLogin();
+
+
+    document.getElementById(
+        "registerModal"
+    ).style.display = "flex";
+
+}
+
+
+
+/* =====================================================
+   CLOSE REGISTRATION
+===================================================== */
+
+function closeRegister() {
+
+    document.getElementById(
+        "registerModal"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "registerMessage"
+    ).textContent = "";
+
+}
+
+
+
+/* =====================================================
+   BACK TO LOGIN
+===================================================== */
+
+function backToLogin() {
+
+    closeRegister();
+
+    openPatientLogin();
+
+}
+
+
+
+/* =====================================================
+   REGISTER PATIENT
+===================================================== */
+
+function registerPatient() {
+
+
+    const name =
+        document.getElementById(
+            "registerName"
+        ).value.trim();
+
+
+
+    const patientId =
+        document.getElementById(
+            "registerPatientId"
+        ).value.trim();
+
+
+
+    const gender =
+        document.getElementById(
+            "registerGender"
+        ).value;
+
+
+
+    const password =
+        document.getElementById(
+            "registerPassword"
+        ).value;
+
+
+
+    const confirmPassword =
+        document.getElementById(
+            "registerConfirmPassword"
+        ).value;
+
+
+
+    const message =
+        document.getElementById(
+            "registerMessage"
+        );
+
+
+
+    /* Clear old message */
+
+    message.textContent = "";
+
+
+
+    /* Validation */
+
+    if (
+        !name ||
+        !patientId ||
+        !gender ||
+        !password ||
+        !confirmPassword
+    ) {
+
+        message.textContent =
+            "Please fill in all fields.";
+
+        message.style.color =
+            "red";
+
+        return;
+
+    }
+
+
+
+    if (password.length < 4) {
+
+        message.textContent =
+            "Password must contain at least 4 characters.";
+
+        message.style.color =
+            "red";
+
+        return;
+
+    }
+
+
+
+    if (
+        password !==
+        confirmPassword
+    ) {
+
+        message.textContent =
+            "Passwords do not match.";
+
+        message.style.color =
+            "red";
+
+        return;
+
+    }
+
+
+
+    /* Get existing patients */
+
+    let patients = [];
+
+
+    try {
+
+        patients =
+            JSON.parse(
+                localStorage.getItem(
+                    "mindcarePatients"
+                ) || "[]"
+            );
+
+    }
+
+    catch (error) {
+
+        patients = [];
+
+    }
+
+
+
+    /* Check duplicate Patient ID */
+
+    const existingPatient =
+        patients.find(
+            function(patient) {
+
+                return (
+
+                    String(
+                        patient.patientId
+                    ).toLowerCase() ===
+
+                    patientId.toLowerCase()
+
+                );
+
+            }
+        );
+
+
+
+    if (existingPatient) {
+
+        message.textContent =
+            "This Patient ID already exists.";
+
+        message.style.color =
+            "red";
+
+        return;
+
+    }
+
+
+
+    /* =================================================
+       CREATE PATIENT
+    ================================================= */
+
+    const newPatient = {
+
+        patientId:
+            patientId,
+
+        name:
+            name,
+
+        gender:
+            gender,
+
+        password:
+            password,
+
+        createdAt:
+            new Date().toISOString()
+
+    };
+
+
+
+    patients.push(
+        newPatient
+    );
+
+
+
+    /* Save patient list */
+
+    localStorage.setItem(
+
+        "mindcarePatients",
+
+        JSON.stringify(
+            patients
+        )
+
+    );
+
+
+
+    /* Success message */
+
+    message.textContent =
+        "Patient account created successfully!";
+
+    message.style.color =
+        "green";
+
+
+
+    /* Clear form */
+
+    document.getElementById(
+        "registerName"
+    ).value = "";
+
+
+    document.getElementById(
+        "registerPatientId"
+    ).value = "";
+
+
+    document.getElementById(
+        "registerGender"
+    ).value = "";
+
+
+    document.getElementById(
+        "registerPassword"
+    ).value = "";
+
+
+    document.getElementById(
+        "registerConfirmPassword"
+    ).value = "";
+
+
+
+    /* Open login after short delay */
+
+    setTimeout(
+        function() {
+
+            closeRegister();
+
+            openPatientLogin();
+
+
+            document.getElementById(
+                "loginPatientId"
+            ).value =
+                patientId;
+
+        },
+        1200
+    );
+
+}
+
+
+
+/* =====================================================
+   PATIENT LOGIN
+===================================================== */
+
+function patientLogin() {
+
+
+    const patientId =
+        document.getElementById(
+            "loginPatientId"
+        ).value.trim();
+
+
+
+    const password =
+        document.getElementById(
+            "loginPassword"
+        ).value;
+
+
+
+    const error =
+        document.getElementById(
+            "loginError"
+        );
+
+
+
+    error.textContent = "";
+
+
+
+    if (
+        !patientId ||
+        !password
+    ) {
+
+        error.textContent =
+            "Please enter Patient ID and Password.";
+
+        return;
+
+    }
+
+
+
+    /* Get registered patients */
+
+    let patients = [];
+
+
+    try {
+
+        patients =
+            JSON.parse(
+                localStorage.getItem(
+                    "mindcarePatients"
+                ) || "[]"
+            );
+
+    }
+
+    catch (e) {
+
+        patients = [];
+
+    }
+
+
+
+    /* Find patient */
+
+    const patient =
+        patients.find(
+            function(item) {
+
+                return (
+
+                    String(
+                        item.patientId
+                    ).toLowerCase() ===
+
+                    patientId.toLowerCase()
+
+                    &&
+
+                    item.password ===
+                    password
+
+                );
+
+            }
+        );
+
+
+
+    if (!patient) {
+
+        error.textContent =
+            "Invalid Patient ID or Password.";
+
+        return;
+
+    }
+
+
+
+    /* =================================================
+       SAVE CURRENT LOGGED-IN PATIENT
+    ================================================= */
+
+    sessionStorage.setItem(
+        "currentPatientId",
+        patient.patientId
+    );
+
+
+    sessionStorage.setItem(
+        "currentPatientName",
+        patient.name
+    );
+
+
+    sessionStorage.setItem(
+        "currentPatientGender",
+        patient.gender || "other"
+    );
+
+
+    sessionStorage.setItem(
+        "mindcareRole",
+        "patient"
+    );
+
+
+    sessionStorage.setItem(
+        "mindcareLoggedIn",
+        "true"
+    );
+
+
+
+    /* Open dashboard */
+
+    window.location.href =
+        "patient.html";
+
+}
+
+
+
+/* =====================================================
+   DOCTOR
+===================================================== */
+
+function openDoctor() {
+
+    window.location.href =
+        "doctor.html";
+
+}
+
+
+
+/* =====================================================
+   CAREGIVER
+===================================================== */
+
+function openCaregiver() {
+
+    window.location.href =
+        "caregiver.html";
+
+}
+
+
+
+/* =====================================================
+   CLOSE MODALS WHEN CLICKING OUTSIDE
+===================================================== */
+
+window.addEventListener(
+    "click",
+    function(event) {
+
+
+        const loginModal =
+            document.getElementById(
+                "patientLoginModal"
+            );
+
+
+        const registerModal =
+            document.getElementById(
+                "registerModal"
+            );
+
+
+        if (
+            event.target ===
+            loginModal
+        ) {
+
+            closePatientLogin();
+
+        }
+
+
+        if (
+            event.target ===
+            registerModal
+        ) {
+
+            closeRegister();
+
+        }
+
+    }
+);
+
+
+</script>
+
+
+
+<!-- =========================
+     PAGE STYLE
+========================== -->
+
+<style>
+
+
+/* =========================
+   MODAL
+========================= */
+
+.mindcare-modal {
+
+    display: none;
+
+    position: fixed;
+
+    inset: 0;
+
+    background:
+        rgba(0, 0, 0, 0.55);
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    z-index: 9999;
+
+}
+
+
+
+/* =========================
+   MODAL CARD
+========================= */
+
+.mindcare-modal-card {
+
+    width: 100%;
+
+    max-width: 430px;
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    background: white;
+
+    border-radius: 20px;
+
+    padding: 30px;
+
+    position: relative;
+
+    box-shadow:
+        0 15px 40px
+        rgba(0, 0, 0, 0.25);
+
+    box-sizing: border-box;
+
+}
+
+
+
+/* =========================
+   CLOSE
+========================= */
+
+.close-modal {
+
+    position: absolute;
+
+    top: 12px;
+
+    right: 16px;
+
+    border: none;
+
+    background: transparent;
+
+    font-size: 30px;
+
+    cursor: pointer;
+
+    color: #555;
+
+}
+
+
+
+/* =========================
+   ICON
+========================= */
+
+.modal-icon {
+
+    font-size: 48px;
+
+    text-align: center;
+
+    margin-bottom: 10px;
+
+}
+
+
+
+/* =========================
+   TITLE
+========================= */
+
+.mindcare-modal-card h2 {
+
+    text-align: center;
+
+    margin: 5px 0 10px;
+
+}
+
+
+
+/* =========================
+   DESCRIPTION
+========================= */
+
+.modal-description {
+
+    text-align: center;
+
+    color: #666;
+
+    margin-bottom: 20px;
+
+}
+
+
+
+/* =========================
+   LABEL
+========================= */
+
+.mindcare-modal-card label {
+
+    display: block;
+
+    font-weight: 600;
+
+    margin-top: 12px;
+
+    margin-bottom: 6px;
+
+}
+
+
+
+/* =========================
+   INPUT + SELECT
+========================= */
+
+.mindcare-modal-card input,
+.mindcare-modal-card select {
+
+    width: 100%;
+
+    padding: 12px 14px;
+
+    border: 1px solid #d5d5d5;
+
+    border-radius: 10px;
+
+    font-size: 15px;
+
+    box-sizing: border-box;
+
+    outline: none;
+
+    background: white;
+
+}
+
+
+
+.mindcare-modal-card input:focus,
+.mindcare-modal-card select:focus {
+
+    border-color: #667eea;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(102, 126, 234, 0.12);
+
+}
+
+
+
+/* =========================
+   PRIMARY BUTTON
+========================= */
+
+.modal-primary-btn {
+
+    width: 100%;
+
+    margin-top: 20px;
+
+    padding: 13px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #667eea,
+            #764ba2
+        );
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+}
+
+
+
+.modal-primary-btn:hover {
+
+    opacity: 0.92;
+
+}
+
+
+
+/* =========================
+   ERROR
+========================= */
+
+.form-error {
+
+    color: #d93025;
+
+    text-align: center;
+
+    min-height: 20px;
+
+    margin: 10px 0;
+
+    font-size: 14px;
+
+}
+
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+.form-message {
+
+    text-align: center;
+
+    min-height: 20px;
+
+    margin: 10px 0;
+
+    font-size: 14px;
+
+}
+
+
+
+/* =========================
+   REGISTER QUESTION
+========================= */
+
+.register-question {
+
+    text-align: center;
+
+    margin-top: 18px;
+
+    color: #666;
+
+    font-size: 14px;
+
+}
+
+
+
+.register-question button {
+
+    border: none;
+
+    background: none;
+
+    color: #667eea;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+}
+
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 500px) {
+
+    .mindcare-modal {
+
+        padding: 12px;
+
+    }
+
+
+    .mindcare-modal-card {
+
+        padding: 24px 18px;
+
+        border-radius: 16px;
+
+    }
+
+
+    .mindcare-modal-card h2 {
+
+        font-size: 22px;
+
+    }
+
+}
+
+
+/* =====================================================
+   MOBILE RESPONSIVE FIX
+   Prevents MINDCARE AI text from going outside screen
+===================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.login-page {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.login-header {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 16px;
+    padding-right: 16px;
+    overflow: hidden;
+}
+
+.login-header .logo {
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    text-align: center;
+}
+
+.login-header .logo span {
+    display: block;
+    max-width: 100%;
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+    word-break: normal;
+    text-align: center;
+}
+
+.login-header > p {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 10px;
+    text-align: center;
+    overflow-wrap: break-word;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 12px;
+    padding-right: 12px;
+    overflow-x: hidden;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 430px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.role-button {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.role-content {
+    min-width: 0;
+    flex: 1;
+}
+
+.role-content strong,
+.role-content small {
+    max-width: 100%;
+    overflow-wrap: break-word;
+}
+
+.login-note {
+    width: 100%;
+    max-width: 430px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+@media (max-width: 500px) {
+
+    .login-page {
+        min-height: 100vh;
+    }
+
+    .login-header {
+        padding: 24px 14px 10px;
+    }
+
+    .login-header .logo {
+        flex-direction: column;
+        gap: 8px;
+        line-height: 1;
+    }
+
+    .login-header .logo span {
+        font-size: clamp(32px, 11vw, 48px) !important;
+        line-height: 1.05 !important;
+        letter-spacing: -1px;
+        white-space: normal !important;
+        text-overflow: clip;
+        overflow: visible;
+    }
+
+    .login-header > p {
+        font-size: clamp(16px, 5vw, 21px) !important;
+        line-height: 1.25 !important;
+        margin-top: 12px;
+    }
+
+    .login-container {
+        padding: 10px 10px 24px;
+    }
+
+    .login-card {
+        width: 100%;
+        max-width: 380px;
+        padding: 24px 18px;
+        border-radius: 20px;
+    }
+
+    .login-card h1 {
+        font-size: clamp(25px, 7.5vw, 34px) !important;
+        line-height: 1.12 !important;
+        overflow-wrap: break-word;
+    }
+
+    .login-description {
+        font-size: 17px !important;
+        line-height: 1.3 !important;
+    }
+
+    .role-button {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 15px 12px;
+    }
+
+    .role-content {
+        text-align: left;
+    }
+
+    .role-content strong {
+        font-size: 17px;
+    }
+
+    .role-content small {
+        font-size: 12px;
+        line-height: 1.25;
+    }
+
+    .login-note {
+        max-width: 380px;
+        font-size: 12px;
+        line-height: 1.3;
+    }
+}
+
+
+@media (max-width: 320px) {
+
+    .login-header {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    .login-header .logo {
+        gap: 5px;
+    }
+
+    .login-header .logo span {
+        font-size: 31px !important;
+        letter-spacing: -0.5px;
+    }
+
+    .login-header > p {
+        font-size: 15px !important;
+        padding: 0 4px;
+    }
+
+    .login-container {
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+
+    .login-card {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+}
+
+</style>
+
+
+</body>
+
+</html>

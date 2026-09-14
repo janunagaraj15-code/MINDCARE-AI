@@ -1,0 +1,1647 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Pattern Recognition - MINDCARE AI</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #eef4ff, #f8fbff);
+            color: #222;
+        }
+
+        header {
+            background: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            color: #2457d6;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .back-btn {
+            background: #2457d6;
+            color: white;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 850px;
+            margin: 40px auto;
+        }
+
+        .intro,
+        .game-box,
+        .result-box {
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            padding: 30px;
+        }
+
+        .intro {
+            text-align: center;
+        }
+
+        h1 {
+            color: #2457d6;
+            margin-bottom: 10px;
+        }
+
+        .intro p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .difficulty {
+            display: inline-block;
+            background: #eef3ff;
+            color: #2457d6;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .start-btn,
+        .submit-btn,
+        .again-btn {
+            background: #2457d6;
+            color: white;
+            border: none;
+            padding: 13px 28px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: 15px;
+            margin-top: 15px;
+        }
+
+        .start-btn:hover,
+        .submit-btn:hover,
+        .again-btn:hover {
+            opacity: 0.9;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            background: #f5f8ff;
+            padding: 12px 20px;
+            border-radius: 10px;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .stat strong {
+            display: block;
+            color: #2457d6;
+            font-size: 18px;
+            margin-top: 5px;
+        }
+
+        .instruction {
+            text-align: center;
+            color: #555;
+            font-size: 17px;
+            margin: 20px 0;
+        }
+
+        /* PATTERN AREA */
+
+        .pattern-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 70px);
+            gap: 10px;
+            justify-content: center;
+            margin: 25px auto;
+        }
+
+        .pattern-cell {
+            width: 70px;
+            height: 70px;
+            border-radius: 10px;
+            background: #e9eef8;
+            border: 2px solid #d5def0;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .pattern-cell.active {
+            background: #2457d6;
+            border-color: #2457d6;
+        }
+
+        .pattern-cell.selected {
+            background: #7b61ff;
+            border-color: #7b61ff;
+        }
+
+        .pattern-cell.correct {
+            background: #35a853;
+            border-color: #35a853;
+        }
+
+        .pattern-cell.wrong {
+            background: #e74c3c;
+            border-color: #e74c3c;
+        }
+
+        .message {
+            text-align: center;
+            min-height: 25px;
+            font-weight: bold;
+            margin: 15px;
+        }
+
+        .submit-area {
+            text-align: center;
+        }
+
+        .result-box {
+            text-align: center;
+        }
+
+        .result-box h2 {
+            color: #2457d6;
+        }
+
+        .result-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .result-item {
+            background: #f5f8ff;
+            padding: 18px;
+            border-radius: 12px;
+        }
+
+        .result-item span {
+            display: block;
+            color: #666;
+            margin-bottom: 7px;
+        }
+
+        .result-item strong {
+            font-size: 20px;
+            color: #2457d6;
+        }
+
+        .ai-box {
+            background: #eef4ff;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .ai-box h3 {
+            color: #2457d6;
+            margin-top: 0;
+        }
+
+        .next-level {
+            font-weight: bold;
+            color: #2457d6;
+            margin-top: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+
+            header {
+                padding: 15px 20px;
+            }
+
+            .pattern-grid {
+                grid-template-columns: repeat(3, 55px);
+            }
+
+            .pattern-cell {
+                width: 55px;
+                height: 55px;
+            }
+
+            .result-stats {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header>
+
+    <div>
+
+        <div class="logo">
+            🧠 MINDCARE AI
+        </div>
+
+        <div class="subtitle">
+            Pattern Recognition Cognitive Game
+        </div>
+
+    </div>
+
+
+    <button
+        class="back-btn"
+        onclick="goBack()">
+
+        ← Back
+
+    </button>
+
+</header>
+
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<div class="container">
+
+
+    <!-- =========================
+         INTRO
+    ========================== -->
+
+    <div
+        class="intro"
+        id="intro">
+
+        <h1>
+            🎨 Pattern Recognition
+        </h1>
+
+
+        <p>
+            Remember the highlighted pattern
+            and select the same cells after
+            the pattern disappears.
+        </p>
+
+
+        <div
+            class="difficulty"
+            id="difficulty">
+
+            🤖 AI Difficulty: Easy
+
+        </div>
+
+
+        <br>
+
+
+        <button
+            class="start-btn"
+            onclick="startGame()">
+
+            ▶ Start Game
+
+        </button>
+
+    </div>
+
+
+
+    <!-- =========================
+         GAME
+    ========================== -->
+
+    <div
+        class="game-box hidden"
+        id="gameArea">
+
+
+        <div class="stats">
+
+
+            <div class="stat">
+
+                Difficulty
+
+                <strong id="gameDifficulty">
+                    Easy
+                </strong>
+
+            </div>
+
+
+
+            <div class="stat">
+
+                Time
+
+                <strong id="time">
+                    0s
+                </strong>
+
+            </div>
+
+
+
+            <div class="stat">
+
+                Mistakes
+
+                <strong id="mistakes">
+                    0
+                </strong>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div
+            class="instruction"
+            id="instruction">
+
+            Remember the highlighted pattern...
+
+        </div>
+
+
+
+        <div
+            class="pattern-grid"
+            id="patternGrid">
+
+        </div>
+
+
+
+        <div
+            class="message"
+            id="message">
+
+        </div>
+
+
+
+        <div class="submit-area">
+
+            <button
+                class="submit-btn"
+                id="submitBtn"
+                onclick="submitPattern()">
+
+                ✓ Submit Pattern
+
+            </button>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =========================
+         RESULT
+    ========================== -->
+
+    <div
+        class="result-box hidden"
+        id="resultArea">
+
+
+        <h2>
+            🎉 Game Completed
+        </h2>
+
+
+        <p>
+            Pattern Recognition Performance
+        </p>
+
+
+
+        <div class="result-stats">
+
+
+            <div class="result-item">
+
+                <span>
+                    Score
+                </span>
+
+                <strong id="finalScore">
+                    0
+                </strong>
+
+            </div>
+
+
+
+            <div class="result-item">
+
+                <span>
+                    Time
+                </span>
+
+                <strong id="finalTime">
+                    0s
+                </strong>
+
+            </div>
+
+
+
+            <div class="result-item">
+
+                <span>
+                    Mistakes
+                </span>
+
+                <strong id="finalMistakes">
+                    0
+                </strong>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="ai-box">
+
+
+            <h3>
+                🤖 AI Performance Analysis
+            </h3>
+
+
+            <p id="aiAnalysis">
+                Analysis will appear here.
+            </p>
+
+
+            <div
+                class="next-level"
+                id="nextLevel">
+
+            </div>
+
+
+        </div>
+
+
+
+        <button
+            class="again-btn"
+            onclick="startGame()">
+
+            🔄 Play Again
+
+        </button>
+
+
+        <br>
+
+
+        <button
+            class="again-btn"
+            onclick="goBack()">
+
+            🏠 Memory Games
+
+        </button>
+
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+
+/* =========================
+   CURRENT PATIENT
+========================= */
+
+const patientId =
+    sessionStorage.getItem("currentPatientId");
+
+const patientName =
+    sessionStorage.getItem("currentPatientName");
+
+
+/* =========================
+   LOGIN CHECK
+========================= */
+
+if (!patientId || !patientName) {
+
+    alert("Please login as a patient first.");
+
+    window.location.href = "index.html";
+
+}
+
+
+/* =========================
+   PATIENT-SPECIFIC KEYS
+========================= */
+
+const historyKey =
+    "gameHistory_" + patientId;
+
+const patternLevelKey =
+    "patternLevel_" + patientId;
+
+
+/* =========================
+   GAME VARIABLES
+========================= */
+
+let currentLevel =
+    localStorage.getItem(patternLevelKey) || "Easy";
+
+
+let playedLevel =
+    "Easy";
+
+
+let activePattern = [];
+
+
+let selectedPattern = [];
+
+
+let mistakes = 0;
+
+
+let seconds = 0;
+
+
+let timer = null;
+
+
+let patternTimeout = null;
+
+
+let gameStarted = false;
+
+
+let gameFinished = false;
+
+
+/* =========================
+   LEVEL SETTINGS
+========================= */
+
+const levelSettings = {
+
+    Easy: {
+
+        cells: 3,
+
+        showTime: 3000
+
+    },
+
+
+    Medium: {
+
+        cells: 5,
+
+        showTime: 2500
+
+    },
+
+
+    Hard: {
+
+        cells: 7,
+
+        showTime: 1800
+
+    }
+
+};
+
+
+/* =========================
+   UPDATE DIFFICULTY
+========================= */
+
+function updateDifficulty() {
+
+    currentLevel =
+        localStorage.getItem(
+            patternLevelKey
+        ) || "Easy";
+
+
+    document.getElementById(
+        "difficulty"
+    ).innerText =
+        "🤖 AI Difficulty: " +
+        currentLevel;
+
+}
+
+
+/* =========================
+   CREATE GRID
+========================= */
+
+function createGrid() {
+
+    const grid =
+        document.getElementById(
+            "patternGrid"
+        );
+
+
+    grid.innerHTML = "";
+
+
+    for (
+        let i = 0;
+        i < 9;
+        i++
+    ) {
+
+
+        const cell =
+            document.createElement(
+                "div"
+            );
+
+
+        cell.className =
+            "pattern-cell";
+
+
+        cell.dataset.index =
+            i;
+
+
+        cell.onclick =
+            function() {
+
+                selectCell(
+                    i,
+                    cell
+                );
+
+            };
+
+
+        grid.appendChild(
+            cell
+        );
+
+    }
+
+}
+
+
+/* =========================
+   RANDOM PATTERN
+========================= */
+
+function generatePattern() {
+
+    activePattern = [];
+
+
+    const requiredCells =
+        levelSettings[
+            playedLevel
+        ].cells;
+
+
+    while (
+        activePattern.length <
+        requiredCells
+    ) {
+
+
+        const randomIndex =
+            Math.floor(
+                Math.random() * 9
+            );
+
+
+        if (
+            !activePattern.includes(
+                randomIndex
+            )
+        ) {
+
+            activePattern.push(
+                randomIndex
+            );
+
+        }
+
+    }
+
+}
+
+
+/* =========================
+   SHOW PATTERN
+========================= */
+
+function showPattern() {
+
+    const cells =
+        document.querySelectorAll(
+            ".pattern-cell"
+        );
+
+
+    activePattern.forEach(
+        index => {
+
+            cells[index]
+                .classList
+                .add("active");
+
+        }
+    );
+
+
+    document.getElementById(
+        "instruction"
+    ).innerText =
+        "👀 Remember the highlighted pattern...";
+
+
+    patternTimeout =
+        setTimeout(
+
+            () => {
+
+                cells.forEach(
+                    cell => {
+
+                        cell.classList
+                            .remove("active");
+
+                    }
+                );
+
+
+                document.getElementById(
+                    "instruction"
+                ).innerText =
+                    "Select the cells that were highlighted.";
+
+
+                gameStarted = true;
+
+            },
+
+            levelSettings[
+                playedLevel
+            ].showTime
+
+        );
+
+}
+
+
+/* =========================
+   SELECT CELL
+========================= */
+
+function selectCell(
+    index,
+    cell
+) {
+
+
+    if (!gameStarted || gameFinished) {
+
+        return;
+
+    }
+
+
+    if (
+        selectedPattern.includes(
+            index
+        )
+    ) {
+
+
+        selectedPattern =
+            selectedPattern.filter(
+                item =>
+                    item !== index
+            );
+
+
+        cell.classList.remove(
+            "selected"
+        );
+
+    }
+
+    else {
+
+
+        selectedPattern.push(
+            index
+        );
+
+
+        cell.classList.add(
+            "selected"
+        );
+
+    }
+
+}
+
+
+/* =========================
+   START GAME
+========================= */
+
+function startGame() {
+
+
+    clearInterval(
+        timer
+    );
+
+
+    clearTimeout(
+        patternTimeout
+    );
+
+
+    currentLevel =
+        localStorage.getItem(
+            patternLevelKey
+        ) || "Easy";
+
+
+    playedLevel =
+        currentLevel;
+
+
+    mistakes = 0;
+
+
+    seconds = 0;
+
+
+    selectedPattern = [];
+
+
+    activePattern = [];
+
+
+    gameStarted = false;
+
+
+    gameFinished = false;
+
+
+    document.getElementById(
+        "intro"
+    ).classList.add(
+        "hidden"
+    );
+
+
+    document.getElementById(
+        "resultArea"
+    ).classList.add(
+        "hidden"
+    );
+
+
+    document.getElementById(
+        "gameArea"
+    ).classList.remove(
+        "hidden"
+    );
+
+
+    document.getElementById(
+        "gameDifficulty"
+    ).innerText =
+        playedLevel;
+
+
+    document.getElementById(
+        "time"
+    ).innerText =
+        "0s";
+
+
+    document.getElementById(
+        "mistakes"
+    ).innerText =
+        "0";
+
+
+    document.getElementById(
+        "message"
+    ).innerText =
+        "";
+
+
+    createGrid();
+
+
+    generatePattern();
+
+
+    showPattern();
+
+
+    timer =
+        setInterval(
+
+            () => {
+
+                if (!gameFinished) {
+
+                    seconds++;
+
+
+                    document.getElementById(
+                        "time"
+                    ).innerText =
+                        seconds + "s";
+
+                }
+
+            },
+
+            1000
+
+        );
+
+}
+
+
+/* =========================
+   SUBMIT PATTERN
+========================= */
+
+function submitPattern() {
+
+
+    if (
+        !gameStarted ||
+        gameFinished
+    ) {
+
+        return;
+
+    }
+
+
+    const sortedCorrect =
+        [...activePattern].sort(
+            (a, b) =>
+                a - b
+        );
+
+
+    const sortedSelected =
+        [...selectedPattern].sort(
+            (a, b) =>
+                a - b
+        );
+
+
+    const correct =
+        JSON.stringify(
+            sortedCorrect
+        ) ===
+        JSON.stringify(
+            sortedSelected
+        );
+
+
+    const cells =
+        document.querySelectorAll(
+            ".pattern-cell"
+        );
+
+
+    if (correct) {
+
+
+        cells.forEach(
+            cell => {
+
+                cell.classList
+                    .remove("selected");
+
+            }
+        );
+
+
+        endGame(true);
+
+    }
+
+    else {
+
+
+        mistakes++;
+
+
+        document.getElementById(
+            "mistakes"
+        ).innerText =
+            mistakes;
+
+
+        document.getElementById(
+            "message"
+        ).innerText =
+            "❌ Pattern is not correct. Try again.";
+
+    }
+
+}
+
+
+/* =========================
+   ANALYZE PERFORMANCE
+========================= */
+
+function analyzePerformance() {
+
+
+    let performance =
+        "Needs Support";
+
+
+    let nextLevel =
+        "Easy";
+
+
+    if (
+        playedLevel ===
+        "Easy"
+    ) {
+
+
+        if (
+            mistakes <= 1 &&
+            seconds <= 30
+        ) {
+
+
+            performance =
+                "Excellent";
+
+
+            nextLevel =
+                "Medium";
+
+        }
+
+
+        else if (
+            mistakes <= 3 &&
+            seconds <= 50
+        ) {
+
+
+            performance =
+                "Good";
+
+
+            nextLevel =
+                "Easy";
+
+        }
+
+
+        else {
+
+
+            performance =
+                "Needs Support";
+
+
+            nextLevel =
+                "Easy";
+
+        }
+
+    }
+
+
+    else if (
+        playedLevel ===
+        "Medium"
+    ) {
+
+
+        if (
+            mistakes <= 1 &&
+            seconds <= 40
+        ) {
+
+
+            performance =
+                "Excellent";
+
+
+            nextLevel =
+                "Hard";
+
+        }
+
+
+        else if (
+            mistakes <= 3 &&
+            seconds <= 60
+        ) {
+
+
+            performance =
+                "Good";
+
+
+            nextLevel =
+                "Medium";
+
+        }
+
+
+        else {
+
+
+            performance =
+                "Needs Support";
+
+
+            nextLevel =
+                "Easy";
+
+        }
+
+    }
+
+
+    else if (
+        playedLevel ===
+        "Hard"
+    ) {
+
+
+        if (
+            mistakes <= 2 &&
+            seconds <= 60
+        ) {
+
+
+            performance =
+                "Excellent";
+
+
+            nextLevel =
+                "Hard";
+
+        }
+
+
+        else if (
+            mistakes <= 4 &&
+            seconds <= 90
+        ) {
+
+
+            performance =
+                "Good";
+
+
+            nextLevel =
+                "Medium";
+
+        }
+
+
+        else {
+
+
+            performance =
+                "Needs Support";
+
+
+            nextLevel =
+                "Easy";
+
+        }
+
+    }
+
+
+    /* =========================
+       PATIENT-SPECIFIC AI LEVEL
+    ========================== */
+
+    localStorage.setItem(
+        patternLevelKey,
+        nextLevel
+    );
+
+
+    return {
+
+        performance:
+            performance,
+
+        nextLevel:
+            nextLevel
+
+    };
+
+}
+
+
+/* =========================
+   SAVE GAME HISTORY
+========================= */
+
+function saveGameHistory(
+    performance
+) {
+
+
+    let history = [];
+
+
+    try {
+
+
+        history =
+            JSON.parse(
+
+                localStorage.getItem(
+                    historyKey
+                ) || "[]"
+
+            );
+
+
+        if (
+            !Array.isArray(
+                history
+            )
+        ) {
+
+            history = [];
+
+        }
+
+    }
+
+
+    catch (error) {
+
+        history = [];
+
+    }
+
+
+    const now =
+        new Date();
+
+
+    const gameData = {
+
+
+        /* Patient ID */
+        patientId:
+            patientId,
+
+
+        /* Patient Name */
+        patient:
+            patientName,
+
+
+        /* Game */
+        game:
+            "Pattern Recognition",
+
+
+        /* Score */
+        score:
+            calculateScore(),
+
+
+        /* Time */
+        time:
+            seconds,
+
+
+        /* Mistakes */
+        mistakes:
+            mistakes,
+
+
+        /* Difficulty */
+        difficulty:
+            playedLevel,
+
+
+        /* Performance */
+        performance:
+            performance,
+
+
+        /* Date */
+        date:
+            now.toLocaleDateString(),
+
+
+        /* Time */
+        timeStamp:
+            now.toLocaleTimeString(
+                [],
+                {
+                    hour:
+                        "2-digit",
+
+                    minute:
+                        "2-digit"
+                }
+            )
+
+    };
+
+
+    history.push(
+        gameData
+    );
+
+
+    localStorage.setItem(
+
+        historyKey,
+
+        JSON.stringify(
+            history
+        )
+
+    );
+
+}
+
+
+/* =========================
+   CALCULATE SCORE
+========================= */
+
+function calculateScore() {
+
+
+    let baseScore =
+        100;
+
+
+    baseScore -=
+        mistakes * 15;
+
+
+    baseScore -=
+        Math.floor(
+            seconds / 10
+        ) * 5;
+
+
+    if (
+        baseScore < 0
+    ) {
+
+        baseScore = 0;
+
+    }
+
+
+    return baseScore;
+
+}
+
+
+/* =========================
+   END GAME
+========================= */
+
+function endGame(
+    success
+) {
+
+
+    gameStarted =
+        false;
+
+
+    gameFinished =
+        true;
+
+
+    clearInterval(
+        timer
+    );
+
+
+    clearTimeout(
+        patternTimeout
+    );
+
+
+    const result =
+        analyzePerformance();
+
+
+    const score =
+        calculateScore();
+
+
+    document.getElementById(
+        "gameArea"
+    ).classList.add(
+        "hidden"
+    );
+
+
+    document.getElementById(
+        "resultArea"
+    ).classList.remove(
+        "hidden"
+    );
+
+
+    document.getElementById(
+        "finalScore"
+    ).innerText =
+        score;
+
+
+    document.getElementById(
+        "finalTime"
+    ).innerText =
+        seconds + "s";
+
+
+    document.getElementById(
+        "finalMistakes"
+    ).innerText =
+        mistakes;
+
+
+    let analysisText =
+        "";
+
+
+    if (
+        result.performance ===
+        "Excellent"
+    ) {
+
+
+        analysisText =
+            "Excellent performance! The patient identified the visual pattern accurately with good attention and memory.";
+
+    }
+
+
+    else if (
+        result.performance ===
+        "Good"
+    ) {
+
+
+        analysisText =
+            "Good performance. The patient was able to recognize the pattern with some mistakes.";
+
+    }
+
+
+    else {
+
+
+        analysisText =
+            "The patient may benefit from practising simpler visual patterns before progressing to a higher difficulty.";
+
+    }
+
+
+    document.getElementById(
+        "aiAnalysis"
+    ).innerText =
+        analysisText;
+
+
+    document.getElementById(
+        "nextLevel"
+    ).innerText =
+        "🤖 Recommended Next Level: " +
+        result.nextLevel;
+
+
+    saveGameHistory(
+        result.performance
+    );
+
+}
+
+
+/* =========================
+   BACK
+========================= */
+
+function goBack() {
+
+    window.location.href =
+        "memory-games.html";
+
+}
+
+
+/* =========================
+   INITIAL LOAD
+========================= */
+
+window.addEventListener(
+    "load",
+    updateDifficulty
+);
+
+
+</script>
+
+
+</body>
+
+</html>

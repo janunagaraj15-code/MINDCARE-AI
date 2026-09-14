@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Patient Dashboard - MINDCARE AI</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+<div class="patient-page">
+
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <header class="patient-header">
+
+        <div>
+
+            <h1>🧠 MINDCARE AI</h1>
+
+            <p>Patient Care Dashboard</p>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =========================
+         WELCOME
+    ========================== -->
+
+    <section class="welcome-section">
+
+        <div>
+
+            <h2 id="greeting">
+                Good Morning 👋
+            </h2>
+
+            <p>
+                Welcome back,
+                <strong id="patientNameDisplay">
+                    Patient
+                </strong>!
+                Let's take care of your day.
+            </p>
+
+        </div>
+
+
+        <div class="patient-status">
+
+            🟢 Care Status: Active
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         TODAY'S CARE
+    ========================== -->
+
+    <section class="feature-section">
+
+        <h2>Today's Care</h2>
+
+
+        <div class="feature-grid">
+
+
+            <!-- MEMORY GAMES -->
+
+            <div class="feature-card"
+                 onclick="openMemoryGames()">
+
+                <div class="feature-icon">
+                    🧠
+                </div>
+
+                <h3>
+                    Memory Games
+                </h3>
+
+                <p>
+                    Play simple memory and cognitive games.
+                </p>
+
+                <button>
+                    Play Games
+                </button>
+
+            </div>
+
+
+
+            <!-- GAME HISTORY -->
+
+            <div class="feature-card"
+                 onclick="openGameHistory()">
+
+                <div class="feature-icon">
+                    📊
+                </div>
+
+                <h3>
+                    Game History
+                </h3>
+
+                <p>
+                    View your previous cognitive game performance.
+                </p>
+
+                <button>
+                    View History
+                </button>
+
+            </div>
+
+
+
+            <!-- MEDICINE -->
+
+            <div class="feature-card"
+                 onclick="openMedicine()">
+
+                <div class="feature-icon">
+                    💊
+                </div>
+
+                <h3>
+                    Medicine
+                </h3>
+
+                <p>
+                    View your doctor-approved medicine reminders.
+                </p>
+
+                <button>
+                    View Reminder
+                </button>
+
+            </div>
+
+
+
+            <!-- HYDRATION -->
+
+            <div class="feature-card"
+                 onclick="openWater()">
+
+                <div class="feature-icon">
+                    💧
+                </div>
+
+                <h3>
+                    Hydration
+                </h3>
+
+                <p>
+                    Keep track of your scheduled water breaks.
+                </p>
+
+                <button>
+                    View Water
+                </button>
+
+            </div>
+
+
+
+            <!-- DAILY SCHEDULE -->
+
+            <div class="feature-card"
+                 onclick="openSchedule()">
+
+                <div class="feature-icon">
+                    📅
+                </div>
+
+                <h3>
+                    Daily Schedule
+                </h3>
+
+                <p>
+                    See today's activities and appointments.
+                </p>
+
+                <button>
+                    View Schedule
+                </button>
+
+            </div>
+
+
+
+            <!-- VOICE ASSISTANT -->
+
+            <div class="feature-card"
+                 onclick="openVoice()">
+
+                <div class="feature-icon">
+                    🎤
+                </div>
+
+                <h3>
+                    Voice Assistant
+                </h3>
+
+                <p>
+                    Ask about your schedule using your voice.
+                </p>
+
+                <button>
+                    Talk
+                </button>
+
+            </div>
+
+
+
+            <!-- PROGRESS -->
+
+            <div class="feature-card"
+                 onclick="openProgress()">
+
+                <div class="feature-icon">
+                    📈
+                </div>
+
+                <h3>
+                    My Progress
+                </h3>
+
+                <p>
+                    View your daily activities and game progress.
+                </p>
+
+                <button>
+                    View Progress
+                </button>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         TODAY'S PROGRESS
+    ========================== -->
+
+    <section class="progress-section">
+
+        <h2>
+            Today's Progress
+        </h2>
+
+
+        <div class="progress-grid">
+
+
+            <!-- GAMES -->
+
+            <div class="progress-card">
+
+                <span>
+                    🧠
+                </span>
+
+                <h3>
+                    Games
+                </h3>
+
+                <strong id="gamesProgress">
+                    0 / 3
+                </strong>
+
+                <p>
+                    Completed
+                </p>
+
+            </div>
+
+
+
+            <!-- MEDICINE -->
+
+            <div class="progress-card">
+
+                <span>
+                    💊
+                </span>
+
+                <h3>
+                    Medicine
+                </h3>
+
+                <strong id="medicineProgress">
+                    0 / 1
+                </strong>
+
+                <p>
+                    Confirmed
+                </p>
+
+            </div>
+
+
+
+            <!-- WATER -->
+
+            <div class="progress-card">
+
+                <span>
+                    💧
+                </span>
+
+                <h3>
+                    Water
+                </h3>
+
+                <strong id="waterProgress">
+                    0 / 5
+                </strong>
+
+                <p>
+                    Completed
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         AI MESSAGE
+    ========================== -->
+
+    <section class="ai-message">
+
+        <div class="ai-icon">
+            🤖
+        </div>
+
+        <div>
+
+            <h3>
+                MINDCARE AI Assistant
+            </h3>
+
+            <p id="aiMessage">
+
+                Let's take care of your activities today.
+
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer>
+
+        <p>
+            MINDCARE AI • Supporting everyday elderly care
+        </p>
+
+    </footer>
+
+
+</div>
+
+
+
+<script>
+
+
+/* =====================================================
+   CURRENT PATIENT
+===================================================== */
+
+const patientId =
+    sessionStorage.getItem("currentPatientId");
+
+const patientName =
+    sessionStorage.getItem("currentPatientName");
+
+
+
+/* =====================================================
+   LOGIN CHECK
+===================================================== */
+
+if (!patientId || !patientName) {
+
+    alert("Please login as a patient first.");
+
+    window.location.replace("index.html");
+
+}
+
+
+
+/* =====================================================
+   DISPLAY PATIENT NAME
+===================================================== */
+
+document.getElementById(
+    "patientNameDisplay"
+).textContent =
+    patientName || "Patient";
+
+
+
+/* =====================================================
+   STORAGE KEY HELPER
+===================================================== */
+
+/*
+   IMPORTANT:
+
+   Patient ID is used for storing data.
+
+   Example:
+
+   gameHistory_P001
+   medicineHistory_P001
+   waterProgress_P001
+
+   This prevents different patients from
+   sharing each other's data.
+*/
+
+function patientKey(prefix) {
+
+    return prefix + patientId;
+
+}
+
+
+
+/* =====================================================
+   MEMORY GAMES
+===================================================== */
+
+function openMemoryGames() {
+
+    window.location.href =
+        "memory-games.html";
+
+}
+
+
+
+/* =====================================================
+   GAME HISTORY
+===================================================== */
+
+function openGameHistory() {
+
+    window.location.href =
+        "cognitive-history.html";
+
+}
+
+
+
+/* =====================================================
+   MEDICINE
+===================================================== */
+
+function openMedicine() {
+
+    window.location.href =
+        "medicine.html";
+
+}
+
+
+
+/* =====================================================
+   HYDRATION
+===================================================== */
+
+function openWater() {
+
+    window.location.href =
+        "water.html";
+
+}
+
+
+
+/* =====================================================
+   DAILY SCHEDULE
+===================================================== */
+
+function openSchedule() {
+
+    window.location.href =
+        "daily-schedule.html";
+
+}
+
+
+
+/* =====================================================
+   VOICE ASSISTANT
+===================================================== */
+
+function openVoice() {
+
+    window.location.href =
+        "voice-assistant.html";
+
+}
+
+
+
+/* =====================================================
+   PROGRESS
+===================================================== */
+
+function openProgress() {
+
+    window.location.href =
+        "progress.html";
+
+}
+
+
+
+/* =====================================================
+   TODAY'S DATE
+===================================================== */
+
+function getTodayDate() {
+
+    const today =
+        new Date();
+
+    return today.toLocaleDateString();
+
+}
+
+
+
+/* =====================================================
+   READ JSON SAFELY
+===================================================== */
+
+function getStorageArray(key) {
+
+    try {
+
+        const data =
+            localStorage.getItem(key);
+
+        if (!data) {
+
+            return [];
+
+        }
+
+        const parsed =
+            JSON.parse(data);
+
+        return Array.isArray(parsed)
+            ? parsed
+            : [];
+
+    }
+
+    catch (error) {
+
+        console.log(
+            "Storage read error:",
+            key
+        );
+
+        return [];
+
+    }
+
+}
+
+
+
+/* =====================================================
+   UPDATE GAME PROGRESS
+===================================================== */
+
+function updateGameProgress() {
+
+    const historyKey =
+        patientKey("gameHistory_");
+
+
+    let history =
+        getStorageArray(historyKey);
+
+
+    const today =
+        getTodayDate();
+
+
+    const todayGames =
+        history.filter(function(game) {
+
+            return game.date === today;
+
+        });
+
+
+    const completed =
+        todayGames.length;
+
+
+    document.getElementById(
+        "gamesProgress"
+    ).textContent =
+        completed + " / 3";
+
+}
+
+
+
+/* =====================================================
+   UPDATE MEDICINE PROGRESS
+===================================================== */
+
+function updateMedicineProgress() {
+
+    const historyKey =
+        patientKey("medicineHistory_");
+
+
+    let history =
+        getStorageArray(historyKey);
+
+
+    const today =
+        getTodayDate();
+
+
+    const todayMedicine =
+        history.filter(function(item) {
+
+            return item.date === today;
+
+        });
+
+
+    const taken =
+        todayMedicine.filter(function(item) {
+
+            return item.status === "taken";
+
+        }).length;
+
+
+    document.getElementById(
+        "medicineProgress"
+    ).textContent =
+        taken + " / 1";
+
+}
+
+
+
+/* =====================================================
+   UPDATE WATER PROGRESS
+===================================================== */
+
+function updateWaterProgress() {
+
+    const waterKey =
+        patientKey("waterProgress_");
+
+
+    const savedWater =
+        localStorage.getItem(waterKey);
+
+
+    let waterCount = 0;
+
+
+    if (savedWater) {
+
+        try {
+
+            const data =
+                JSON.parse(savedWater);
+
+
+            if (
+                typeof data === "number"
+            ) {
+
+                waterCount = data;
+
+            }
+
+            else if (
+                data &&
+                typeof data.count === "number"
+            ) {
+
+                waterCount =
+                    data.count;
+
+            }
+
+            else if (
+                data &&
+                typeof data.waterCount === "number"
+            ) {
+
+                waterCount =
+                    data.waterCount;
+
+            }
+
+            else {
+
+                waterCount =
+                    parseInt(savedWater) || 0;
+
+            }
+
+        }
+
+        catch (error) {
+
+            waterCount =
+                parseInt(savedWater) || 0;
+
+        }
+
+    }
+
+
+    waterCount =
+        Math.max(
+            0,
+            Math.min(
+                waterCount,
+                5
+            )
+        );
+
+
+    document.getElementById(
+        "waterProgress"
+    ).textContent =
+        waterCount + " / 5";
+
+}
+
+
+
+/* =====================================================
+   AI MESSAGE
+===================================================== */
+
+function updateAIMessage() {
+
+    const gameText =
+        document.getElementById(
+            "gamesProgress"
+        ).textContent;
+
+
+    const medicineText =
+        document.getElementById(
+            "medicineProgress"
+        ).textContent;
+
+
+    const waterText =
+        document.getElementById(
+            "waterProgress"
+        ).textContent;
+
+
+    const games =
+        parseInt(
+            gameText
+                .split("/")[0]
+                .trim()
+        ) || 0;
+
+
+    const medicine =
+        parseInt(
+            medicineText
+                .split("/")[0]
+                .trim()
+        ) || 0;
+
+
+    const water =
+        parseInt(
+            waterText
+                .split("/")[0]
+                .trim()
+        ) || 0;
+
+
+    const message =
+        document.getElementById(
+            "aiMessage"
+        );
+
+
+    if (
+        games >= 3 &&
+        medicine >= 1 &&
+        water >= 5
+    ) {
+
+        message.textContent =
+            "Excellent! You have completed today's activities. Keep following your scheduled routine.";
+
+    }
+
+    else if (
+        games >= 2 &&
+        medicine >= 1 &&
+        water >= 3
+    ) {
+
+        message.textContent =
+            "You are doing well today! Keep following your scheduled activities.";
+
+    }
+
+    else if (
+        games >= 1 ||
+        medicine >= 1 ||
+        water >= 1
+    ) {
+
+        message.textContent =
+            "Good start! Continue with your remaining scheduled activities.";
+
+    }
+
+    else {
+
+        message.textContent =
+            "Let's take care of your activities today. You can start with your scheduled games, medicine or hydration.";
+
+    }
+
+}
+
+
+
+/* =====================================================
+   GREETING
+===================================================== */
+
+function updateGreeting() {
+
+    const hour =
+        new Date().getHours();
+
+
+    const greeting =
+        document.getElementById(
+            "greeting"
+        );
+
+
+    if (hour < 12) {
+
+        greeting.textContent =
+            "Good Morning 👋";
+
+    }
+
+    else if (hour < 17) {
+
+        greeting.textContent =
+            "Good Afternoon 👋";
+
+    }
+
+    else {
+
+        greeting.textContent =
+            "Good Evening 👋";
+
+    }
+
+}
+
+
+
+/* =====================================================
+   UPDATE DASHBOARD
+===================================================== */
+
+function updateDashboard() {
+
+    updateGameProgress();
+
+    updateMedicineProgress();
+
+    updateWaterProgress();
+
+    updateGreeting();
+
+    updateAIMessage();
+
+}
+
+
+
+/* =====================================================
+   PAGE LOAD
+===================================================== */
+
+window.addEventListener(
+    "load",
+    function() {
+
+        updateDashboard();
+
+    }
+);
+
+
+
+/* =====================================================
+   AUTO REFRESH
+===================================================== */
+
+window.addEventListener(
+    "pageshow",
+    function() {
+
+        updateDashboard();
+
+    }
+);
+
+
+</script>
+
+
+</body>
+
+</html>

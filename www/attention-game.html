@@ -1,0 +1,1852 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Attention Game - MINDCARE AI</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #eef4ff, #f8fbff);
+            color: #222;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        header {
+            background: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            width: 100%;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            color: #2457d6;
+            line-height: 1.2;
+            white-space: nowrap;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-top: 5px;
+            line-height: 1.3;
+        }
+
+        .back-btn {
+            background: #2457d6;
+            color: white;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        /* =========================
+           CONTAINER
+        ========================= */
+
+        .container {
+            width: 90%;
+            max-width: 850px;
+            margin: 40px auto;
+        }
+
+        .intro,
+        .game-box,
+        .result-box {
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            padding: 30px;
+            width: 100%;
+        }
+
+        .intro {
+            text-align: center;
+        }
+
+        h1 {
+            color: #2457d6;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .intro p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .difficulty {
+            display: inline-block;
+            background: #eef3ff;
+            color: #2457d6;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .start-btn,
+        .again-btn {
+            background: #2457d6;
+            color: white;
+            border: none;
+            padding: 13px 28px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: 15px;
+            margin-top: 15px;
+        }
+
+        .start-btn:hover,
+        .again-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* =========================
+           STATS
+        ========================= */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat {
+            background: #f5f8ff;
+            padding: 12px 10px;
+            border-radius: 10px;
+            text-align: center;
+            min-width: 0;
+        }
+
+        .stat strong {
+            display: block;
+            color: #2457d6;
+            font-size: 18px;
+            margin-top: 5px;
+        }
+
+        /* =========================
+           TARGET
+        ========================= */
+
+        .target-box {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .target-box p {
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .target-symbol {
+            font-size: 45px;
+            font-weight: bold;
+            color: #2457d6;
+        }
+
+        .instruction {
+            text-align: center;
+            color: #555;
+            font-size: 17px;
+            margin: 20px 0;
+        }
+
+        /* =========================
+           SYMBOL GRID
+        ========================= */
+
+        .symbol-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 80px);
+            gap: 15px;
+            justify-content: center;
+            margin: 30px auto;
+            width: 100%;
+        }
+
+        .symbol-btn {
+            width: 80px;
+            height: 80px;
+            background: #f5f8ff;
+            border: 2px solid #d5def0;
+            border-radius: 12px;
+            font-size: 30px;
+            cursor: pointer;
+            transition: 0.2s;
+            padding: 0;
+        }
+
+        .symbol-btn:hover {
+            transform: scale(1.05);
+            border-color: #2457d6;
+        }
+
+        .symbol-btn.correct {
+            background: #35a853;
+            border-color: #35a853;
+            color: white;
+        }
+
+        .symbol-btn.wrong {
+            background: #e74c3c;
+            border-color: #e74c3c;
+            color: white;
+        }
+
+        .message {
+            text-align: center;
+            min-height: 25px;
+            font-weight: bold;
+            margin: 15px;
+            line-height: 1.4;
+        }
+
+        /* =========================
+           RESULT
+        ========================= */
+
+        .result-box {
+            text-align: center;
+        }
+
+        .result-box h2 {
+            color: #2457d6;
+        }
+
+        .result-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .result-item {
+            background: #f5f8ff;
+            padding: 18px;
+            border-radius: 12px;
+            min-width: 0;
+        }
+
+        .result-item span {
+            display: block;
+            color: #666;
+            margin-bottom: 7px;
+        }
+
+        .result-item strong {
+            font-size: 20px;
+            color: #2457d6;
+        }
+
+        /* =========================
+           AI BOX
+        ========================= */
+
+        .ai-box {
+            background: #eef4ff;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .ai-box h3 {
+            color: #2457d6;
+            margin-top: 0;
+        }
+
+        .ai-box p {
+            line-height: 1.6;
+            margin-bottom: 0;
+        }
+
+        .next-level {
+            font-weight: bold;
+            color: #2457d6;
+            margin-top: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* =====================================================
+           MOBILE RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 600px) {
+
+            body {
+                overflow-x: hidden;
+            }
+
+            /* =========================
+               MOBILE HEADER
+            ========================= */
+
+            header {
+                padding: 14px 15px;
+                gap: 12px;
+                align-items: center;
+            }
+
+            .logo {
+                font-size: 20px;
+                white-space: normal;
+                line-height: 1.15;
+            }
+
+            .subtitle {
+                font-size: 12px;
+                margin-top: 4px;
+                line-height: 1.25;
+            }
+
+            .back-btn {
+                padding: 9px 13px;
+                font-size: 13px;
+                white-space: nowrap;
+            }
+
+            /* =========================
+               MAIN CONTAINER
+            ========================= */
+
+            .container {
+                width: calc(100% - 20px);
+                max-width: 100%;
+                margin: 18px auto 25px;
+            }
+
+            .intro,
+            .game-box,
+            .result-box {
+                width: 100%;
+                padding: 20px 15px;
+                border-radius: 16px;
+            }
+
+            /* =========================
+               INTRO
+            ========================= */
+
+            h1 {
+                font-size: 27px;
+                line-height: 1.15;
+                margin-top: 5px;
+            }
+
+            .intro p {
+                font-size: 15px;
+                line-height: 1.5;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .difficulty {
+                font-size: 13px;
+                padding: 8px 12px;
+                max-width: 100%;
+            }
+
+            .start-btn,
+            .again-btn {
+                width: 100%;
+                max-width: 260px;
+                padding: 12px 18px;
+            }
+
+            /* =========================
+               GAME STATS
+            ========================= */
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                margin-bottom: 20px;
+            }
+
+            .stat {
+                padding: 11px 7px;
+                font-size: 12px;
+                border-radius: 10px;
+            }
+
+            .stat strong {
+                font-size: 16px;
+                margin-top: 4px;
+            }
+
+            /* =========================
+               TARGET
+            ========================= */
+
+            .target-box {
+                margin: 15px 0;
+            }
+
+            .target-box p {
+                font-size: 14px;
+            }
+
+            .target-symbol {
+                font-size: 42px;
+            }
+
+            .instruction {
+                font-size: 15px;
+                line-height: 1.4;
+                margin: 16px 0;
+            }
+
+            /* =========================
+               MOBILE SYMBOL GRID
+            ========================= */
+
+            .symbol-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+                width: 100%;
+                max-width: 270px;
+                margin: 22px auto;
+            }
+
+            .symbol-btn {
+                width: 100%;
+                height: auto;
+                aspect-ratio: 1 / 1;
+                min-width: 0;
+                font-size: 27px;
+                border-radius: 11px;
+            }
+
+            .symbol-btn:hover {
+                transform: none;
+            }
+
+            .message {
+                margin: 12px 0 0;
+                font-size: 14px;
+                min-height: 22px;
+            }
+
+            /* =========================
+               RESULT
+            ========================= */
+
+            .result-box h2 {
+                font-size: 24px;
+                line-height: 1.2;
+            }
+
+            .result-box > p {
+                font-size: 14px;
+            }
+
+            .result-stats {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                margin: 20px 0;
+            }
+
+            .result-item {
+                padding: 14px;
+            }
+
+            .result-item strong {
+                font-size: 19px;
+            }
+
+            .ai-box {
+                padding: 16px;
+                margin-top: 15px;
+            }
+
+            .ai-box h3 {
+                font-size: 18px;
+            }
+
+            .ai-box p {
+                font-size: 14px;
+                line-height: 1.5;
+            }
+
+            .next-level {
+                font-size: 14px;
+                line-height: 1.4;
+            }
+
+        }
+
+        /* =====================================================
+           SMALL PHONES
+        ===================================================== */
+
+        @media (max-width: 380px) {
+
+            header {
+                padding: 12px 10px;
+                gap: 8px;
+            }
+
+            .logo {
+                font-size: 17px;
+            }
+
+            .subtitle {
+                font-size: 10px;
+            }
+
+            .back-btn {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+
+            .container {
+                width: calc(100% - 14px);
+                margin-top: 12px;
+            }
+
+            .intro,
+            .game-box,
+            .result-box {
+                padding: 17px 11px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .intro p {
+                font-size: 14px;
+            }
+
+            .difficulty {
+                font-size: 12px;
+            }
+
+            .stats {
+                gap: 8px;
+            }
+
+            .stat {
+                font-size: 11px;
+                padding: 10px 5px;
+            }
+
+            .stat strong {
+                font-size: 15px;
+            }
+
+            .symbol-grid {
+                max-width: 240px;
+                gap: 8px;
+            }
+
+            .symbol-btn {
+                font-size: 24px;
+            }
+
+        }
+
+        /* =====================================================
+           VERY SMALL PHONES
+        ===================================================== */
+
+        @media (max-width: 320px) {
+
+            .logo {
+                font-size: 15px;
+            }
+
+            .subtitle {
+                font-size: 9px;
+            }
+
+            .back-btn {
+                padding: 7px 8px;
+                font-size: 11px;
+            }
+
+            .container {
+                width: calc(100% - 10px);
+            }
+
+            .intro,
+            .game-box,
+            .result-box {
+                padding: 15px 9px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            .symbol-grid {
+                max-width: 225px;
+            }
+
+            .symbol-btn {
+                font-size: 22px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header>
+
+    <div>
+
+        <div class="logo">
+            🧠 MINDCARE AI
+        </div>
+
+        <div class="subtitle">
+            Attention & Concentration Game
+        </div>
+
+    </div>
+
+
+    <button class="back-btn"
+            onclick="goBack()">
+
+        ← Back
+
+    </button>
+
+</header>
+
+
+
+<div class="container">
+
+
+    <!-- =========================
+         INTRO
+    ========================== -->
+
+    <div class="intro"
+         id="intro">
+
+        <h1>
+            👀 Attention Game
+        </h1>
+
+        <p>
+            Find the target symbol among the
+            displayed symbols as quickly and
+            accurately as possible.
+        </p>
+
+        <div class="difficulty"
+             id="difficulty">
+
+            🤖 AI Difficulty: Easy
+
+        </div>
+
+        <br>
+
+        <button class="start-btn"
+                onclick="startGame()">
+
+            ▶ Start Game
+
+        </button>
+
+    </div>
+
+
+
+    <!-- =========================
+         GAME AREA
+    ========================== -->
+
+    <div class="game-box hidden"
+         id="gameArea">
+
+
+        <div class="stats">
+
+
+            <div class="stat">
+
+                Difficulty
+
+                <strong id="gameDifficulty">
+                    Easy
+                </strong>
+
+            </div>
+
+
+            <div class="stat">
+
+                Time
+
+                <strong id="time">
+                    0s
+                </strong>
+
+            </div>
+
+
+            <div class="stat">
+
+                Score
+
+                <strong id="score">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="stat">
+
+                Mistakes
+
+                <strong id="mistakes">
+                    0
+                </strong>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- TARGET -->
+
+        <div class="target-box">
+
+            <p>
+                🎯 Find this symbol:
+            </p>
+
+            <div class="target-symbol"
+                 id="targetSymbol">
+
+                ⭐
+
+            </div>
+
+        </div>
+
+
+
+        <div class="instruction">
+
+            Select the matching symbol below.
+
+        </div>
+
+
+
+        <!-- SYMBOL GRID -->
+
+        <div class="symbol-grid"
+             id="symbolGrid">
+
+        </div>
+
+
+
+        <div class="message"
+             id="message">
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =========================
+         RESULT
+    ========================== -->
+
+    <div class="result-box hidden"
+         id="resultArea">
+
+        <h2>
+            🎉 Game Completed
+        </h2>
+
+        <p>
+            Attention Game Performance
+        </p>
+
+
+        <div class="result-stats">
+
+
+            <div class="result-item">
+
+                <span>
+                    Score
+                </span>
+
+                <strong id="finalScore">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="result-item">
+
+                <span>
+                    Time
+                </span>
+
+                <strong id="finalTime">
+                    0 sec
+                </strong>
+
+            </div>
+
+
+            <div class="result-item">
+
+                <span>
+                    Mistakes
+                </span>
+
+                <strong id="finalMistakes">
+                    0
+                </strong>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- AI RESULT -->
+
+        <div class="ai-box">
+
+            <h3>
+                🤖 AI Analysis
+            </h3>
+
+            <p id="aiMessage">
+                Analyzing your attention performance...
+            </p>
+
+            <div class="next-level"
+                 id="nextLevel">
+
+            </div>
+
+        </div>
+
+
+
+        <button class="again-btn"
+                onclick="startGame()">
+
+            🔄 Play Again
+
+        </button>
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+
+/* =====================================================
+   CURRENT LOGGED-IN PATIENT
+===================================================== */
+
+const patientId =
+    sessionStorage.getItem("currentPatientId");
+
+const patientName =
+    sessionStorage.getItem("currentPatientName");
+
+
+/* =====================================================
+   LOGIN CHECK
+===================================================== */
+
+if (!patientId || !patientName) {
+
+    alert("Please login first.");
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+/* =====================================================
+   PATIENT-SPECIFIC STORAGE KEYS
+===================================================== */
+
+const historyKey =
+    "gameHistory_" + patientId;
+
+
+const attentionLevelKey =
+    "attentionLevel_" + patientId;
+
+
+
+/* =====================================================
+   GAME SETTINGS
+===================================================== */
+
+const levels = {
+
+    Easy: {
+
+        symbols: 4,
+        rounds: 5
+
+    },
+
+    Medium: {
+
+        symbols: 6,
+        rounds: 6
+
+    },
+
+    Hard: {
+
+        symbols: 8,
+        rounds: 8
+
+    }
+
+};
+
+
+
+/* =====================================================
+   SYMBOLS
+===================================================== */
+
+const symbols = [
+
+    "⭐",
+    "❤️",
+    "🔵",
+    "🟢",
+    "🔺",
+    "🔶",
+    "🌟",
+    "💎",
+    "☀️",
+    "🍀",
+    "🌸",
+    "🎵"
+
+];
+
+
+
+/* =====================================================
+   CURRENT GAME VARIABLES
+===================================================== */
+
+let attentionLevel =
+    localStorage.getItem(
+        attentionLevelKey
+    ) || "Easy";
+
+
+let playedLevel =
+    attentionLevel;
+
+
+let currentRound = 0;
+
+let totalRounds = 0;
+
+let score = 0;
+
+let mistakes = 0;
+
+let seconds = 0;
+
+let timer = null;
+
+let roundTimeout = null;
+
+let gameFinished = false;
+
+
+
+/* =====================================================
+   UPDATE DIFFICULTY DISPLAY
+===================================================== */
+
+function updateDifficultyDisplay() {
+
+    document.getElementById(
+        "difficulty"
+    ).textContent =
+        "🤖 AI Difficulty: " +
+        attentionLevel;
+
+}
+
+
+
+/* =====================================================
+   START GAME
+===================================================== */
+
+function startGame() {
+
+
+    clearInterval(timer);
+
+    clearTimeout(roundTimeout);
+
+
+    attentionLevel =
+        localStorage.getItem(
+            attentionLevelKey
+        ) || "Easy";
+
+
+    playedLevel =
+        attentionLevel;
+
+
+    currentRound = 0;
+
+    score = 0;
+
+    mistakes = 0;
+
+    seconds = 0;
+
+    gameFinished = false;
+
+
+    totalRounds =
+        levels[playedLevel].rounds;
+
+
+    document.getElementById(
+        "intro"
+    ).classList.add("hidden");
+
+
+    document.getElementById(
+        "resultArea"
+    ).classList.add("hidden");
+
+
+    document.getElementById(
+        "gameArea"
+    ).classList.remove("hidden");
+
+
+    document.getElementById(
+        "gameDifficulty"
+    ).textContent =
+        playedLevel;
+
+
+    document.getElementById(
+        "time"
+    ).textContent =
+        "0s";
+
+
+    document.getElementById(
+        "score"
+    ).textContent =
+        "0";
+
+
+    document.getElementById(
+        "mistakes"
+    ).textContent =
+        "0";
+
+
+    document.getElementById(
+        "message"
+    ).textContent =
+        "";
+
+
+    updateDifficultyDisplay();
+
+
+    startTimer();
+
+    nextRound();
+
+}
+
+
+
+/* =====================================================
+   TIMER
+===================================================== */
+
+function startTimer() {
+
+
+    clearInterval(timer);
+
+
+    timer =
+        setInterval(
+            function() {
+
+
+                if (gameFinished) {
+
+                    clearInterval(timer);
+
+                    return;
+
+                }
+
+
+                seconds++;
+
+
+                document.getElementById(
+                    "time"
+                ).textContent =
+                    seconds + "s";
+
+
+            },
+            1000
+        );
+
+}
+
+
+
+/* =====================================================
+   NEXT ROUND
+===================================================== */
+
+function nextRound() {
+
+
+    if (gameFinished) {
+
+        return;
+
+    }
+
+
+    clearTimeout(roundTimeout);
+
+
+    if (
+        currentRound >= totalRounds
+    ) {
+
+        endGame();
+
+        return;
+
+    }
+
+
+    currentRound++;
+
+
+    const levelSettings =
+        levels[playedLevel];
+
+
+    const symbolCount =
+        levelSettings.symbols;
+
+
+    const targetIndex =
+        Math.floor(
+            Math.random() *
+            symbols.length
+        );
+
+
+    const target =
+        symbols[targetIndex];
+
+
+    document.getElementById(
+        "targetSymbol"
+    ).textContent =
+        target;
+
+
+    const grid =
+        document.getElementById(
+            "symbolGrid"
+        );
+
+
+    grid.innerHTML = "";
+
+
+    let roundSymbols =
+        [target];
+
+
+    while (
+        roundSymbols.length <
+        symbolCount
+    ) {
+
+
+        const randomSymbol =
+            symbols[
+                Math.floor(
+                    Math.random() *
+                    symbols.length
+                )
+            ];
+
+
+        if (
+            !roundSymbols.includes(
+                randomSymbol
+            )
+        ) {
+
+            roundSymbols.push(
+                randomSymbol
+            );
+
+        }
+
+    }
+
+
+    roundSymbols.sort(
+        () => Math.random() - 0.5
+    );
+
+
+    roundSymbols.forEach(
+        function(symbol) {
+
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+
+            button.className =
+                "symbol-btn";
+
+
+            button.textContent =
+                symbol;
+
+
+            button.addEventListener(
+                "click",
+                function() {
+
+                    checkAnswer(
+                        symbol,
+                        target,
+                        button
+                    );
+
+                }
+            );
+
+
+            grid.appendChild(
+                button
+            );
+
+        }
+    );
+
+
+    document.getElementById(
+        "message"
+    ).textContent =
+        "Round " +
+        currentRound +
+        " of " +
+        totalRounds;
+
+}
+
+
+
+/* =====================================================
+   CHECK ANSWER
+===================================================== */
+
+function checkAnswer(
+    selected,
+    target,
+    button
+) {
+
+
+    if (gameFinished) {
+
+        return;
+
+    }
+
+
+    if (
+        selected === target
+    ) {
+
+
+        button.classList.add(
+            "correct"
+        );
+
+
+        score += 20;
+
+
+        document.getElementById(
+            "score"
+        ).textContent =
+            score;
+
+
+        document.getElementById(
+            "message"
+        ).textContent =
+            "✅ Correct! Great attention.";
+
+
+        disableButtons();
+
+
+        roundTimeout =
+            setTimeout(
+                function() {
+
+                    nextRound();
+
+                },
+                600
+            );
+
+
+    }
+
+    else {
+
+
+        button.classList.add(
+            "wrong"
+        );
+
+
+        mistakes++;
+
+
+        document.getElementById(
+            "mistakes"
+        ).textContent =
+            mistakes;
+
+
+        document.getElementById(
+            "message"
+        ).textContent =
+            "❌ Wrong symbol. Try again.";
+
+    }
+
+}
+
+
+
+/* =====================================================
+   DISABLE BUTTONS
+===================================================== */
+
+function disableButtons() {
+
+
+    const buttons =
+        document.querySelectorAll(
+            ".symbol-btn"
+        );
+
+
+    buttons.forEach(
+        function(button) {
+
+            button.disabled = true;
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   END GAME
+===================================================== */
+
+function endGame() {
+
+
+    if (gameFinished) {
+
+        return;
+
+    }
+
+
+    gameFinished = true;
+
+
+    clearInterval(timer);
+
+    clearTimeout(roundTimeout);
+
+
+    document.getElementById(
+        "gameArea"
+    ).classList.add("hidden");
+
+
+    document.getElementById(
+        "resultArea"
+    ).classList.remove("hidden");
+
+
+    document.getElementById(
+        "finalScore"
+    ).textContent =
+        score;
+
+
+    document.getElementById(
+        "finalTime"
+    ).textContent =
+        seconds + " sec";
+
+
+    document.getElementById(
+        "finalMistakes"
+    ).textContent =
+        mistakes;
+
+
+    const performance =
+        getPerformance();
+
+
+    const next =
+        getNextLevel(
+            performance
+        );
+
+
+    localStorage.setItem(
+        attentionLevelKey,
+        next
+    );
+
+
+    document.getElementById(
+        "aiMessage"
+    ).textContent =
+        getAIMessage(
+            performance
+        );
+
+
+    document.getElementById(
+        "nextLevel"
+    ).textContent =
+        "Next AI Difficulty: " +
+        next;
+
+
+    saveGameHistory(
+        performance
+    );
+
+}
+
+
+
+/* =====================================================
+   PERFORMANCE
+===================================================== */
+
+function getPerformance() {
+
+
+    const maxScore =
+        totalRounds * 20;
+
+
+    const percentage =
+        maxScore > 0
+        ? (score / maxScore) * 100
+        : 0;
+
+
+    if (
+        percentage >= 80 &&
+        mistakes <= 2
+    ) {
+
+        return "Excellent";
+
+    }
+
+
+    if (
+        percentage >= 50
+    ) {
+
+        return "Good";
+
+    }
+
+
+    return "Needs Support";
+
+}
+
+
+
+/* =====================================================
+   NEXT AI LEVEL
+===================================================== */
+
+function getNextLevel(
+    performance
+) {
+
+
+    if (
+        performance === "Excellent"
+    ) {
+
+
+        if (
+            playedLevel === "Easy"
+        ) {
+
+            return "Medium";
+
+        }
+
+
+        if (
+            playedLevel === "Medium"
+        ) {
+
+            return "Hard";
+
+        }
+
+
+        return "Hard";
+
+    }
+
+
+    if (
+        performance === "Good"
+    ) {
+
+        return playedLevel;
+
+    }
+
+
+    if (
+        playedLevel === "Hard"
+    ) {
+
+        return "Medium";
+
+    }
+
+
+    if (
+        playedLevel === "Medium"
+    ) {
+
+        return "Easy";
+
+    }
+
+
+    return "Easy";
+
+}
+
+
+
+/* =====================================================
+   AI MESSAGE
+===================================================== */
+
+function getAIMessage(
+    performance
+) {
+
+
+    if (
+        performance === "Excellent"
+    ) {
+
+        return (
+            "Excellent attention performance, " +
+            patientName +
+            "! You identified the target symbols accurately. " +
+            "The AI can gradually increase the challenge."
+        );
+
+    }
+
+
+    if (
+        performance === "Good"
+    ) {
+
+        return (
+            "Good attention performance, " +
+            patientName +
+            ". Continue regular practice. " +
+            "The AI will maintain a suitable difficulty level."
+        );
+
+    }
+
+
+    return (
+        "This activity was challenging, " +
+        patientName +
+        ". Continue practicing at a supportive level. " +
+        "The AI will adjust the difficulty based on future performance."
+    );
+
+}
+
+
+
+/* =====================================================
+   SAVE GAME HISTORY
+===================================================== */
+
+function saveGameHistory(
+    performance
+) {
+
+
+    let history = [];
+
+
+    try {
+
+
+        history =
+            JSON.parse(
+                localStorage.getItem(
+                    historyKey
+                ) || "[]"
+            );
+
+
+        if (
+            !Array.isArray(history)
+        ) {
+
+            history = [];
+
+        }
+
+    }
+
+    catch (error) {
+
+        history = [];
+
+    }
+
+
+    const now =
+        new Date();
+
+
+    const date =
+        now.toLocaleDateString();
+
+
+    const timeStamp =
+        now.toLocaleTimeString();
+
+
+    const record = {
+
+        patientId:
+            patientId,
+
+        patient:
+            patientName,
+
+        game:
+            "Attention & Concentration",
+
+        score:
+            score,
+
+        time:
+            seconds,
+
+        mistakes:
+            mistakes,
+
+        difficulty:
+            playedLevel,
+
+        performance:
+            performance,
+
+        date:
+            date,
+
+        timeStamp:
+            timeStamp
+
+    };
+
+
+    history.push(
+        record
+    );
+
+
+    localStorage.setItem(
+        historyKey,
+        JSON.stringify(history)
+    );
+
+}
+
+
+
+/* =====================================================
+   BACK BUTTON
+===================================================== */
+
+function goBack() {
+
+
+    window.location.href =
+        "memory-games.html";
+
+}
+
+
+
+/* =====================================================
+   INITIAL DISPLAY
+===================================================== */
+
+updateDifficultyDisplay();
+
+
+
+/* =====================================================
+   PAGE SHOW
+===================================================== */
+
+window.addEventListener(
+    "pageshow",
+    function() {
+
+
+        attentionLevel =
+            localStorage.getItem(
+                attentionLevelKey
+            ) || "Easy";
+
+
+        updateDifficultyDisplay();
+
+    }
+);
+
+
+</script>
+
+
+</body>
+
+</html>

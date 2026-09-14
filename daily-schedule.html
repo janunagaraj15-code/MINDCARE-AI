@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Daily Schedule - MINDCARE AI</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f8fb;
+            color: #263238;
+        }
+
+        .schedule-page {
+            min-height: 100vh;
+            padding-bottom: 30px;
+        }
+
+        /* HEADER */
+
+        .schedule-header {
+            background: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .schedule-header h1 {
+            font-size: 28px;
+        }
+
+        .schedule-header p {
+            margin-top: 5px;
+            color: #607d8b;
+        }
+
+        .back-btn {
+            border: none;
+            background: #1976d2;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .back-btn:hover {
+            background: #125ca1;
+        }
+
+        /* CONTAINER */
+
+        .schedule-container {
+            max-width: 900px;
+            margin: 35px auto;
+            padding: 20px;
+        }
+
+        /* WELCOME */
+
+        .schedule-welcome {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .schedule-icon {
+            font-size: 55px;
+        }
+
+        .schedule-welcome h2 {
+            margin: 10px 0;
+            font-size: 27px;
+        }
+
+        .schedule-welcome p {
+            color: #607d8b;
+        }
+
+        /* SUMMARY */
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 14px;
+            text-align: center;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .summary-card span {
+            font-size: 32px;
+        }
+
+        .summary-card h3 {
+            margin: 8px 0;
+        }
+
+        .summary-card strong {
+            font-size: 24px;
+            color: #1976d2;
+        }
+
+        /* TIMELINE */
+
+        .timeline-section {
+            background: white;
+            margin-top: 25px;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .timeline-section h2 {
+            margin-bottom: 20px;
+        }
+
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .schedule-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 18px;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            background: #fafafa;
+        }
+
+        .schedule-item.completed {
+            opacity: 0.65;
+        }
+
+        .schedule-icon-box {
+            font-size: 35px;
+            width: 55px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .schedule-info {
+            flex: 1;
+        }
+
+        .schedule-info h3 {
+            margin-bottom: 5px;
+        }
+
+        .schedule-time {
+            color: #1976d2;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .schedule-info p {
+            color: #607d8b;
+        }
+
+        /* BUTTON */
+
+        .complete-btn {
+            border: none;
+            background: #43a047;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            white-space: nowrap;
+            font-size: 14px;
+        }
+
+        .complete-btn:hover {
+            opacity: 0.9;
+        }
+
+        .complete-btn.completed-btn {
+            background: #78909c;
+        }
+
+        /* SPECIAL BUTTONS */
+
+        .view-medicine-btn {
+            background: #1976d2;
+        }
+
+        .water-btn {
+            background: #0288d1;
+        }
+
+        .game-btn {
+            background: #8e24aa;
+        }
+
+        /* AI */
+
+        .ai-message {
+            margin-top: 25px;
+            background: white;
+            padding: 22px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .ai-icon {
+            font-size: 45px;
+        }
+
+        .ai-message h3 {
+            margin-bottom: 7px;
+        }
+
+        .ai-message p {
+            color: #607d8b;
+        }
+
+        footer {
+            text-align: center;
+            color: #78909c;
+            margin-top: 30px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 650px) {
+
+            .schedule-header {
+                padding: 18px;
+            }
+
+            .schedule-header h1 {
+                font-size: 22px;
+            }
+
+            .schedule-header p {
+                font-size: 14px;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .schedule-item {
+                align-items: flex-start;
+                flex-wrap: wrap;
+            }
+
+            .schedule-info {
+                min-width: 0;
+            }
+
+            .complete-btn {
+                margin-left: auto;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="schedule-page">
+
+
+    <!-- HEADER -->
+
+    <header class="schedule-header">
+
+        <div>
+
+            <h1>📅 MINDCARE AI</h1>
+
+            <p>Daily Schedule</p>
+
+        </div>
+
+        <button class="back-btn"
+                onclick="goBack()">
+
+            ← Back
+
+        </button>
+
+    </header>
+
+
+
+    <!-- MAIN -->
+
+    <main class="schedule-container">
+
+
+        <!-- WELCOME -->
+
+        <section class="schedule-welcome">
+
+            <div class="schedule-icon">
+                📅
+            </div>
+
+            <h2 id="welcomeTitle">
+                Today's Schedule
+            </h2>
+
+            <p>
+                Follow your daily activities step by step.
+            </p>
+
+        </section>
+
+
+
+        <!-- SUMMARY -->
+
+        <section class="summary-grid">
+
+            <div class="summary-card">
+
+                <span>📋</span>
+
+                <h3>
+                    Total
+                </h3>
+
+                <strong id="totalActivities">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <span>✅</span>
+
+                <h3>
+                    Completed
+                </h3>
+
+                <strong id="completedActivities">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <span>⏳</span>
+
+                <h3>
+                    Remaining
+                </h3>
+
+                <strong id="remainingActivities">
+                    0
+                </strong>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- TIMELINE -->
+
+        <section class="timeline-section">
+
+            <h2>
+                🕒 Today's Activities
+            </h2>
+
+            <div class="timeline"
+                 id="scheduleList">
+
+            </div>
+
+        </section>
+
+
+
+        <!-- AI MESSAGE -->
+
+        <section class="ai-message">
+
+            <div class="ai-icon">
+                🤖
+            </div>
+
+            <div>
+
+                <h3>
+                    MINDCARE AI Assistant
+                </h3>
+
+                <p id="aiMessage">
+                    Let's follow today's schedule step by step.
+                </p>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+
+    <footer>
+
+        <p>
+            MINDCARE AI • Supporting everyday elderly care
+        </p>
+
+    </footer>
+
+
+</div>
+
+
+
+<script>
+
+
+/* =========================
+   CURRENT PATIENT
+========================= */
+
+const patientId =
+    sessionStorage.getItem("currentPatientId");
+
+const patientName =
+    sessionStorage.getItem("currentPatientName");
+
+
+/* =========================
+   LOGIN CHECK
+========================= */
+
+if (!patientId || !patientName) {
+
+    window.location.href = "index.html";
+
+}
+
+
+/* =========================
+   SHOW PATIENT NAME
+========================= */
+
+document.getElementById(
+    "welcomeTitle"
+).textContent =
+    "Today's Schedule, " + patientName;
+
+
+
+/* =========================
+   DEFAULT SCHEDULE
+========================= */
+
+const defaultSchedule = [
+
+    {
+        id: "morning",
+        time: "08:00 AM",
+        icon: "🌅",
+        title: "Morning Routine",
+        description: "Wake up and get ready for the day."
+    },
+
+    {
+        id: "medicine",
+        time: "09:00 AM",
+        icon: "💊",
+        title: "Medicine",
+        description: "Check your doctor-approved medicine reminder."
+    },
+
+    {
+        id: "water1",
+        time: "10:30 AM",
+        icon: "💧",
+        title: "Water Break",
+        description: "Take a short water break."
+    },
+
+    {
+        id: "game",
+        time: "11:00 AM",
+        icon: "🧠",
+        title: "Cognitive Game",
+        description: "Play one memory or cognitive game."
+    },
+
+    {
+        id: "lunch",
+        time: "01:00 PM",
+        icon: "🍲",
+        title: "Lunch",
+        description: "Have your scheduled lunch."
+    },
+
+    {
+        id: "water2",
+        time: "03:30 PM",
+        icon: "💧",
+        title: "Water Break",
+        description: "Take another water break."
+    },
+
+    {
+        id: "walk",
+        time: "05:00 PM",
+        icon: "🚶",
+        title: "Evening Walk",
+        description: "Follow your normal daily activity."
+    },
+
+    {
+        id: "water3",
+        time: "06:30 PM",
+        icon: "💧",
+        title: "Water Break",
+        description: "Take a short water break."
+    },
+
+    {
+        id: "dinner",
+        time: "08:00 PM",
+        icon: "🍽️",
+        title: "Dinner",
+        description: "Have your scheduled dinner."
+    },
+
+    {
+        id: "sleep",
+        time: "10:00 PM",
+        icon: "🌙",
+        title: "Sleep Routine",
+        description: "Prepare for your bedtime routine."
+    }
+
+];
+
+
+
+/* =========================
+   PATIENT-SPECIFIC STORAGE
+========================= */
+
+const scheduleKey =
+    "dailySchedule_" + patientId;
+
+
+
+/* =========================
+   GET TODAY KEY
+========================= */
+
+function getTodayKey() {
+
+    const today = new Date();
+
+    return today.toLocaleDateString();
+
+}
+
+
+
+/* =========================
+   GET COMPLETED DATA
+========================= */
+
+function getCompletedActivities() {
+
+    let saved = {};
+
+    try {
+
+        saved =
+            JSON.parse(
+                localStorage.getItem(scheduleKey) || "{}"
+            );
+
+    }
+
+    catch (error) {
+
+        saved = {};
+
+    }
+
+
+    const today =
+        getTodayKey();
+
+
+    if (!Array.isArray(saved[today])) {
+
+        saved[today] = [];
+
+        localStorage.setItem(
+            scheduleKey,
+            JSON.stringify(saved)
+        );
+
+    }
+
+
+    return saved;
+
+}
+
+
+
+/* =========================
+   TOGGLE ACTIVITY
+========================= */
+
+function toggleActivity(id) {
+
+    const saved =
+        getCompletedActivities();
+
+    const today =
+        getTodayKey();
+
+
+    if (!Array.isArray(saved[today])) {
+
+        saved[today] = [];
+
+    }
+
+
+    const index =
+        saved[today].indexOf(id);
+
+
+    if (index === -1) {
+
+        saved[today].push(id);
+
+    }
+
+    else {
+
+        saved[today].splice(index, 1);
+
+    }
+
+
+    localStorage.setItem(
+        scheduleKey,
+        JSON.stringify(saved)
+    );
+
+
+    renderSchedule();
+
+}
+
+
+
+/* =========================
+   OPEN MEDICINE
+========================= */
+
+function openMedicine() {
+
+    window.location.href =
+        "medicine.html";
+
+}
+
+
+
+/* =========================
+   OPEN WATER
+========================= */
+
+function openWater() {
+
+    window.location.href =
+        "water.html";
+
+}
+
+
+
+/* =========================
+   OPEN COGNITIVE GAMES
+========================= */
+
+function openGames() {
+
+    window.location.href =
+        "memory-games.html";
+
+}
+
+
+
+/* =========================
+   RENDER SCHEDULE
+========================= */
+
+function renderSchedule() {
+
+    const list =
+        document.getElementById(
+            "scheduleList"
+        );
+
+
+    list.innerHTML = "";
+
+
+    const saved =
+        getCompletedActivities();
+
+
+    const today =
+        getTodayKey();
+
+
+    const completed =
+        saved[today] || [];
+
+
+    defaultSchedule.forEach(
+        function(item) {
+
+
+            const isCompleted =
+                completed.includes(item.id);
+
+
+            const card =
+                document.createElement("div");
+
+
+            card.className =
+                "schedule-item" +
+                (
+                    isCompleted
+                    ? " completed"
+                    : ""
+                );
+
+
+            let buttonHTML = "";
+
+
+            /* =========================
+               MEDICINE BUTTON
+            ========================= */
+
+            if (item.id === "medicine") {
+
+                buttonHTML = `
+
+                    <button
+                        class="complete-btn view-medicine-btn"
+                        onclick="openMedicine()">
+
+                        💊 View Medicine
+
+                    </button>
+
+                `;
+
+            }
+
+
+            /* =========================
+               WATER BUTTON
+            ========================= */
+
+            else if (
+                item.id === "water1" ||
+                item.id === "water2" ||
+                item.id === "water3"
+            ) {
+
+                buttonHTML = `
+
+                    <button
+                        class="complete-btn water-btn"
+                        onclick="openWater()">
+
+                        💧 Open Water
+
+                    </button>
+
+                `;
+
+            }
+
+
+            /* =========================
+               COGNITIVE GAME BUTTON
+            ========================= */
+
+            else if (item.id === "game") {
+
+                buttonHTML = `
+
+                    <button
+                        class="complete-btn game-btn"
+                        onclick="openGames()">
+
+                        🧠 Play Game
+
+                    </button>
+
+                `;
+
+            }
+
+
+            /* =========================
+               NORMAL ACTIVITIES
+            ========================= */
+
+            else {
+
+                buttonHTML = `
+
+                    <button
+                        class="complete-btn ${
+                            isCompleted
+                            ? "completed-btn"
+                            : ""
+                        }"
+                        onclick="toggleActivity('${item.id}')">
+
+                        ${
+                            isCompleted
+                            ? "✓ Done"
+                            : "Complete"
+                        }
+
+                    </button>
+
+                `;
+
+            }
+
+
+            card.innerHTML = `
+
+                <div class="schedule-icon-box">
+
+                    ${item.icon}
+
+                </div>
+
+
+                <div class="schedule-info">
+
+                    <div class="schedule-time">
+
+                        ${item.time}
+
+                    </div>
+
+
+                    <h3>
+
+                        ${item.title}
+
+                    </h3>
+
+
+                    <p>
+
+                        ${item.description}
+
+                    </p>
+
+                </div>
+
+
+                ${buttonHTML}
+
+            `;
+
+
+            list.appendChild(card);
+
+        }
+    );
+
+
+    updateSummary(
+        completed.length
+    );
+
+}
+
+
+
+/* =========================
+   UPDATE SUMMARY
+========================= */
+
+function updateSummary(
+    completedCount
+) {
+
+    const total =
+        defaultSchedule.length;
+
+
+    const remaining =
+        total - completedCount;
+
+
+    document.getElementById(
+        "totalActivities"
+    ).textContent =
+        total;
+
+
+    document.getElementById(
+        "completedActivities"
+    ).textContent =
+        completedCount;
+
+
+    document.getElementById(
+        "remainingActivities"
+    ).textContent =
+        remaining;
+
+
+    updateAIMessage(
+        completedCount,
+        total
+    );
+
+}
+
+
+
+/* =========================
+   AI MESSAGE
+========================= */
+
+function updateAIMessage(
+    completed,
+    total
+) {
+
+    const message =
+        document.getElementById(
+            "aiMessage"
+        );
+
+
+    if (completed === total) {
+
+        message.textContent =
+            "Excellent! You have completed today's schedule. Keep following your routine.";
+
+    }
+
+    else if (completed >= 5) {
+
+        message.textContent =
+            "Great progress! Most of today's activities are completed.";
+
+    }
+
+    else if (completed >= 2) {
+
+        message.textContent =
+            "Good start! Continue with your remaining scheduled activities.";
+
+    }
+
+    else {
+
+        message.textContent =
+            "Let's follow today's schedule step by step.";
+
+    }
+
+}
+
+
+
+/* =========================
+   BACK
+========================= */
+
+function goBack() {
+
+    window.location.href =
+        "patient.html";
+
+}
+
+
+
+/* =========================
+   PAGE LOAD
+========================= */
+
+window.addEventListener(
+    "load",
+    function() {
+
+        renderSchedule();
+
+    }
+);
+
+
+
+/* =========================
+   PAGE SHOW
+========================= */
+
+window.addEventListener(
+    "pageshow",
+    function() {
+
+        renderSchedule();
+
+    }
+);
+
+
+</script>
+
+
+</body>
+
+</html>
