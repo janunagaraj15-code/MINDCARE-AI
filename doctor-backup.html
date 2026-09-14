@@ -1,0 +1,2565 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MINDCARE AI - Doctor Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f8f7;
+            color: #1f2937;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font-family: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .doctor-page {
+            width: 100%;
+            min-height: 100vh;
+            background: #f5f8f7;
+        }
+
+        /* HEADER */
+
+        .doctor-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 22px 6%;
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .doctor-header h1 {
+            margin: 0 0 5px;
+            font-size: 28px;
+            color: #183b32;
+        }
+
+        .doctor-header p {
+            margin: 0;
+            color: #6b7280;
+        }
+
+        .doctor-online {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #166534;
+            font-weight: 700;
+        }
+
+        .online-dot {
+            width: 10px;
+            height: 10px;
+            background: #22c55e;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 7px rgba(34, 197, 94, 0.55);
+        }
+
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 24px;
+            font-size: 15px;
+            font-weight: 700;
+            transition: 0.2s ease;
+        }
+
+        .logout-btn:hover {
+            background: #c82333;
+            transform: translateY(-1px);
+        }
+
+        /* PROFILE */
+
+        .doctor-profile {
+            width: 88%;
+            max-width: 1200px;
+            margin: 28px auto;
+            padding: 24px;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.06);
+        }
+
+        /* STATS */
+
+        .doctor-stats {
+            width: 88%;
+            max-width: 1200px;
+            margin: 0 auto 28px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+        }
+
+        .doctor-stat-card {
+            background: #ffffff;
+            border: 1px solid #e8eeeb;
+            border-radius: 18px;
+            padding: 22px;
+            text-align: center;
+            transition: all 0.25s ease;
+        }
+
+        .doctor-stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .doctor-stat-card span {
+            display: block;
+            font-size: 28px;
+        }
+
+        .doctor-stat-card strong {
+            display: block;
+            margin-top: 8px;
+            font-size: 30px;
+            color: #26734d;
+        }
+
+        .doctor-stat-card h3 {
+            margin: 10px 0 0;
+            color: #374151;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        /* MAIN */
+
+        .doctor-main {
+            width: 88%;
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 30px;
+            background: #ffffff;
+            border: 1px solid #e5ece8;
+            border-radius: 22px;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.055);
+        }
+
+        .doctor-section-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 25px;
+            margin-bottom: 24px;
+        }
+
+        .doctor-section-title > div {
+            flex: 1;
+        }
+
+        .doctor-section-title h2 {
+            margin: 0 0 6px;
+            color: #183b32;
+            font-size: 26px;
+            font-weight: 800;
+        }
+
+        .doctor-section-title p {
+            margin: 0;
+            color: #6b7280;
+            font-size: 15px;
+        }
+
+        #patientSearch {
+            width: 320px;
+            min-width: 280px;
+            height: 48px;
+            padding: 0 16px;
+            background: #fbfdfc;
+            border: 1px solid #d7e2dc;
+            border-radius: 12px;
+            color: #26332e;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        #patientSearch:focus {
+            background: #ffffff;
+            border-color: #4f9d70;
+            box-shadow: 0 0 0 4px rgba(79, 157, 112, 0.11);
+        }
+
+        #patientSearch::placeholder {
+            color: #9aa7a1;
+        }
+
+        /* PATIENT LIST */
+
+        .patient-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        #patientList {
+            margin-top: 20px;
+        }
+
+        .doctor-patient-card {
+            width: 100%;
+            min-height: 82px;
+            display: flex;
+            align-items: center;
+            padding: 15px 18px;
+            background: #f9fbfa;
+            border: 1px solid #e3ebe7;
+            border-radius: 16px;
+            transition: 0.2s ease;
+        }
+
+        .doctor-patient-card:hover {
+            background: #f5faf7;
+            border-color: #b8d8c6;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(38, 115, 77, 0.08);
+        }
+
+        /* AVATAR */
+
+        .patient-mini-avatar {
+            width: 54px;
+            height: 54px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            background: #eaf6f0;
+            border-radius: 50%;
+            font-size: 27px;
+        }
+
+        .doctor-patient-info {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .doctor-patient-info h3 {
+            margin: 0 0 3px;
+            color: #183b32;
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .doctor-patient-info p {
+            margin: 0 0 5px;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .doctor-patient-info .stable {
+            width: fit-content;
+            padding: 4px 9px;
+            background: #eaf7ef;
+            border-radius: 20px;
+            color: #26734d;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .patient-actions {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            flex-shrink: 0;
+            flex-wrap: wrap;
+        }
+
+        .patient-actions button {
+            height: 42px;
+            padding: 0 17px;
+            border-radius: 10px;
+            border: none;
+            font-size: 14px;
+            font-weight: 700;
+            transition: 0.2s ease;
+        }
+
+        .patient-actions button:first-child {
+            background: #26734d;
+            color: #ffffff;
+            box-shadow: 0 3px 8px rgba(38, 115, 77, 0.18);
+        }
+
+        .patient-actions button:first-child:hover {
+            background: #1f6040;
+            transform: translateY(-1px);
+        }
+
+        .patient-actions .delete-patient-btn {
+            background: #fff1f2;
+            color: #dc2626;
+            border: 1px solid #fecdd3;
+        }
+
+        .patient-actions .delete-patient-btn:hover {
+            background: #fee2e2;
+            transform: translateY(-1px);
+        }
+
+        /* EMPTY */
+
+        #emptyPatientMessage {
+            border: 1px dashed #cbdad2;
+            background: #f8fbf9;
+            border-radius: 15px;
+            padding: 35px 20px;
+            text-align: center;
+            color: #6b7280;
+        }
+
+        #emptyPatientMessage h3 {
+            color: #183b32;
+            margin-bottom: 6px;
+        }
+
+        /* SELECTED PATIENT */
+
+        .selected-patient {
+            width: 88%;
+            max-width: 1200px;
+            margin: 28px auto;
+            padding: 0;
+        }
+
+        .selected-patient > * {
+            border-radius: 18px;
+        }
+
+        .doctor-patient-tools {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin: 24px 0;
+        }
+
+        .doctor-patient-tools button {
+            border: 1px solid #dce8e2;
+            padding: 14px 16px;
+            border-radius: 12px;
+            background: #ffffff;
+            color: #26734d;
+            font-weight: 700;
+            transition: 0.2s ease;
+        }
+
+        .doctor-patient-tools button:hover {
+            background: #edf7f1;
+            border-color: #9fc9b2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .history-box {
+            background: #ffffff;
+            border: 1px solid #e6ece9;
+            border-radius: 18px;
+            padding: 22px;
+        }
+
+        .history-box strong {
+            color: #26734d;
+        }
+
+        /* PRESCRIPTION */
+
+        .prescription-section {
+            background: #ffffff;
+            border: 1px solid #e5ece8;
+            border-radius: 20px;
+            padding: 26px;
+            margin-top: 24px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .prescription-title {
+            margin-bottom: 22px;
+        }
+
+        .prescription-form input,
+        .prescription-form select,
+        .prescription-section textarea {
+            border: 1px solid #d8e2dd;
+            border-radius: 10px;
+            padding: 12px 14px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .prescription-form input:focus,
+        .prescription-form select:focus,
+        .prescription-section textarea:focus {
+            border-color: #55a878;
+            box-shadow: 0 0 0 3px rgba(85, 168, 120, 0.12);
+        }
+
+        .approve-btn {
+            background: #26734d;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 14px 22px;
+            font-weight: 700;
+            transition: 0.25s ease;
+        }
+
+        .approve-btn:hover {
+            background: #1f6040;
+            transform: translateY(-2px);
+        }
+
+        .current-prescription {
+            background: #f8fcfa;
+            border: 1px solid #dcece3;
+            border-radius: 18px;
+            padding: 24px;
+            margin-top: 20px;
+        }
+
+        /* AI */
+
+        .doctor-ai {
+            width: 88%;
+            max-width: 1200px;
+            margin: 28px auto;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            background: linear-gradient(135deg, #edf8f2, #f4f9ff);
+            border: 1px solid #d8e9df;
+            border-radius: 20px;
+            padding: 25px;
+        }
+
+        .doctor-ai-icon {
+            font-size: 42px;
+        }
+
+        .doctor-ai h2 {
+            color: #245b43;
+            margin: 0 0 7px;
+        }
+
+        .doctor-ai p {
+            margin: 0;
+            color: #66736e;
+        }
+
+        .doctor-footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #6b7280;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 1000px) {
+            .doctor-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .doctor-patient-tools {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .doctor-section-title {
+                align-items: flex-start;
+            }
+
+            #patientSearch {
+                width: 280px;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .doctor-section-title {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 15px;
+            }
+
+            #patientSearch {
+                width: 100%;
+                min-width: 0;
+            }
+
+            .doctor-patient-card {
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .doctor-header {
+                padding: 18px 5%;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .doctor-header h1 {
+                font-size: 23px;
+            }
+
+            .doctor-profile,
+            .doctor-stats,
+            .doctor-main,
+            .selected-patient,
+            .doctor-ai {
+                width: 92%;
+            }
+
+            .doctor-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .doctor-main {
+                padding: 20px;
+                border-radius: 18px;
+            }
+
+            .doctor-section-title h2 {
+                font-size: 23px;
+            }
+
+            .doctor-patient-card {
+                flex-wrap: wrap;
+                padding: 16px;
+            }
+
+            .patient-mini-avatar {
+                width: 48px;
+                height: 48px;
+                font-size: 24px;
+            }
+
+            .doctor-patient-info {
+                flex: 1;
+                min-width: calc(100% - 65px);
+            }
+
+            .patient-actions {
+                width: 100%;
+                margin-top: 8px;
+            }
+
+            .patient-actions button {
+                flex: 1;
+            }
+
+            .doctor-patient-tools {
+                grid-template-columns: 1fr;
+            }
+
+            .doctor-ai {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="doctor-page">
+
+    <!-- HEADER -->
+
+    <header class="doctor-header">
+
+        <div>
+            <h1>🧠 MINDCARE AI</h1>
+            <p>Doctor Dashboard • Dementia Care Management</p>
+        </div>
+
+        <div class="doctor-online">
+            <span class="online-dot"></span>
+            Online
+        </div>
+
+        <button
+            class="logout-btn"
+            onclick="logoutDoctor()">
+            Logout
+        </button>
+
+    </header>
+
+
+    <!-- DOCTOR PROFILE -->
+
+    <section class="doctor-profile">
+
+        <div style="
+            display:flex;
+            align-items:center;
+            gap:22px;
+        ">
+
+            <div style="
+                width:96px;
+                height:96px;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                background:#eef2ff;
+                border-radius:50%;
+                font-size:48px;
+                flex-shrink:0;
+            ">
+                👨‍⚕️
+            </div>
+
+            <div>
+
+                <h2 style="
+                    margin:0 0 6px;
+                    color:#183b32;
+                    font-size:28px;
+                ">
+                    Dr. Arun Kumar
+                </h2>
+
+                <p style="
+                    margin:0 0 5px;
+                    color:#6b7280;
+                    font-size:17px;
+                ">
+                    Neurologist
+                </p>
+
+                <p style="
+                    margin:0;
+                    color:#6b7280;
+                ">
+                    MINDCARE AI Healthcare Network
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- DASHBOARD STATS -->
+
+    <section class="doctor-stats">
+
+        <div class="doctor-stat-card">
+            <span>👥</span>
+            <strong id="registeredPatientsCount">0</strong>
+            <h3>Registered Patients</h3>
+        </div>
+
+        <div class="doctor-stat-card">
+            <span>💊</span>
+            <strong id="activePrescriptionCount">0</strong>
+            <h3>Active Prescriptions</h3>
+        </div>
+
+        <div class="doctor-stat-card">
+            <span>⚠️</span>
+            <strong id="careAlertsCount">0</strong>
+            <h3>Care Alerts</h3>
+        </div>
+
+        <div class="doctor-stat-card">
+            <span>🤖</span>
+            <strong id="aiActivityCount">0</strong>
+            <h3>AI Activity Reports</h3>
+        </div>
+
+    </section>
+
+
+    <!-- PATIENT MANAGEMENT -->
+
+    <section class="doctor-main">
+
+        <div class="doctor-section-title">
+
+            <div>
+
+                <h2>👥 Patient Management</h2>
+
+                <p>
+                    Select a registered patient to view and manage their care information.
+                </p>
+
+            </div>
+
+            <input
+                type="text"
+                id="patientSearch"
+                placeholder="Search patient name or ID..."
+                oninput="searchPatients()">
+
+        </div>
+
+
+        <div
+            id="patientList"
+            class="patient-list">
+        </div>
+
+
+        <div
+            id="emptyPatientMessage"
+            style="display:none;">
+
+            <h3>No patients found</h3>
+
+            <p>
+                Try searching with a different patient name or ID.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- SELECTED PATIENT -->
+
+    <section
+        id="selectedPatientSection"
+        class="selected-patient"
+        style="display:none;">
+
+        <div style="
+            background:#ffffff;
+            padding:26px;
+            border:1px solid #e5ece8;
+            border-radius:20px;
+            box-shadow:0 6px 24px rgba(0,0,0,0.05);
+        ">
+
+            <div style="
+                display:flex;
+                align-items:center;
+                gap:18px;
+                margin-bottom:20px;
+            ">
+
+                <div
+                    id="selectedPatientAvatar"
+                    style="
+                        width:70px;
+                        height:70px;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        background:#eaf6f0;
+                        border-radius:50%;
+                        font-size:35px;
+                    ">
+                    👤
+                </div>
+
+                <div>
+
+                    <h2
+                        id="selectedPatientName"
+                        style="
+                            margin:0 0 5px;
+                            color:#183b32;
+                        ">
+                        Patient
+                    </h2>
+
+                    <p
+                        id="selectedPatientId"
+                        style="
+                            margin:0;
+                            color:#6b7280;
+                        ">
+                        Patient ID
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- PATIENT TOOLS -->
+
+            <div class="doctor-patient-tools">
+
+                <button
+                    type="button"
+                    onclick="showPatientOverview()">
+                    📋 Overview
+                </button>
+
+                <button
+                    type="button"
+                    onclick="showPatientHistory()">
+                    📈 History
+                </button>
+
+                <button
+                    type="button"
+                    onclick="showPatientMedication()">
+                    💊 Medication
+                </button>
+
+                <button
+                    type="button"
+                    onclick="showPatientReports()">
+                    🤖 AI Reports
+                </button>
+
+            </div>
+
+
+            <!-- PATIENT DATA -->
+
+            <div id="patientDataContainer">
+
+                <div class="history-box">
+
+                    <h3 style="
+                        margin-top:0;
+                        color:#183b32;
+                    ">
+                        Patient Overview
+                    </h3>
+
+                    <div id="patientOverviewData"></div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PRESCRIPTION -->
+
+            <div class="prescription-section">
+
+                <div class="prescription-title">
+
+                    <h2 style="
+                        margin:0 0 6px;
+                        color:#183b32;
+                    ">
+                        💊 Prescription Management
+                    </h2>
+
+                    <p style="
+                        margin:0;
+                        color:#6b7280;
+                    ">
+                        Create and manage the patient's prescription.
+                    </p>
+
+                </div>
+
+
+                <form
+                    id="prescriptionForm"
+                    class="prescription-form">
+
+                    <div style="
+                        display:grid;
+                        grid-template-columns:repeat(2,1fr);
+                        gap:16px;
+                    ">
+
+                        <div>
+
+                            <label style="
+                                display:block;
+                                margin-bottom:7px;
+                                font-weight:700;
+                                color:#374151;
+                            ">
+                                Medicine
+                            </label>
+
+                            <input
+                                type="text"
+                                id="medicineName"
+                                placeholder="Medicine name"
+                                style="width:100%;">
+
+                        </div>
+
+
+                        <div>
+
+                            <label style="
+                                display:block;
+                                margin-bottom:7px;
+                                font-weight:700;
+                                color:#374151;
+                            ">
+                                Dosage
+                            </label>
+
+                            <input
+                                type="text"
+                                id="medicineDosage"
+                                placeholder="e.g. 10 mg"
+                                style="width:100%;">
+
+                        </div>
+
+
+                        <div>
+
+                            <label style="
+                                display:block;
+                                margin-bottom:7px;
+                                font-weight:700;
+                                color:#374151;
+                            ">
+                                Frequency
+                            </label>
+
+                            <select
+                                id="medicineFrequency"
+                                style="width:100%;">
+
+                                <option value="">
+                                    Select frequency
+                                </option>
+
+                                <option value="Once daily">
+                                    Once daily
+                                </option>
+
+                                <option value="Twice daily">
+                                    Twice daily
+                                </option>
+
+                                <option value="Three times daily">
+                                    Three times daily
+                                </option>
+
+                                <option value="As needed">
+                                    As needed
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div>
+
+                            <label style="
+                                display:block;
+                                margin-bottom:7px;
+                                font-weight:700;
+                                color:#374151;
+                            ">
+                                Duration
+                            </label>
+
+                            <input
+                                type="text"
+                                id="medicineDuration"
+                                placeholder="e.g. 30 days"
+                                style="width:100%;">
+
+                        </div>
+
+                    </div>
+
+
+                    <div style="margin-top:16px;">
+
+                        <label style="
+                            display:block;
+                            margin-bottom:7px;
+                            font-weight:700;
+                            color:#374151;
+                        ">
+                            Doctor Instructions
+                        </label>
+
+                        <textarea
+                            id="medicineInstructions"
+                            rows="4"
+                            placeholder="Enter instructions..."
+                            style="
+                                width:100%;
+                                resize:vertical;
+                            "></textarea>
+
+                    </div>
+
+
+                    <div style="
+                        margin-top:18px;
+                        display:flex;
+                        justify-content:flex-end;
+                    ">
+
+                        <button
+                            type="submit"
+                            class="approve-btn">
+                            Approve Prescription
+                        </button>
+
+                    </div>
+
+                </form>
+
+
+                <!-- CURRENT PRESCRIPTION -->
+
+                <div
+                    id="currentPrescription"
+                    class="current-prescription">
+
+                    <h3 style="
+                        margin-top:0;
+                        color:#183b32;
+                    ">
+                        Current Prescription
+                    </h3>
+
+                    <div id="currentPrescriptionData">
+                        No active prescription.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- AI SECTION -->
+
+    <section class="doctor-ai">
+
+        <div class="doctor-ai-icon">
+            🤖
+        </div>
+
+        <div>
+
+            <h2>AI Care Assistant</h2>
+
+            <p>
+                MINDCARE AI continuously supports dementia care monitoring,
+                patient activity analysis and care recommendations.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <footer class="doctor-footer">
+        MINDCARE AI • Dementia Care Management
+    </footer>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   STORAGE HELPERS
+===================================================== */
+
+function getPatients() {
+
+    try {
+
+        const stored =
+            localStorage.getItem("mindcarePatients");
+
+        if (!stored) {
+            return [];
+        }
+
+        const patients =
+            JSON.parse(stored);
+
+        return Array.isArray(patients)
+            ? patients
+            : [];
+
+    } catch (error) {
+
+        console.error(
+            "Unable to load patients:",
+            error
+        );
+
+        return [];
+    }
+}
+
+
+function savePatients(patients) {
+
+    localStorage.setItem(
+        "mindcarePatients",
+        JSON.stringify(patients)
+    );
+}
+
+
+/* =====================================================
+   GENDER AVATAR
+===================================================== */
+
+function getPatientAvatar(patient) {
+
+    if (!patient) {
+        return "👤";
+    }
+
+    const gender =
+        String(patient.gender || "")
+            .trim()
+            .toLowerCase();
+
+    if (gender === "female") {
+        return "👩";
+    }
+
+    if (gender === "male") {
+        return "👨";
+    }
+
+    return "👤";
+}
+
+
+/* =====================================================
+   SELECTED PATIENT
+===================================================== */
+
+let selectedPatient = null;
+
+
+/* =====================================================
+   LOAD PATIENTS
+===================================================== */
+
+function loadPatients() {
+
+    const patients =
+        getPatients();
+
+    const list =
+        document.getElementById("patientList");
+
+    const emptyMessage =
+        document.getElementById("emptyPatientMessage");
+
+    if (!list) {
+        return;
+    }
+
+    list.innerHTML = "";
+
+    if (patients.length === 0) {
+
+        if (emptyMessage) {
+            emptyMessage.style.display = "block";
+        }
+
+        updateDashboardStats();
+
+        return;
+    }
+
+    if (emptyMessage) {
+        emptyMessage.style.display = "none";
+    }
+
+    patients.forEach(function(patient) {
+
+        createPatientCard(
+            patient,
+            list
+        );
+
+    });
+
+    updateDashboardStats();
+}
+
+
+/* =====================================================
+   CREATE PATIENT CARD
+===================================================== */
+
+function createPatientCard(
+    patient,
+    list
+) {
+
+    const card =
+        document.createElement("div");
+
+    card.className =
+        "doctor-patient-card";
+
+
+    /* AVATAR */
+
+    const avatar =
+        document.createElement("div");
+
+    avatar.className =
+        "patient-mini-avatar";
+
+    /* IMPORTANT GENDER CHANGE */
+
+    avatar.textContent =
+        getPatientAvatar(patient);
+
+
+    /* INFO */
+
+    const info =
+        document.createElement("div");
+
+    info.className =
+        "doctor-patient-info";
+
+
+    const name =
+        document.createElement("h3");
+
+    name.textContent =
+        patient.name ||
+        "Unknown Patient";
+
+
+    const id =
+        document.createElement("p");
+
+    id.textContent =
+        "Patient ID: " +
+        (
+            patient.patientId ||
+            "N/A"
+        );
+
+
+    const status =
+        document.createElement("span");
+
+    status.className =
+        "stable";
+
+    status.textContent =
+        "● Registered";
+
+
+    info.appendChild(name);
+    info.appendChild(id);
+    info.appendChild(status);
+
+
+    /* ACTIONS */
+
+    const actions =
+        document.createElement("div");
+
+    actions.className =
+        "patient-actions";
+
+
+    /* VIEW */
+
+    const viewButton =
+        document.createElement("button");
+
+    viewButton.type =
+        "button";
+
+    viewButton.textContent =
+        "View Patient";
+
+    viewButton.addEventListener(
+        "click",
+        function() {
+
+            selectPatient(patient);
+
+        }
+    );
+
+    actions.appendChild(
+        viewButton
+    );
+
+
+    /* DELETE */
+
+    const deleteButton =
+        document.createElement("button");
+
+    deleteButton.type =
+        "button";
+
+    deleteButton.textContent =
+        "Delete";
+
+    deleteButton.className =
+        "delete-patient-btn";
+
+    deleteButton.addEventListener(
+        "click",
+        function() {
+
+            deletePatient(
+                patient.patientId
+            );
+
+        }
+    );
+
+    actions.appendChild(
+        deleteButton
+    );
+
+
+    card.appendChild(avatar);
+    card.appendChild(info);
+    card.appendChild(actions);
+
+    list.appendChild(card);
+}
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+function searchPatients() {
+
+    const searchInput =
+        document.getElementById(
+            "patientSearch"
+        );
+
+    if (!searchInput) {
+        return;
+    }
+
+    const query =
+        searchInput.value
+            .trim()
+            .toLowerCase();
+
+
+    const patients =
+        getPatients();
+
+
+    const list =
+        document.getElementById(
+            "patientList"
+        );
+
+    const emptyMessage =
+        document.getElementById(
+            "emptyPatientMessage"
+        );
+
+
+    if (!list) {
+        return;
+    }
+
+
+    list.innerHTML = "";
+
+
+    const filtered =
+        patients.filter(
+            function(patient) {
+
+                const name =
+                    String(
+                        patient.name || ""
+                    ).toLowerCase();
+
+                const id =
+                    String(
+                        patient.patientId || ""
+                    ).toLowerCase();
+
+                return (
+                    name.includes(query) ||
+                    id.includes(query)
+                );
+
+            }
+        );
+
+
+    if (filtered.length === 0) {
+
+        if (emptyMessage) {
+            emptyMessage.style.display =
+                "block";
+        }
+
+        return;
+    }
+
+
+    if (emptyMessage) {
+        emptyMessage.style.display =
+            "none";
+    }
+
+
+    filtered.forEach(
+        function(patient) {
+
+            createPatientCard(
+                patient,
+                list
+            );
+
+        }
+    );
+}
+
+
+/* =====================================================
+   SELECT PATIENT
+===================================================== */
+
+function selectPatient(patient) {
+
+    selectedPatient =
+        patient;
+
+
+    const section =
+        document.getElementById(
+            "selectedPatientSection"
+        );
+
+
+    if (section) {
+
+        section.style.display =
+            "block";
+
+    }
+
+
+    const name =
+        document.getElementById(
+            "selectedPatientName"
+        );
+
+
+    const id =
+        document.getElementById(
+            "selectedPatientId"
+        );
+
+
+    const avatar =
+        document.getElementById(
+            "selectedPatientAvatar"
+        );
+
+
+    if (name) {
+
+        name.textContent =
+            patient.name ||
+            "Patient";
+
+    }
+
+
+    if (id) {
+
+        id.textContent =
+            "Patient ID: " +
+            (
+                patient.patientId ||
+                "N/A"
+            );
+
+    }
+
+
+    /* IMPORTANT GENDER CHANGE */
+
+    if (avatar) {
+
+        avatar.textContent =
+            getPatientAvatar(patient);
+
+    }
+
+
+    loadPatientData();
+
+    loadPrescription();
+
+
+    if (section) {
+
+        section.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    }
+}
+
+
+/* =====================================================
+   LOAD PATIENT DATA
+===================================================== */
+
+function loadPatientData() {
+
+    if (!selectedPatient) {
+        return;
+    }
+
+
+    const container =
+        document.getElementById(
+            "patientOverviewData"
+        );
+
+
+    if (!container) {
+        return;
+    }
+
+
+    const age =
+        selectedPatient.age ||
+        "Not available";
+
+
+    const gender =
+        selectedPatient.gender ||
+        "Not available";
+
+
+    const diagnosis =
+        selectedPatient.diagnosis ||
+        selectedPatient.condition ||
+        "Dementia care monitoring";
+
+
+    const caregiver =
+        selectedPatient.caregiver ||
+        "Not available";
+
+
+    container.innerHTML = `
+
+        <div style="
+            display:grid;
+            grid-template-columns:repeat(2,1fr);
+            gap:14px;
+        ">
+
+            <div style="
+                padding:16px;
+                background:#f8fbf9;
+                border-radius:12px;
+            ">
+
+                <strong>Age</strong>
+
+                <div style="
+                    margin-top:5px;
+                    color:#6b7280;
+                ">
+                    ${escapeHTML(age)}
+                </div>
+
+            </div>
+
+
+            <div style="
+                padding:16px;
+                background:#f8fbf9;
+                border-radius:12px;
+            ">
+
+                <strong>Gender</strong>
+
+                <div style="
+                    margin-top:5px;
+                    color:#6b7280;
+                ">
+                    ${escapeHTML(gender)}
+                </div>
+
+            </div>
+
+
+            <div style="
+                padding:16px;
+                background:#f8fbf9;
+                border-radius:12px;
+            ">
+
+                <strong>Condition</strong>
+
+                <div style="
+                    margin-top:5px;
+                    color:#6b7280;
+                ">
+                    ${escapeHTML(diagnosis)}
+                </div>
+
+            </div>
+
+
+            <div style="
+                padding:16px;
+                background:#f8fbf9;
+                border-radius:12px;
+            ">
+
+                <strong>Caregiver</strong>
+
+                <div style="
+                    margin-top:5px;
+                    color:#6b7280;
+                ">
+                    ${escapeHTML(caregiver)}
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+}
+
+
+/* =====================================================
+   PATIENT OVERVIEW
+===================================================== */
+
+function showPatientOverview() {
+
+    loadPatientData();
+
+}
+
+
+/* =====================================================
+   PATIENT HISTORY
+===================================================== */
+
+function showPatientHistory() {
+
+    if (!selectedPatient) {
+        return;
+    }
+
+
+    const container =
+        document.getElementById(
+            "patientOverviewData"
+        );
+
+
+    if (!container) {
+        return;
+    }
+
+
+    const history =
+        selectedPatient.history ||
+        selectedPatient.medicalHistory ||
+        "No patient history available.";
+
+
+    container.innerHTML = `
+
+        <div class="history-box">
+
+            <h3 style="
+                margin-top:0;
+                color:#183b32;
+            ">
+                Patient History
+            </h3>
+
+            <p style="
+                margin:0;
+                line-height:1.7;
+                color:#6b7280;
+            ">
+                ${escapeHTML(history)}
+            </p>
+
+        </div>
+
+    `;
+}
+
+
+/* =====================================================
+   MEDICATION
+===================================================== */
+
+function showPatientMedication() {
+
+    if (!selectedPatient) {
+        return;
+    }
+
+
+    const container =
+        document.getElementById(
+            "patientOverviewData"
+        );
+
+
+    if (!container) {
+        return;
+    }
+
+
+    const medications =
+        selectedPatient.medications ||
+        selectedPatient.medication ||
+        "No medication information available.";
+
+
+    let medicationText;
+
+
+    if (Array.isArray(medications)) {
+
+        medicationText =
+            medications
+                .map(
+                    function(item) {
+
+                        return `
+                            <li>
+                                ${escapeHTML(
+                                    String(item)
+                                )}
+                            </li>
+                        `;
+
+                    }
+                )
+                .join("");
+
+    } else {
+
+        medicationText =
+            escapeHTML(
+                String(medications)
+            );
+
+    }
+
+
+    container.innerHTML = `
+
+        <div class="history-box">
+
+            <h3 style="
+                margin-top:0;
+                color:#183b32;
+            ">
+                Current Medication
+            </h3>
+
+            ${
+                Array.isArray(medications)
+                ? `
+                    <ul style="
+                        margin:0;
+                        padding-left:20px;
+                        color:#6b7280;
+                        line-height:1.8;
+                    ">
+                        ${medicationText}
+                    </ul>
+                `
+                : `
+                    <p style="
+                        margin:0;
+                        color:#6b7280;
+                    ">
+                        ${medicationText}
+                    </p>
+                `
+            }
+
+        </div>
+
+    `;
+}
+
+
+/* =====================================================
+   AI REPORTS
+===================================================== */
+
+function showPatientReports() {
+
+    const container =
+        document.getElementById(
+            "patientOverviewData"
+        );
+
+
+    if (!container) {
+        return;
+    }
+
+
+    const report =
+        selectedPatient &&
+        (
+            selectedPatient.aiReport ||
+            selectedPatient.aiSummary
+        );
+
+
+    container.innerHTML = `
+
+        <div class="history-box">
+
+            <h3 style="
+                margin-top:0;
+                color:#183b32;
+            ">
+                🤖 AI Activity Report
+            </h3>
+
+            <p style="
+                margin:0;
+                line-height:1.7;
+                color:#6b7280;
+            ">
+
+                ${
+                    report
+                    ? escapeHTML(
+                        String(report)
+                    )
+                    : "No AI activity report available for this patient."
+                }
+
+            </p>
+
+        </div>
+
+    `;
+}
+
+
+/* =====================================================
+   LOAD PRESCRIPTION
+===================================================== */
+
+function loadPrescription() {
+
+    if (!selectedPatient) {
+        return;
+    }
+
+
+    const prescriptions =
+        selectedPatient.prescriptions ||
+        [];
+
+
+    const current =
+        document.getElementById(
+            "currentPrescriptionData"
+        );
+
+
+    if (!current) {
+        return;
+    }
+
+
+    if (
+        !Array.isArray(
+            prescriptions
+        ) ||
+        prescriptions.length === 0
+    ) {
+
+        current.innerHTML = `
+
+            <p style="
+                margin:0;
+                color:#6b7280;
+            ">
+                No active prescription.
+            </p>
+
+        `;
+
+        return;
+    }
+
+
+    const prescription =
+        prescriptions[
+            prescriptions.length - 1
+        ];
+
+
+    current.innerHTML = `
+
+        <div style="
+            display:grid;
+            gap:10px;
+        ">
+
+            <div>
+                <strong>Medicine:</strong>
+                ${escapeHTML(
+                    prescription.medicine ||
+                    prescription.name ||
+                    ""
+                )}
+            </div>
+
+            <div>
+                <strong>Dosage:</strong>
+                ${escapeHTML(
+                    prescription.dosage ||
+                    ""
+                )}
+            </div>
+
+            <div>
+                <strong>Frequency:</strong>
+                ${escapeHTML(
+                    prescription.frequency ||
+                    ""
+                )}
+            </div>
+
+            <div>
+                <strong>Duration:</strong>
+                ${escapeHTML(
+                    prescription.duration ||
+                    ""
+                )}
+            </div>
+
+            <div>
+                <strong>Instructions:</strong>
+                ${escapeHTML(
+                    prescription.instructions ||
+                    ""
+                )}
+            </div>
+
+        </div>
+
+    `;
+}
+
+
+/* =====================================================
+   SAVE PRESCRIPTION
+===================================================== */
+
+const prescriptionForm =
+    document.getElementById(
+        "prescriptionForm"
+    );
+
+
+if (prescriptionForm) {
+
+    prescriptionForm.addEventListener(
+        "submit",
+        function(event) {
+
+            event.preventDefault();
+
+
+            if (!selectedPatient) {
+
+                alert(
+                    "Please select a patient first."
+                );
+
+                return;
+            }
+
+
+            const medicine =
+                document.getElementById(
+                    "medicineName"
+                ).value.trim();
+
+
+            const dosage =
+                document.getElementById(
+                    "medicineDosage"
+                ).value.trim();
+
+
+            const frequency =
+                document.getElementById(
+                    "medicineFrequency"
+                ).value.trim();
+
+
+            const duration =
+                document.getElementById(
+                    "medicineDuration"
+                ).value.trim();
+
+
+            const instructions =
+                document.getElementById(
+                    "medicineInstructions"
+                ).value.trim();
+
+
+            if (!medicine) {
+
+                alert(
+                    "Please enter medicine name."
+                );
+
+                return;
+            }
+
+
+            const patients =
+                getPatients();
+
+
+            const index =
+                patients.findIndex(
+                    function(patient) {
+
+                        return String(
+                            patient.patientId
+                        ) === String(
+                            selectedPatient.patientId
+                        );
+
+                    }
+                );
+
+
+            if (index === -1) {
+
+                alert(
+                    "Patient not found."
+                );
+
+                return;
+            }
+
+
+            if (
+                !Array.isArray(
+                    patients[index].prescriptions
+                )
+            ) {
+
+                patients[index].prescriptions =
+                    [];
+
+            }
+
+
+            const prescription = {
+
+                medicine:
+                    medicine,
+
+                dosage:
+                    dosage,
+
+                frequency:
+                    frequency,
+
+                duration:
+                    duration,
+
+                instructions:
+                    instructions,
+
+                createdAt:
+                    new Date().toISOString(),
+
+                status:
+                    "Active"
+
+            };
+
+
+            patients[index]
+                .prescriptions
+                .push(
+                    prescription
+                );
+
+
+            savePatients(
+                patients
+            );
+
+
+            selectedPatient =
+                patients[index];
+
+
+            loadPrescription();
+
+
+            prescriptionForm.reset();
+
+
+            updatePrescriptionCount();
+
+
+            alert(
+                "Prescription approved successfully."
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   DELETE PATIENT
+===================================================== */
+
+function deletePatient(patientId) {
+
+    const confirmed =
+        confirm(
+            "Are you sure you want to delete this patient?"
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    const patients =
+        getPatients();
+
+
+    const updated =
+        patients.filter(
+            function(patient) {
+
+                return String(
+                    patient.patientId
+                ) !== String(
+                    patientId
+                );
+
+            }
+        );
+
+
+    savePatients(
+        updated
+    );
+
+
+    if (
+        selectedPatient &&
+        String(
+            selectedPatient.patientId
+        ) === String(
+            patientId
+        )
+    ) {
+
+        selectedPatient =
+            null;
+
+
+        const section =
+            document.getElementById(
+                "selectedPatientSection"
+            );
+
+
+        if (section) {
+
+            section.style.display =
+                "none";
+
+        }
+
+    }
+
+
+    loadPatients();
+
+    updateDashboardStats();
+}
+
+
+/* =====================================================
+   PRESCRIPTION COUNT
+===================================================== */
+
+function updatePrescriptionCount() {
+
+    const patients =
+        getPatients();
+
+
+    let count = 0;
+
+
+    patients.forEach(
+        function(patient) {
+
+            if (
+                Array.isArray(
+                    patient.prescriptions
+                )
+            ) {
+
+                patient.prescriptions.forEach(
+                    function(prescription) {
+
+                        if (
+                            !prescription.status ||
+                            prescription.status ===
+                            "Active"
+                        ) {
+
+                            count++;
+
+                        }
+
+                    }
+                );
+
+            }
+
+        }
+    );
+
+
+    const element =
+        document.getElementById(
+            "activePrescriptionCount"
+        );
+
+
+    if (element) {
+
+        element.textContent =
+            count;
+
+    }
+}
+
+
+/* =====================================================
+   DASHBOARD STATS
+===================================================== */
+
+function updateDashboardStats() {
+
+    const patients =
+        getPatients();
+
+
+    const registered =
+        document.getElementById(
+            "registeredPatientsCount"
+        );
+
+
+    if (registered) {
+
+        registered.textContent =
+            patients.length;
+
+    }
+
+
+    updatePrescriptionCount();
+
+
+    const alerts =
+        document.getElementById(
+            "careAlertsCount"
+        );
+
+
+    if (alerts) {
+
+        let alertCount = 0;
+
+
+        patients.forEach(
+            function(patient) {
+
+                if (
+                    patient.careAlert ||
+                    patient.alert ||
+                    patient.hasAlert
+                ) {
+
+                    alertCount++;
+
+                }
+
+            }
+        );
+
+
+        alerts.textContent =
+            alertCount;
+
+    }
+
+
+    const aiActivity =
+        document.getElementById(
+            "aiActivityCount"
+        );
+
+
+    if (aiActivity) {
+
+        let activityCount = 0;
+
+
+        patients.forEach(
+            function(patient) {
+
+                if (
+                    patient.aiReport ||
+                    patient.aiSummary ||
+                    patient.aiActivity
+                ) {
+
+                    activityCount++;
+
+                }
+
+            }
+        );
+
+
+        aiActivity.textContent =
+            activityCount;
+
+    }
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHTML(value) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        value == null
+            ? ""
+            : String(value);
+
+
+    return div.innerHTML;
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logoutDoctor() {
+
+    const confirmed =
+        confirm(
+            "Are you sure you want to logout?"
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    try {
+
+        localStorage.removeItem(
+            "doctorLoggedIn"
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
+
+
+    window.location.href =
+        "login.html";
+}
+
+
+/* =====================================================
+   PAGE SHOW
+===================================================== */
+
+window.addEventListener(
+    "pageshow",
+    function() {
+
+        loadPatients();
+
+        updatePrescriptionCount();
+
+        updateDashboardStats();
+
+
+        if (selectedPatient) {
+
+            const patients =
+                getPatients();
+
+
+            const latestPatient =
+                patients.find(
+                    function(patient) {
+
+                        return String(
+                            patient.patientId
+                        ) === String(
+                            selectedPatient.patientId
+                        );
+
+                    }
+                );
+
+
+            if (latestPatient) {
+
+                selectedPatient =
+                    latestPatient;
+
+
+                loadPrescription();
+
+                loadPatientData();
+
+
+                /* Refresh selected avatar */
+
+                const avatar =
+                    document.getElementById(
+                        "selectedPatientAvatar"
+                    );
+
+
+                if (avatar) {
+
+                    avatar.textContent =
+                        getPatientAvatar(
+                            latestPatient
+                        );
+
+                }
+
+            }
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   INITIAL LOAD
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        loadPatients();
+
+        updatePrescriptionCount();
+
+        updateDashboardStats();
+
+    }
+);
+
+</script>
+
+</body>
+</html>
